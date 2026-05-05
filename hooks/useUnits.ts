@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   fetchUnits, fetchUnit, createUnit, updateUnit, deleteUnit, fetchUnitCounts,
+  fetchUnitStatusCounts, fetchVacantUnits,
 } from '../lib/api/units'
 import type { Unit } from '../types'
 
@@ -18,6 +19,14 @@ export function useUnits(propertyId: string) {
 
 export function useUnitCounts() {
   return useQuery({ queryKey: unitCountsKey, queryFn: fetchUnitCounts })
+}
+
+export function useUnitStatusCounts() {
+  return useQuery({ queryKey: ['unit-status-counts'], queryFn: fetchUnitStatusCounts })
+}
+
+export function useVacantUnits() {
+  return useQuery({ queryKey: ['vacant-units'], queryFn: fetchVacantUnits })
 }
 
 export function useUnit(id: string) {

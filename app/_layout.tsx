@@ -3,6 +3,7 @@ import { View } from 'react-native'
 import { Slot, useRouter } from 'expo-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { DatabaseProvider, useDatabase } from '../context/DatabaseContext'
 import { AuthProvider, useAuth } from '../context/AuthContext'
 import { AppText, LoadingSpinner } from '../components/ui'
@@ -38,14 +39,16 @@ function AppContent() {
 
 export default function RootLayout() {
   return (
-    <SafeAreaProvider style={{ flex: 1, backgroundColor: '#0d0d0d' }}>
-      <AuthProvider>
-        <DatabaseProvider>
-          <QueryClientProvider client={queryClient}>
-            <AppContent />
-          </QueryClientProvider>
-        </DatabaseProvider>
-      </AuthProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider style={{ flex: 1, backgroundColor: '#0d0d0d' }}>
+        <AuthProvider>
+          <DatabaseProvider>
+            <QueryClientProvider client={queryClient}>
+              <AppContent />
+            </QueryClientProvider>
+          </DatabaseProvider>
+        </AuthProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   )
 }

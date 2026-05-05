@@ -1,289 +1,415 @@
-import React, { useMemo, useState } from 'react'
-import { ScrollView, View, TouchableOpacity, Text } from 'react-native'
+import React, { useMemo } from 'react'
+import { ScrollView, View, Text, Pressable, StyleSheet, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../hooks/useTabBarScrollHandler'
-import { useTenants } from '../../hooks/useTenants'
 import { useBills } from '../../hooks/useBills'
+import { useUnitCounts, useVacantUnits } from '../../hooks/useUnits'
 import { useSettings } from '../../hooks/useSettings'
-import { isOverdue, formatCurrency } from '../../lib/billing'
-import { AppText, Card, Badge, billStatusBadge } from '../../components/ui'
-import type { TenantWithUnit, BillWithTenant } from '../../types'
+import { useTenantSearch } from '../../context/TenantSearchContext'
+import { SwipeablePaymentRow } from '../../components/admin/SwipeablePaymentRow'
 
-const ACCENT_COLORS = ['#3b82f6','#8b5cf6','#ec4899','#f59e0b','#22c55e','#ef4444']
-function tenantColor(name: string) {
-  let h = 0
-  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % ACCENT_COLORS.length
-  return ACCENT_COLORS[h]
+type IoniconName = React.ComponentProps<typeof Ionicons>['name']
+
+function formatPHP(n: number) {
+  return `₱${n.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`
 }
 
-function TenantRow({
-  tenant, bill, dueDate, onPress,
-}: {
-  tenant: TenantWithUnit
-  bill?: BillWithTenant
-  dueDate: string
-  onPress: () => void
+// ─── KPI Card ─────────────────────────────────────────────────────────────────
+function KPICard({ label, value, accent, icon }: {
+  label: string; value: string; accent: string; icon: IoniconName
 }) {
-  const initial = tenant.full_name.charAt(0).toUpperCase()
-  const color = tenantColor(tenant.full_name)
-  const hasBill = !!bill
-  const statusBadge = hasBill ? billStatusBadge(bill!.status) : null
-
   return (
-    <TouchableOpacity onPress={onPress} className="flex-row items-center gap-3 py-3 border-b border-[#2a2a2a]">
-      <View className="w-10 h-10 rounded-xl items-center justify-center" style={{ backgroundColor: color }}>
-        <Text className="text-white font-bold text-base">{initial}</Text>
+    <View style={[styles.kpiCard, { flex: 1 }]}>
+      <View style={[styles.kpiIcon, { backgroundColor: `${accent}22` }]}>
+        <Ionicons name={icon} size={18} color={accent} />
       </View>
-      <View className="flex-1">
-        <AppText className="font-semibold">{tenant.full_name}</AppText>
-        <AppText color="secondary" variant="caption">
-          Unit {tenant.unit?.unit_number ?? '?'} · Due {dueDate}
-        </AppText>
-      </View>
-      <View className="items-end gap-1">
-        {hasBill
-          ? <AppText className="font-semibold">{formatCurrency(bill!.amount)}</AppText>
-          : <AppText color="muted">—</AppText>
-        }
-        {statusBadge
-          ? <Badge label={statusBadge.label} variant={statusBadge.variant} />
-          : <Badge label="Create" variant="info" />
-        }
-      </View>
-    </TouchableOpacity>
+      <Text style={styles.kpiValue}>{value}</Text>
+      <Text style={styles.kpiLabel}>{label}</Text>
+    </View>
   )
 }
 
-type IncomePeriod = 'day' | 'week' | 'month'
-const INCOME_PERIODS: { key: IncomePeriod; label: string }[] = [
-  { key: 'day', label: 'Day' },
-  { key: 'week', label: 'Week' },
-  { key: 'month', label: 'Month' },
-]
-
-function ExpectedIncomeCard({ bills, yyyy, mm, todayStr }: {
-  bills: BillWithTenant[] | undefined
-  yyyy: string
-  mm: string
-  todayStr: string
+// ─── Quick action button ──────────────────────────────────────────────────────
+function QuickAction({ label, icon, color, onPress }: {
+  label: string; icon: IoniconName; color: string; onPress: () => void
 }) {
-  const [period, setPeriod] = useState<IncomePeriod>('month')
-
-  const amounts = useMemo((): Record<IncomePeriod, number> => {
-    if (!bills) return { day: 0, week: 0, month: 0 }
-    const d = new Date(todayStr)
-    const weekStart = new Date(todayStr)
-    weekStart.setDate(d.getDate() - d.getDay())
-    const weekEnd = new Date(weekStart)
-    weekEnd.setDate(weekStart.getDate() + 6)
-    const ws = weekStart.toISOString().split('T')[0]
-    const we = weekEnd.toISOString().split('T')[0]
-    return {
-      day: bills.filter(b => b.due_date === todayStr).reduce((s, b) => s + b.amount, 0),
-      week: bills.filter(b => b.due_date >= ws && b.due_date <= we).reduce((s, b) => s + b.amount, 0),
-      month: bills.filter(b => b.due_date.startsWith(`${yyyy}-${mm}`)).reduce((s, b) => s + b.amount, 0),
-    }
-  }, [bills, todayStr, yyyy, mm])
-
   return (
-    <Card className="mb-3">
-      <View className="flex-row items-center gap-3 mb-3">
-        <View
-          className="w-10 h-10 rounded-xl items-center justify-center"
-          style={{ backgroundColor: 'rgba(34,197,94,0.15)' }}
-        >
-          <Ionicons name="trending-up-outline" size={20} color="#22c55e" />
-        </View>
-        <View className="flex-1">
-          <AppText className="font-semibold">Expected Income</AppText>
-          <AppText color="secondary" variant="caption">from billed amounts</AppText>
-        </View>
+    <Pressable style={styles.quickAction} onPress={onPress}>
+      <View style={[styles.quickActionIcon, { backgroundColor: `${color}22` }]}>
+        <Ionicons name={icon} size={22} color={color} />
       </View>
-      <AppText variant="display" className="mb-3">{formatCurrency(amounts[period])}</AppText>
-      <View className="flex-row gap-2">
-        {INCOME_PERIODS.map(({ key, label }) => (
-          <TouchableOpacity
-            key={key}
-            onPress={() => setPeriod(key)}
-            style={{ backgroundColor: key === period ? '#22c55e' : '#252525' }}
-            className="flex-1 py-2 rounded-xl items-center"
-          >
-            <AppText
-              variant="caption"
-              className={key === period ? 'text-black font-semibold' : ''}
-              color={key === period ? undefined : 'secondary'}
-            >
-              {label}
-            </AppText>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </Card>
+      <Text style={styles.quickActionLabel}>{label}</Text>
+    </Pressable>
   )
 }
 
-function UnbilledTenantsCard({ count, onPress }: { count: number; onPress: () => void }) {
-  if (count === 0) return null
+// ─── Section header ───────────────────────────────────────────────────────────
+function SectionHeader({ title, onSeeAll }: { title: string; onSeeAll?: () => void }) {
   return (
-    <Card className="mb-6">
-      <View className="flex-row items-center gap-3 mb-3">
-        <View
-          className="w-10 h-10 rounded-xl items-center justify-center"
-          style={{ backgroundColor: 'rgba(245,158,11,0.15)' }}
-        >
-          <Ionicons name="receipt-outline" size={20} color="#f59e0b" />
-        </View>
-        <View className="flex-1">
-          <AppText className="font-semibold">Unbilled Tenants</AppText>
-          <AppText color="secondary" variant="caption">no bill this month</AppText>
-        </View>
-        <View
-          className="rounded-full px-2.5 py-1"
-          style={{ backgroundColor: 'rgba(245,158,11,0.2)' }}
-        >
-          <AppText className="font-bold" style={{ color: '#f59e0b' }}>{count}</AppText>
-        </View>
-      </View>
-      <TouchableOpacity
-        onPress={onPress}
-        className="flex-row items-center justify-center gap-2 py-3 rounded-xl"
-        style={{ backgroundColor: '#252525' }}
-      >
-        <Ionicons name="add-circle-outline" size={18} color="#f1f1f1" />
-        <AppText className="font-semibold">Create Bill</AppText>
-      </TouchableOpacity>
-    </Card>
+    <View style={styles.sectionHeader}>
+      <Text style={styles.sectionTitle}>{title}</Text>
+      {onSeeAll && (
+        <Pressable onPress={onSeeAll}>
+          <Text style={styles.seeAll}>See all</Text>
+        </Pressable>
+      )}
+    </View>
   )
 }
 
+// ─── Home Screen ──────────────────────────────────────────────────────────────
 export default function HomeScreen() {
   const router = useRouter()
   const insets = useSafeAreaInsets()
   const tabBarScroll = useTabBarScrollHandler()
-  const { data: tenants } = useTenants({ status: 'active' })
+  const { open: openSearch } = useTenantSearch()
+
   const { data: bills } = useBills()
+  const { data: unitCounts } = useUnitCounts()
+  const { data: vacantUnits } = useVacantUnits()
   const { data: settings } = useSettings()
 
   const today = new Date()
-  const todayStr = today.toISOString().split('T')[0]
-  const todayDay = today.getDate()
   const yyyy = String(today.getFullYear())
   const mm = String(today.getMonth() + 1).padStart(2, '0')
-
-  function nextDueDate(dueDay: number): string {
-    const pad = String(dueDay).padStart(2, '0')
-    if (todayDay <= dueDay) return `${yyyy}-${mm}-${pad}`
-    const next = new Date(today.getFullYear(), today.getMonth() + 1, 1)
-    const ny = next.getFullYear()
-    const nm = String(next.getMonth() + 1).padStart(2, '0')
-    return `${ny}-${nm}-${pad}`
-  }
-
-  const overdueBills = useMemo(() =>
-    bills?.filter((b) => isOverdue(b.due_date, b.status)) ?? [], [bills])
-
-  const upcomingRows = useMemo(() => {
-    if (!tenants || !bills) return []
-    const result: { tenant: TenantWithUnit; bill?: BillWithTenant; dueDate: string }[] = []
-    for (const t of tenants) {
-      if (!t.due_day) continue
-      const dd = nextDueDate(t.due_day)
-      const daysUntil = Math.round((new Date(dd).getTime() - today.getTime()) / 86400000)
-      if (daysUntil < 0 || daysUntil > 7) continue
-      const bill = bills.find((b) => b.tenant_id === t.id && b.due_date === dd && b.status !== 'paid')
-      result.push({ tenant: t, bill, dueDate: dd })
-    }
-    return result.sort((a, b) => a.dueDate.localeCompare(b.dueDate))
-  }, [tenants, bills, todayStr])
-
-  const unbilledCount = useMemo(() => {
-    if (!tenants || !bills) return 0
-    return tenants.filter(t =>
-      !bills.some(b => b.tenant_id === t.id && b.due_date.startsWith(`${yyyy}-${mm}`))
-    ).length
-  }, [tenants, bills, yyyy, mm])
-
-  const activeTenants = tenants?.length ?? 0
-  const collectedThisMonth = bills?.filter((b) => b.paid_at?.startsWith(`${yyyy}-${mm}`))
-    .reduce((s, b) => s + b.amount, 0) ?? 0
+  const monthPrefix = `${yyyy}-${mm}`
 
   const aptName = settings?.apartment_name ?? 'Apartment Manager'
 
+  // ─── KPI calculations
+  const kpis = useMemo(() => {
+    const occupied = unitCounts?.occupied ?? 0
+    const available = unitCounts?.available ?? 0
+    const maintenance = unitCounts?.maintenance ?? 0
+    const totalUnits = occupied + available + maintenance
+
+    const collectedThisMonth = bills
+      ?.filter((b) => b.paid_at?.startsWith(monthPrefix))
+      .reduce((s, b) => s + b.amount, 0) ?? 0
+
+    const outstanding = bills
+      ?.filter((b) => b.status === 'pending' || b.status === 'overdue')
+      .reduce((s, b) => s + b.amount, 0) ?? 0
+
+    const occupancyPct = totalUnits > 0 ? Math.round((occupied / totalUnits) * 100) : 0
+
+    return {
+      income: collectedThisMonth,
+      occupancy: `${occupancyPct}%`,
+      outstanding,
+      vacancies: available,
+    }
+  }, [bills, unitCounts, monthPrefix])
+
+  // ─── Alert strip data
+  const overdueBills = useMemo(
+    () => bills?.filter((b) => b.status === 'overdue') ?? [],
+    [bills]
+  )
+
+  // ─── Collection progress
+  const progress = useMemo(() => {
+    const monthBills = bills?.filter((b) => b.due_date.startsWith(monthPrefix)) ?? []
+    const total = monthBills.reduce((s, b) => s + b.amount, 0)
+    const collected = monthBills.filter((b) => b.status === 'paid').reduce((s, b) => s + b.amount, 0)
+    return { total, collected, pct: total > 0 ? (collected / total) * 100 : 0 }
+  }, [bills, monthPrefix])
+
+  // ─── Attention list (overdue + pending, sorted by due_date asc, max 5)
+  const attentionList = useMemo(() => {
+    if (!bills) return []
+    return bills
+      .filter((b) => b.status === 'overdue' || b.status === 'pending')
+      .sort((a, b) => a.due_date.localeCompare(b.due_date))
+      .slice(0, 5)
+  }, [bills])
+
+  const billStatusStyle = (s: string) => {
+    if (s === 'overdue') return { bg: 'rgba(239,68,68,0.15)', color: '#ef4444', label: 'OVERDUE' }
+    return { bg: 'rgba(245,158,11,0.15)', color: '#f59e0b', label: 'PENDING' }
+  }
+
   return (
     <ScrollView
-      className="flex-1 bg-app"
-      contentContainerStyle={{ paddingTop: insets.top + 16, paddingHorizontal: 16, paddingBottom: 128 }}
+      style={styles.screen}
+      contentContainerStyle={{ paddingTop: insets.top + 16, paddingBottom: 128 }}
       {...tabBarScroll}
     >
-      <View className="flex-row justify-between items-center mb-6">
-        <AppText variant="heading">{aptName}</AppText>
-        <TouchableOpacity onPress={() => router.push('/(admin)/settings')} style={{ padding: 4 }}>
-          <Ionicons name="settings-outline" size={22} color="#888888" />
-        </TouchableOpacity>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>{aptName}</Text>
+        <View style={styles.headerIcons}>
+          <Pressable style={styles.headerIcon} accessibilityLabel="Notifications">
+            <Ionicons name="notifications-outline" size={22} color="#888888" />
+          </Pressable>
+          <Pressable
+            style={styles.headerIcon}
+            onPress={() => router.push('/(admin)/settings' as any)}
+            accessibilityLabel="Settings"
+          >
+            <Ionicons name="settings-outline" size={22} color="#888888" />
+          </Pressable>
+        </View>
       </View>
 
-      <View className="flex-row gap-3 mb-4">
-        {[
-          { label: 'Tenants',   value: String(activeTenants) },
-          { label: 'Collected', value: formatCurrency(collectedThisMonth) },
-        ].map((s) => (
-          <Card key={s.label} className="flex-1">
-            <AppText variant="display" className="text-xl">{s.value}</AppText>
-            <AppText color="secondary" variant="caption">{s.label}</AppText>
-          </Card>
-        ))}
+      {/* Alert strip */}
+      {(overdueBills.length > 0 || kpis.vacancies > 0) && (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.alertScroll}
+          contentContainerStyle={styles.alertContent}
+        >
+          {overdueBills.length > 0 && (
+            <Pressable
+              style={[styles.alertChip, { backgroundColor: 'rgba(239,68,68,0.15)' }]}
+              onPress={() => router.push('/(admin)/payments' as any)}
+            >
+              <Ionicons name="alert-circle" size={14} color="#ef4444" />
+              <Text style={[styles.alertText, { color: '#ef4444' }]}>
+                {overdueBills.length} overdue
+              </Text>
+            </Pressable>
+          )}
+          {kpis.vacancies > 0 && (
+            <Pressable
+              style={[styles.alertChip, { backgroundColor: 'rgba(245,158,11,0.15)' }]}
+              onPress={() => router.push('/(admin)/properties' as any)}
+            >
+              <Ionicons name="home-outline" size={14} color="#f59e0b" />
+              <Text style={[styles.alertText, { color: '#f59e0b' }]}>
+                {kpis.vacancies} vacant
+              </Text>
+            </Pressable>
+          )}
+        </ScrollView>
+      )}
+
+      {/* KPI 2×2 grid */}
+      <View style={styles.kpiGrid}>
+        <View style={styles.kpiRow}>
+          <KPICard label="Monthly Income" value={formatPHP(kpis.income)}     accent="#22c55e" icon="trending-up-outline" />
+          <View style={{ width: 12 }} />
+          <KPICard label="Occupancy"      value={kpis.occupancy}              accent="#3b82f6" icon="home-outline" />
+        </View>
+        <View style={[styles.kpiRow, { marginTop: 12 }]}>
+          <KPICard label="Outstanding"    value={formatPHP(kpis.outstanding)} accent="#ef4444" icon="alert-circle-outline" />
+          <View style={{ width: 12 }} />
+          <KPICard label="Vacancies"      value={String(kpis.vacancies)}      accent="#f59e0b" icon="business-outline" />
+        </View>
       </View>
 
-      <ExpectedIncomeCard bills={bills} yyyy={yyyy} mm={mm} todayStr={todayStr} />
+      {/* Quick actions */}
+      <View style={styles.quickActions}>
+        <QuickAction label="Record Payment" icon="cash-outline"       color="#22c55e" onPress={openSearch} />
+        <QuickAction label="Add Tenant"     icon="person-add-outline" color="#3b82f6" onPress={() => router.push('/(admin)/tenants/new' as any)} />
+        <QuickAction label="Add Unit"       icon="home-outline"       color="#8b5cf6" onPress={() => router.push('/(admin)/properties' as any)} />
+        <QuickAction label="Log Issue"      icon="construct-outline"  color="#f59e0b" onPress={() => Alert.alert('Coming Soon', 'Maintenance logging is coming in a future update.')} />
+      </View>
 
-      <UnbilledTenantsCard
-        count={unbilledCount}
-        onPress={() => router.push('/(admin)/billing/new')}
-      />
+      {/* Collection progress */}
+      <View style={styles.section}>
+        <SectionHeader title="Collection Progress" />
+        <View style={styles.progressCard}>
+          <View style={styles.progressRow}>
+            <Text style={styles.progressLabel}>
+              {formatPHP(progress.collected)} of {formatPHP(progress.total)}
+            </Text>
+            <Text style={[styles.progressPct, { color: progress.pct >= 80 ? '#22c55e' : '#f59e0b' }]}>
+              {progress.pct.toFixed(0)}%
+            </Text>
+          </View>
+          <View style={styles.progressBarBg}>
+            <View
+              style={[
+                styles.progressBarFill,
+                {
+                  width: `${Math.min(progress.pct, 100)}%` as any,
+                  backgroundColor: progress.pct >= 80 ? '#22c55e' : '#f59e0b',
+                },
+              ]}
+            />
+          </View>
+          <Text style={styles.progressSub}>
+            {bills?.filter((b) => b.due_date.startsWith(monthPrefix) && b.status === 'paid').length ?? 0} of{' '}
+            {bills?.filter((b) => b.due_date.startsWith(monthPrefix)).length ?? 0} bills paid this month
+          </Text>
+        </View>
+      </View>
 
-      {overdueBills.length > 0 && (
-        <View className="mb-6">
-          <AppText variant="label" color="danger" className="mb-2">OVERDUE</AppText>
-          <Card>
-            {overdueBills.map((b) => {
-              const t = tenants?.find((t) => t.id === b.tenant_id)
-              if (!t) return null
+      {/* Tenants requiring attention */}
+      {attentionList.length > 0 && (
+        <View style={styles.section}>
+          <SectionHeader
+            title="Requires Attention"
+            onSeeAll={() => router.push('/(admin)/payments' as any)}
+          />
+          <View style={styles.card}>
+            {attentionList.map((b) => {
+              const st = billStatusStyle(b.status)
               return (
-                <TenantRow key={b.id} tenant={t} bill={b} dueDate={b.due_date}
-                  onPress={() => router.push(`/(admin)/billing/${b.id}` as any)} />
+                <SwipeablePaymentRow
+                  key={b.id}
+                  tenantName={b.tenant.full_name}
+                  unitNumber={null}
+                  amount={b.amount}
+                  statusLabel={st.label}
+                  statusColor={st.color}
+                  statusBg={st.bg}
+                  onRecordPayment={() =>
+                    router.push({ pathname: '/(admin)/billing/new', params: { tenantId: b.tenant_id } } as any)
+                  }
+                  onPress={() => router.push(`/(admin)/billing/${b.id}` as any)}
+                />
               )
             })}
-          </Card>
+          </View>
         </View>
       )}
 
-      <Card>
-        <View className="flex-row items-center gap-3 mb-4">
-          <View
-            className="w-10 h-10 rounded-xl items-center justify-center"
-            style={{ backgroundColor: 'rgba(59,130,246,0.15)' }}
-          >
-            <Ionicons name="calendar-outline" size={20} color="#3b82f6" />
-          </View>
-          <View className="flex-1">
-            <AppText className="font-semibold">Upcoming Dues</AppText>
-            <AppText color="secondary" variant="caption">within 7 days</AppText>
+      {/* Vacant units */}
+      {(vacantUnits?.length ?? 0) > 0 && (
+        <View style={styles.section}>
+          <SectionHeader
+            title="Vacant Units"
+            onSeeAll={() => router.push('/(admin)/properties' as any)}
+          />
+          <View style={styles.card}>
+            {(vacantUnits ?? []).slice(0, 3).map((u) => (
+              <View key={u.id} style={styles.vacantRow}>
+                <View style={styles.vacantIcon}>
+                  <Ionicons name="home-outline" size={16} color="#f59e0b" />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.vacantUnit}>Unit {u.unit_number}</Text>
+                  <Text style={styles.vacantProp}>{(u as any).property_name}</Text>
+                </View>
+                <View style={styles.vacantChip}>
+                  <Text style={styles.vacantChipText}>VACANT</Text>
+                </View>
+              </View>
+            ))}
           </View>
         </View>
-        {upcomingRows.length === 0
-          ? <AppText color="muted" className="text-center py-4">No upcoming dues</AppText>
-          : upcomingRows.map(({ tenant, bill, dueDate }) => (
-              <TenantRow key={tenant.id} tenant={tenant} bill={bill} dueDate={dueDate}
-                onPress={() => bill
-                  ? router.push(`/(admin)/billing/${bill.id}` as any)
-                  : router.push({ pathname: '/(admin)/billing/new', params: { tenantId: tenant.id } })
-                }
-              />
-            ))
-        }
-      </Card>
+      )}
+
+      {/* Recent activity */}
+      {(bills?.length ?? 0) > 0 && (
+        <View style={styles.section}>
+          <SectionHeader title="Recent Activity" />
+          <View style={styles.card}>
+            {(bills ?? [])
+              .slice()
+              .sort((a, b) => (b.created_at ?? '').localeCompare(a.created_at ?? ''))
+              .slice(0, 5)
+              .map((b) => (
+                <Pressable
+                  key={b.id}
+                  style={styles.activityRow}
+                  onPress={() => router.push(`/(admin)/billing/${b.id}` as any)}
+                >
+                  <View style={styles.activityDot} />
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.activityName}>{b.tenant.full_name}</Text>
+                    <Text style={styles.activityMeta}>
+                      {b.billing_type} · {formatPHP(b.amount)}
+                    </Text>
+                  </View>
+                  <Text style={styles.activityDate}>{b.due_date}</Text>
+                </Pressable>
+              ))}
+          </View>
+        </View>
+      )}
     </ScrollView>
   )
 }
+
+const styles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: '#0d0d0d' },
+  header: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    paddingHorizontal: 16, marginBottom: 12,
+  },
+  headerTitle: { fontSize: 22, fontWeight: '800', color: '#f1f1f1', letterSpacing: -0.5 },
+  headerIcons: { flexDirection: 'row', gap: 4 },
+  headerIcon: { padding: 6 },
+  alertScroll: { maxHeight: 44 },
+  alertContent: { paddingHorizontal: 16, gap: 8, paddingBottom: 8 },
+  alertChip: {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20,
+  },
+  alertText: { fontSize: 12, fontWeight: '600' },
+  kpiGrid: { paddingHorizontal: 16, marginTop: 8 },
+  kpiRow: { flexDirection: 'row' },
+  kpiCard: {
+    backgroundColor: '#171717', borderRadius: 12, padding: 14,
+    borderWidth: 1, borderColor: '#2a2a2a',
+  },
+  kpiIcon: {
+    width: 36, height: 36, borderRadius: 10,
+    alignItems: 'center', justifyContent: 'center', marginBottom: 8,
+  },
+  kpiValue: { fontSize: 20, fontWeight: '700', color: '#f1f1f1', letterSpacing: -0.3 },
+  kpiLabel: { fontSize: 11, color: '#888888', marginTop: 2 },
+  quickActions: {
+    flexDirection: 'row', paddingHorizontal: 16, marginTop: 16,
+    justifyContent: 'space-between',
+  },
+  quickAction: { flex: 1, alignItems: 'center', gap: 6 },
+  quickActionIcon: {
+    width: 52, height: 52, borderRadius: 16,
+    alignItems: 'center', justifyContent: 'center',
+  },
+  quickActionLabel: { fontSize: 10, fontWeight: '600', color: '#888888', textAlign: 'center' },
+  section: { marginTop: 20, paddingHorizontal: 16 },
+  sectionHeader: {
+    flexDirection: 'row', justifyContent: 'space-between',
+    alignItems: 'center', marginBottom: 10,
+  },
+  sectionTitle: { fontSize: 14, fontWeight: '700', color: '#888888', letterSpacing: 0.5 },
+  seeAll: { fontSize: 12, color: '#3b82f6', fontWeight: '600' },
+  card: {
+    backgroundColor: '#171717', borderRadius: 12,
+    borderWidth: 1, borderColor: '#2a2a2a', overflow: 'hidden',
+  },
+  progressCard: {
+    backgroundColor: '#171717', borderRadius: 12, padding: 16,
+    borderWidth: 1, borderColor: '#2a2a2a',
+  },
+  progressRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
+  progressLabel: { fontSize: 14, fontWeight: '600', color: '#f1f1f1' },
+  progressPct: { fontSize: 16, fontWeight: '800' },
+  progressBarBg: { height: 8, backgroundColor: '#2a2a2a', borderRadius: 4, overflow: 'hidden' },
+  progressBarFill: { height: 8, borderRadius: 4 },
+  progressSub: { fontSize: 11, color: '#888888', marginTop: 8 },
+  vacantRow: {
+    flexDirection: 'row', alignItems: 'center', gap: 12,
+    paddingHorizontal: 16, paddingVertical: 12,
+    borderBottomWidth: 1, borderBottomColor: '#2a2a2a',
+  },
+  vacantIcon: {
+    width: 32, height: 32, borderRadius: 8,
+    backgroundColor: 'rgba(245,158,11,0.15)',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  vacantUnit: { fontSize: 14, fontWeight: '600', color: '#f1f1f1' },
+  vacantProp: { fontSize: 11, color: '#888888', marginTop: 1 },
+  vacantChip: {
+    paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6,
+    backgroundColor: 'rgba(100,100,100,0.15)',
+  },
+  vacantChipText: { fontSize: 10, fontWeight: '700', color: '#888888', letterSpacing: 0.5 },
+  activityRow: {
+    flexDirection: 'row', alignItems: 'center', gap: 12,
+    paddingHorizontal: 16, paddingVertical: 12,
+    borderBottomWidth: 1, borderBottomColor: '#2a2a2a',
+  },
+  activityDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#3b82f6' },
+  activityName: { fontSize: 13, fontWeight: '600', color: '#f1f1f1' },
+  activityMeta: { fontSize: 11, color: '#888888', marginTop: 1 },
+  activityDate: { fontSize: 11, color: '#555555' },
+})

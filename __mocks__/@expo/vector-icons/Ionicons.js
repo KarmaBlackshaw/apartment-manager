@@ -3,6 +3,6 @@ const { Text } = require('react-native')
 
 const Icon = ({ name, ...props }) => React.createElement(Text, props, name)
 
-module.exports = { Ionicons: Icon, MaterialIcons: Icon, FontAwesome: Icon, Feather: Icon }
+module.exports = Icon
 module.exports.default = Icon
 module.exports.__esModule = true

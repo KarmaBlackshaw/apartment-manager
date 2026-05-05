@@ -1,5 +1,5 @@
 import { db } from '../../db'
-import { units } from '../../db/schema'
+import { units, properties } from '../../db/schema'
 import { eq, asc, count } from 'drizzle-orm'
 import type { Unit, UnitStatus } from '../../types'
 import { nanoid } from 'nanoid/non-secure'
@@ -41,4 +41,40 @@ export async function fetchUnitCounts(): Promise<Record<string, number>> {
     .from(units)
     .groupBy(units.property_id)
   return Object.fromEntries(rows.map((r) => [r.propertyId, r.count]))
+}
+
+export async function fetchUnitStatusCounts(): Promise<{ occupied: number; available: number; maintenance: number }> {
+  const rows = await db
+    .select({ status: units.status, count: count() })
+    .from(units)
+    .groupBy(units.status)
+  const map = Object.fromEntries(rows.map((r) => [r.status, r.count]))
+  return {
+    occupied: map.occupied ?? 0,
+    available: map.available ?? 0,
+    maintenance: map.maintenance ?? 0,
+  }
+}
+
+export async function fetchVacantUnits(): Promise<(Unit & { property_name: string })[]> {
+  const rows = await db
+    .select({
+      id: units.id,
+      property_id: units.property_id,
+      unit_number: units.unit_number,
+      floor: units.floor,
+      bedrooms: units.bedrooms,
+      bathrooms: units.bathrooms,
+      monthly_rate: units.monthly_rate,
+      daily_rate: units.daily_rate,
+      billing_type: units.billing_type,
+      status: units.status,
+      created_at: units.created_at,
+      property_name: properties.name,
+    })
+    .from(units)
+    .innerJoin(properties, eq(units.property_id, properties.id))
+    .where(eq(units.status, 'available'))
+    .orderBy(asc(units.unit_number))
+  return rows as (Unit & { property_name: string })[]
 }
