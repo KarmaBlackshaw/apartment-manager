@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import { View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useHideTabBar } from '../../hooks/useHideTabBar'
 
 interface BottomCTABarProps {
   children: ReactNode
@@ -8,6 +9,7 @@ interface BottomCTABarProps {
 
 export function BottomCTABar({ children }: BottomCTABarProps) {
   const insets = useSafeAreaInsets()
+  useHideTabBar()
 
   return (
     <View

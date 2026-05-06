@@ -122,6 +122,16 @@ export function initializeDatabase() {
       created_at TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP)
     );
 
+    CREATE TABLE IF NOT EXISTS beds (
+      id TEXT PRIMARY KEY,
+      unit_id TEXT NOT NULL REFERENCES units(id),
+      label TEXT NOT NULL,
+      daily_rate REAL NOT NULL DEFAULT 0,
+      tenant_id TEXT REFERENCES tenants(id),
+      vacated_at TEXT,
+      created_at TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+    );
+
     CREATE TABLE IF NOT EXISTS utility_readings (
       id TEXT PRIMARY KEY,
       unit_id TEXT NOT NULL REFERENCES units(id),
@@ -147,6 +157,10 @@ export function initializeDatabase() {
     "ALTER TABLE bills ADD COLUMN electricity_previous REAL",
     "ALTER TABLE bills ADD COLUMN electricity_current REAL",
     "ALTER TABLE tenants ADD COLUMN include_internet INTEGER NOT NULL DEFAULT 0",
+    "ALTER TABLE units ADD COLUMN unit_type TEXT DEFAULT 'studio'",
+    "ALTER TABLE units ADD COLUMN amenities TEXT DEFAULT '[]'",
+    "ALTER TABLE units ADD COLUMN size_sqm REAL",
+    "ALTER TABLE units ADD COLUMN billing_day INTEGER DEFAULT 1",
   ]
   for (const stmt of alterStatements) {
     try { expo.execSync(stmt) } catch { /* column already exists */ }

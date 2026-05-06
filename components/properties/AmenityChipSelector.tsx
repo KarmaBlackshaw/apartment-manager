@@ -10,8 +10,9 @@ const AMENITIES = ['Aircon', 'WiFi', 'Private CR', 'Furnished', 'Parking', 'Wate
 
 interface AmenityChipSelectorProps {
   selected: string[]
-  onToggle: (amenity: string) => void
+  onToggle?: (amenity: string) => void
   options?: string[]
+  readOnly?: boolean
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
@@ -60,15 +61,17 @@ export function AmenityChipSelector({
   selected,
   onToggle,
   options = AMENITIES,
+  readOnly = false,
 }: AmenityChipSelectorProps) {
+  const displayOptions = readOnly ? options.filter((a) => selected.includes(a)) : options
   return (
     <View className="flex-row flex-wrap gap-2">
-      {options.map((amenity) => (
+      {displayOptions.map((amenity) => (
         <AmenityChip
           key={amenity}
           label={amenity}
-          isSelected={selected.includes(amenity)}
-          onPress={() => onToggle(amenity)}
+          isSelected={readOnly ? true : selected.includes(amenity)}
+          onPress={() => !readOnly && onToggle?.(amenity)}
         />
       ))}
     </View>

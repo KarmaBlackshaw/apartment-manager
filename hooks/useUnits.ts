@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
-  fetchUnits, fetchUnit, createUnit, updateUnit, deleteUnit, fetchUnitCounts,
+  fetchUnits, fetchUnit, fetchUnitsWithStatus, fetchUnitDetail,
+  createUnit, updateUnit, deleteUnit, fetchUnitCounts,
   fetchUnitStatusCounts, fetchVacantUnits,
 } from '../lib/api/units'
 import type { Unit } from '../types'
@@ -13,6 +14,17 @@ export function useUnits(propertyId: string) {
   return useQuery({
     queryKey: unitsKey(propertyId),
     queryFn: () => fetchUnits(propertyId),
+    enabled: !!propertyId,
+  })
+}
+
+export function useUnitsWithStatus(propertyId: string, floor?: number | null) {
+  return useQuery({
+    queryKey: ['units-with-status', propertyId, floor ?? 'all'],
+    queryFn: async () => {
+      const all = await fetchUnitsWithStatus(propertyId)
+      return floor != null ? all.filter((u) => u.floor === floor) : all
+    },
     enabled: !!propertyId,
   })
 }
@@ -37,6 +49,14 @@ export function useUnit(id: string) {
   })
 }
 
+export function useUnitDetail(unitId: string) {
+  return useQuery({
+    queryKey: ['unit-detail', unitId],
+    queryFn: () => fetchUnitDetail(unitId),
+    enabled: !!unitId,
+  })
+}
+
 export function useCreateUnit(propertyId: string) {
   const qc = useQueryClient()
   return useMutation({
@@ -56,6 +76,7 @@ export function useUpdateUnit(propertyId: string) {
     onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: unitsKey(propertyId) })
       qc.invalidateQueries({ queryKey: ['unit', data.id] })
+      qc.invalidateQueries({ queryKey: ['unit-detail', data.id] })
     },
   })
 }

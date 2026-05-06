@@ -1,34 +1,26 @@
-import React, { useState, useMemo } from 'react'
-import { View, FlatList, TouchableOpacity, TextInput } from 'react-native'
+import React from 'react'
+import { View, FlatList, TouchableOpacity, Text } from 'react-native'
 import { useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
-import { useProperties } from '../../../hooks/useProperties'
-import { useUnitCounts } from '../../../hooks/useUnits'
-import { LoadingSpinner, EmptyState, AppText, PropertyCard, AppHeader } from '../../../components/ui'
+import { usePropertiesWithStats } from '../../../hooks/useProperties'
+import { AppHeader, LoadingSpinner, EmptyState, FAB } from '../../../components/ui'
+import { PropertyOverviewCard } from '../../../components/properties/PropertyOverviewCard'
+import { colors } from '../../../constants/theme'
 
 export default function PropertiesScreen() {
   const router = useRouter()
   const tabBarScroll = useTabBarScrollHandler()
-  const { data: properties, isLoading, isError } = useProperties()
-  const { data: unitCounts } = useUnitCounts()
-  const [query, setQuery] = useState('')
-
-  const filtered = useMemo(() => {
-    if (!properties) return []
-    if (!query.trim()) return properties
-    const q = query.toLowerCase()
-    return properties.filter(
-      (p) => p.name.toLowerCase().includes(q) || p.address.toLowerCase().includes(q),
-    )
-  }, [properties, query])
+  const { data: properties, isLoading, isError } = usePropertiesWithStats()
 
   if (isLoading) return <LoadingSpinner />
   if (isError) return (
     <View className="flex-1 items-center justify-center p-8 bg-app">
-      <AppText color="danger" className="text-center">Could not load properties. Please restart the app.</AppText>
+      <Text className="text-danger text-center">Could not load properties. Please restart the app.</Text>
     </View>
   )
+
+  const handleAdd = () => router.push('/(admin)/properties/new')
 
   return (
     <View className="flex-1 bg-app">
@@ -36,60 +28,72 @@ export default function PropertiesScreen() {
         title="Properties"
         right={
           <TouchableOpacity
-            onPress={() => router.push('/(admin)/properties/new')}
+            onPress={() => {}}
             style={{ marginRight: 8, padding: 4 }}
+            accessibilityLabel="Notifications"
           >
-            <Ionicons name="add" size={26} color="#3b82f6" />
+            <Ionicons name="notifications-outline" size={24} color={colors.textSecondary} />
           </TouchableOpacity>
         }
       />
-      {/* Search bar */}
-      <View className="px-4 pt-3 pb-2">
-        {/* @ts-ignore */}
-        <View className="flex-row items-center bg-elevated border border-[#2a2a2a] rounded-xl px-4 py-3 gap-3">
-          <Ionicons name="search" size={18} color="#555555" />
-          <TextInput
-            value={query}
-            onChangeText={setQuery}
-            placeholder="Search properties…"
-            placeholderTextColor="#555555"
-            // @ts-ignore
-            className="flex-1 text-base text-[#f1f1f1]"
-          />
-          {query.length > 0 && (
-            <TouchableOpacity onPress={() => setQuery('')} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-              <Ionicons name="close-circle" size={18} color="#555555" />
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
 
       <FlatList
-        data={filtered}
+        data={properties ?? []}
         keyExtractor={(p) => p.id}
-        contentContainerClassName="p-4"
-        contentContainerStyle={{ paddingBottom: 128 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 12, paddingBottom: 140 }}
         {...tabBarScroll}
-        renderItem={({ item }) => (
-          <PropertyCard
-            property={item}
-            unitCount={unitCounts ? (unitCounts[item.id] ?? 0) : undefined}
-            onPress={() => router.push(`/(admin)/properties/${item.id}`)}
-          />
-        )}
-        ListEmptyComponent={
-          query.trim() ? (
-            <AppText color="muted" className="text-center mt-12">No properties match "{query}"</AppText>
-          ) : (
-            <EmptyState
-              title="No properties yet"
-              description="Add your first property to get started"
-              actionLabel="Add Property"
-              onAction={() => router.push('/(admin)/properties/new')}
+        renderItem={({ item }) => {
+          const occupancyPct = item.totalUnits > 0
+            ? Math.round((item.occupiedUnits / item.totalUnits) * 100)
+            : 0
+          const chips = [
+            { label: `${item.totalUnits} unit${item.totalUnits !== 1 ? 's' : ''}`, variant: 'neutral' as const },
+            ...(item.occupiedUnits > 0
+              ? [{ label: `${item.occupiedUnits} occupied`, variant: 'success' as const }]
+              : []),
+            ...(item.vacantUnits > 0
+              ? [{ label: `${item.vacantUnits} vacant`, variant: 'danger' as const }]
+              : []),
+          ]
+          return (
+            <PropertyOverviewCard
+              name={item.name}
+              address={item.address}
+              chips={chips}
+              monthlyIncome={item.expectedMonthlyIncome}
+              occupancyPct={occupancyPct}
+              onPress={() => router.push(`/(admin)/properties/${item.id}`)}
             />
           )
+        }}
+        ListEmptyComponent={
+          <EmptyState
+            title="No properties yet"
+            description="Add your first property to get started"
+            actionLabel="Add Property"
+            onAction={handleAdd}
+          />
+        }
+        ListFooterComponent={
+          (properties?.length ?? 0) > 0 ? (
+            <TouchableOpacity
+              onPress={handleAdd}
+              className="rounded-xl items-center justify-center py-4 mt-1"
+              style={{
+                borderWidth: 1,
+                borderStyle: 'dashed',
+                borderColor: colors.border,
+              }}
+              accessibilityRole="button"
+              accessibilityLabel="Add property"
+            >
+              <Text style={{ color: colors.textMuted }} className="text-sm">+ Add property</Text>
+            </TouchableOpacity>
+          ) : null
         }
       />
+
+      <FAB onPress={handleAdd} bottomOffset={100} />
     </View>
   )
 }

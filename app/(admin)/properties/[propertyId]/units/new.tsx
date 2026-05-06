@@ -1,30 +1,44 @@
 import React, { useState } from 'react'
-import { View, ScrollView, KeyboardAvoidingView, Platform, Alert, StatusBar } from 'react-native'
+import { View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { useTabBarScrollHandler } from '../../../../../hooks/useTabBarScrollHandler'
 import { useCreateUnit } from '../../../../../hooks/useUnits'
-import { Input, Button, AppText } from '../../../../../components/ui'
-import type { BillingType } from '../../../../../types'
+import { useHideTabBar } from '../../../../../hooks/useHideTabBar'
+import { Input, Button, AppText, AppHeader } from '../../../../../components/ui'
+import { AmenityChipSelector } from '../../../../../components/properties/AmenityChipSelector'
+import type { UnitType } from '../../../../../types'
+
+const UNIT_TYPES: { value: UnitType; label: string }[] = [
+  { value: 'studio', label: 'Studio' },
+  { value: '1br', label: '1BR' },
+  { value: '2br', label: '2BR' },
+  { value: 'bedspacer', label: 'Bedspacer' },
+]
 
 export default function NewUnitScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()
   const router = useRouter()
-  const tabBarScroll = useTabBarScrollHandler()
   const { mutateAsync, isPending } = useCreateUnit(propertyId)
+  useHideTabBar()
+
   const [unitNumber, setUnitNumber] = useState('')
   const [floor, setFloor] = useState('')
-  const [bedrooms, setBedrooms] = useState('1')
-  const [bathrooms, setBathrooms] = useState('1')
-  const [billingType, setBillingType] = useState<BillingType>('monthly')
-  const [monthlyRate, setMonthlyRate] = useState('')
-  const [dailyRate, setDailyRate] = useState('')
+  const [sizeSqm, setSizeSqm] = useState('')
+  const [unitType, setUnitType] = useState<UnitType>('studio')
+  const [monthlyRent, setMonthlyRent] = useState('')
+  const [billingDay, setBillingDay] = useState('1')
+  const [amenities, setAmenities] = useState<string[]>([])
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  function toggleAmenity(a: string) {
+    setAmenities((prev) =>
+      prev.includes(a) ? prev.filter((x) => x !== a) : [...prev, a],
+    )
+  }
 
   async function handleSubmit() {
     const errs: Record<string, string> = {}
-    if (!unitNumber.trim()) errs.unitNumber = 'Unit number is required'
-    if (billingType === 'monthly' && !monthlyRate) errs.rate = 'Monthly rate is required'
-    if (billingType === 'daily' && !dailyRate) errs.rate = 'Daily rate is required'
+    if (!unitNumber.trim()) errs.unitNumber = 'Unit number / name is required'
+    if (!monthlyRent || isNaN(parseFloat(monthlyRent))) errs.monthlyRent = 'Monthly rent is required'
     if (Object.keys(errs).length) { setErrors(errs); return }
 
     try {
@@ -32,11 +46,15 @@ export default function NewUnitScreen() {
         property_id: propertyId,
         unit_number: unitNumber.trim(),
         floor: floor ? parseInt(floor) : null,
-        bedrooms: parseInt(bedrooms) || 1,
-        bathrooms: parseInt(bathrooms) || 1,
-        billing_type: billingType,
-        monthly_rate: billingType === 'monthly' ? parseFloat(monthlyRate) : null,
-        daily_rate: billingType === 'daily' ? parseFloat(dailyRate) : null,
+        bedrooms: 1,
+        bathrooms: 1,
+        billing_type: 'monthly',
+        monthly_rate: parseFloat(monthlyRent),
+        daily_rate: null,
+        unit_type: unitType,
+        amenities: JSON.stringify(amenities),
+        size_sqm: sizeSqm ? parseFloat(sizeSqm) : null,
+        billing_day: billingDay ? parseInt(billingDay) : 1,
       })
       router.back()
     } catch {
@@ -46,43 +64,84 @@ export default function NewUnitScreen() {
 
   return (
     <KeyboardAvoidingView
-      behavior="padding"
-      keyboardVerticalOffset={Platform.OS === 'android' ? StatusBar.currentHeight ?? 0 : 0}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       className="flex-1 bg-app"
     >
+      <AppHeader title="Add Unit" />
       <ScrollView
-        contentContainerClassName="p-4 pb-32"
+        contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
-        {...tabBarScroll}
       >
-        <Input label="Unit Number" value={unitNumber} onChangeText={setUnitNumber} error={errors.unitNumber} placeholder="e.g. 101" />
-        <Input label="Floor (optional)" value={floor} onChangeText={setFloor} keyboardType="number-pad" placeholder="1" />
-        <Input label="Bedrooms" value={bedrooms} onChangeText={setBedrooms} keyboardType="number-pad" />
-        <Input label="Bathrooms" value={bathrooms} onChangeText={setBathrooms} keyboardType="number-pad" />
+        <Input
+          label="Unit number / name"
+          value={unitNumber}
+          onChangeText={setUnitNumber}
+          error={errors.unitNumber}
+          placeholder="Unit 1A"
+        />
 
-        <AppText variant="label" color="secondary" className="mb-2">Billing Type</AppText>
-        <View className="flex-row gap-2 mb-4">
-          <Button
-            label="Monthly" size="sm"
-            variant={billingType === 'monthly' ? 'primary' : 'secondary'}
-            onPress={() => setBillingType('monthly')}
-            className="flex-1"
-          />
-          <Button
-            label="Daily" size="sm"
-            variant={billingType === 'daily' ? 'primary' : 'secondary'}
-            onPress={() => setBillingType('daily')}
-            className="flex-1"
-          />
+        <View className="flex-row gap-3">
+          <View className="flex-1">
+            <Input
+              label="Floor"
+              value={floor}
+              onChangeText={setFloor}
+              keyboardType="number-pad"
+              placeholder="1"
+            />
+          </View>
+          <View className="flex-1">
+            <Input
+              label="Size (sqm)"
+              value={sizeSqm}
+              onChangeText={setSizeSqm}
+              keyboardType="decimal-pad"
+              placeholder="Optional"
+            />
+          </View>
         </View>
 
-        {billingType === 'monthly'
-          ? <Input label="Monthly Rate ($)" value={monthlyRate} onChangeText={setMonthlyRate} keyboardType="decimal-pad" error={errors.rate} placeholder="500.00" />
-          : <Input label="Daily Rate ($)" value={dailyRate} onChangeText={setDailyRate} keyboardType="decimal-pad" error={errors.rate} placeholder="25.00" />
-        }
+        <AppText variant="label" color="secondary" className="mb-2 mt-1">Unit type</AppText>
+        <View className="flex-row flex-wrap gap-2 mb-4">
+          {UNIT_TYPES.map((type) => (
+            <Button
+              key={type.value}
+              label={type.label}
+              size="sm"
+              variant={unitType === type.value ? 'primary' : 'secondary'}
+              onPress={() => setUnitType(type.value)}
+              className="flex-1 min-w-[44%]"
+            />
+          ))}
+        </View>
 
-        <Button label="Create Unit" onPress={handleSubmit} loading={isPending} className="mt-4" />
+        <Input
+          label="Monthly rent (₱)"
+          value={monthlyRent}
+          onChangeText={setMonthlyRent}
+          keyboardType="decimal-pad"
+          placeholder="3,500"
+          error={errors.monthlyRent}
+        />
+
+        <Input
+          label="Billing day"
+          value={billingDay}
+          onChangeText={setBillingDay}
+          keyboardType="number-pad"
+          placeholder="1st of month"
+        />
+
+        <AppText variant="label" color="secondary" className="mb-2 mt-1">Amenities</AppText>
+        <AmenityChipSelector selected={amenities} onToggle={toggleAmenity} />
+
+        <Button
+          label="Save Unit"
+          onPress={handleSubmit}
+          loading={isPending}
+          className="mt-6"
+        />
       </ScrollView>
     </KeyboardAvoidingView>
   )

@@ -47,6 +47,10 @@ export default function NewUnitScreen() {
         billing_type: billingType,
         monthly_rate: billingType === 'monthly' ? parseFloat(monthlyRate) : null,
         daily_rate: billingType === 'daily' ? parseFloat(dailyRate) : null,
+        unit_type: null,
+        amenities: '[]',
+        size_sqm: null,
+        billing_day: 1,
       })
       router.back()
     } catch {

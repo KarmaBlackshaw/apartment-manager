@@ -20,6 +20,10 @@ export const units = sqliteTable('units', {
   daily_rate: real('daily_rate'),
   billing_type: text('billing_type', { enum: ['monthly', 'daily'] }).notNull(),
   status: text('status', { enum: ['available', 'occupied', 'maintenance'] }).notNull().default('available'),
+  unit_type: text('unit_type', { enum: ['studio', '1br', '2br', 'bedspacer'] }).default('studio'),
+  amenities: text('amenities').default('[]'),
+  size_sqm: real('size_sqm'),
+  billing_day: integer('billing_day').default(1),
   created_at: text('created_at').notNull().default(sql`(CURRENT_TIMESTAMP)`),
 }, (t) => ({
   unitNumberUnique: uniqueIndex('units_property_unit_unique').on(t.property_id, t.unit_number),
@@ -105,6 +109,16 @@ export const payments = sqliteTable('payments', {
   balance_before: real('balance_before').notNull().default(0),
   balance_after: real('balance_after').notNull().default(0),
   voided_at: text('voided_at'),
+  created_at: text('created_at').notNull().default(sql`(CURRENT_TIMESTAMP)`),
+})
+
+export const beds = sqliteTable('beds', {
+  id: text('id').primaryKey(),
+  unit_id: text('unit_id').notNull().references(() => units.id),
+  label: text('label').notNull(),
+  daily_rate: real('daily_rate').notNull().default(0),
+  tenant_id: text('tenant_id').references(() => tenants.id),
+  vacated_at: text('vacated_at'),
   created_at: text('created_at').notNull().default(sql`(CURRENT_TIMESTAMP)`),
 })
 

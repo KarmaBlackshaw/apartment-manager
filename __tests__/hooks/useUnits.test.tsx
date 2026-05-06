@@ -41,7 +41,8 @@ test('useCreateUnit calls createUnit and invalidates list', async () => {
     result.current.mutate({
       property_id: 'p1', unit_number: '102', floor: null,
       bedrooms: 1, bathrooms: 1, monthly_rate: 400, daily_rate: null,
-      billing_type: 'monthly',
+      billing_type: 'monthly', unit_type: null, amenities: '[]',
+      size_sqm: null, billing_day: 1,
     })
   })
   await waitFor(() => expect(result.current.isSuccess).toBe(true))

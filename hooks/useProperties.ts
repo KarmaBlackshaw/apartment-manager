@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
-  fetchProperties, fetchProperty, createProperty, updateProperty, deleteProperty,
+  fetchProperties, fetchProperty, fetchPropertiesWithStats, fetchPropertyStats,
+  createProperty, updateProperty, deleteProperty,
 } from '../lib/api/properties'
 import type { Property } from '../types'
 
@@ -10,11 +11,26 @@ export function useProperties() {
   return useQuery({ queryKey: PROPERTIES_KEY, queryFn: fetchProperties })
 }
 
+export function usePropertiesWithStats() {
+  return useQuery({
+    queryKey: [...PROPERTIES_KEY, 'with-stats'],
+    queryFn: fetchPropertiesWithStats,
+  })
+}
+
 export function useProperty(id: string) {
   return useQuery({
     queryKey: [...PROPERTIES_KEY, id],
     queryFn: () => fetchProperty(id),
     enabled: !!id,
+  })
+}
+
+export function usePropertyStats(propertyId: string) {
+  return useQuery({
+    queryKey: [...PROPERTIES_KEY, propertyId, 'stats'],
+    queryFn: () => fetchPropertyStats(propertyId),
+    enabled: !!propertyId,
   })
 }
 
