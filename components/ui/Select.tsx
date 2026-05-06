@@ -98,7 +98,6 @@ export function Select({
                 onChangeText={setQuery}
                 placeholder="Search…"
                 placeholderTextColor="#555555"
-                autoFocus
                 style={{ flex: 1, fontSize: 16, color: '#f1f1f1' }}
               />
               {query.length > 0 && (

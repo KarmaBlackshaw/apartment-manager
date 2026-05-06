@@ -67,7 +67,7 @@ export default function MoveOutScreen() {
           onPress: async () => {
             try {
               await deactivate({ id, unitId: tenant.unit_id! })
-              router.replace('/(admin)/tenants' as any)
+              router.replace('/tenants')
             } catch {
               Alert.alert('Error', 'Could not process move-out. Please try again.')
             }

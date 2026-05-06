@@ -16,6 +16,7 @@ import {
   AmountText,
   LoadingSpinner,
   EmptyState,
+  FAB,
 } from '../../../components/ui'
 import { colors } from '../../../constants/theme'
 import type { ChipVariant } from '../../../components/ui'
@@ -70,7 +71,7 @@ export default function TenantsScreen() {
     navigation.setOptions({
       headerRight: () => (
         <Pressable
-          onPress={() => router.push('/(admin)/notifications' as any)}
+          onPress={() => router.push('/notifications')}
           style={{ padding: 4, marginRight: 8 }}
           hitSlop={8}
         >
@@ -84,35 +85,6 @@ export default function TenantsScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
-      {/* Property selector row */}
-      <View
-        style={{
-          paddingHorizontal: 16,
-          paddingVertical: 8,
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}
-      >
-        <Pressable
-          style={{
-            backgroundColor: colors.elevated,
-            borderRadius: 999,
-            paddingHorizontal: 14,
-            paddingVertical: 8,
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 6,
-          }}
-        >
-          <Ionicons name="home-outline" size={14} color={colors.textSecondary} />
-          <Text style={{ color: colors.textPrimary, fontSize: 14, fontWeight: '500' }}>
-            All properties ▾
-          </Text>
-        </Pressable>
-        <View style={{ flex: 1 }} />
-        <Text style={{ color: colors.textMuted, fontSize: 13 }}>{total} tenants</Text>
-      </View>
-
       {/* Search bar */}
       <View
         style={{
@@ -183,18 +155,14 @@ export default function TenantsScreen() {
               }
               trailingChip={<StatusChip variant={chipVariant} label={chipLabel} />}
               trailingAmount={<AmountText amount={owed} variant={owed > 0 ? 'owed' : 'zero'} />}
-              onPress={() => router.push(`/(admin)/tenants/${tenant.id}` as any)}
+              onPress={() => router.push({ pathname: '/tenants/[id]', params: { id: tenant.id } })}
             />
           )
         }}
-        ListEmptyComponent={
-          <EmptyState
-            title="No tenants"
-            actionLabel="New tenant"
-            onAction={() => router.push('/(admin)/tenants/new' as any)}
-          />
-        }
+        ListEmptyComponent={<EmptyState title="No tenants" />}
       />
+
+      <FAB onPress={() => router.push('/tenants/new')} />
     </View>
   )
 }

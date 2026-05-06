@@ -94,7 +94,7 @@ export default function TenantDetailScreen() {
             amount={currentBalance}
             variant={currentBalance > 0 ? 'danger' : currentBalance < 0 ? 'neutral' : 'success'}
             onRecordPayment={() =>
-              router.push(`/(admin)/billing/new?tenantId=${id}` as any)
+              router.push({ pathname: '/billing/new', params: { tenantId: id } })
             }
           />
         </View>
@@ -120,7 +120,7 @@ export default function TenantDetailScreen() {
           <SectionHeader
             title="Payment history"
             onViewAll={() =>
-              router.push(`/(admin)/tenants/${id}/payment-history` as any)
+              router.push({ pathname: '/tenants/[id]/payment-history', params: { id } })
             }
           />
           <View style={styles.section}>
@@ -164,12 +164,12 @@ export default function TenantDetailScreen() {
           <Button
             label="Move Out"
             variant="danger"
-            onPress={() => router.push(`/(admin)/tenants/${id}/move-out` as any)}
+            onPress={() => router.push({ pathname: '/tenants/[id]/move-out', params: { id } })}
           />
           <Button
             label="View Documents"
             variant="secondary"
-            onPress={() => router.push(`/(admin)/tenants/${id}/documents` as any)}
+            onPress={() => router.push({ pathname: '/tenants/[id]/documents', params: { id } })}
             className="mt-2"
           />
         </View>

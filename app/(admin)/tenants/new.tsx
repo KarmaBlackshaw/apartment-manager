@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, ScrollView, KeyboardAvoidingView, Platform, Pressable, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
@@ -7,6 +7,7 @@ import dayjs from 'dayjs'
 import { useCreateTenant } from '../../../hooks/useTenants'
 import { useProperties } from '../../../hooks/useProperties'
 import { useUnits } from '../../../hooks/useUnits'
+import { useTabBarVisibility } from '../../../context/TabBarVisibilityContext'
 import {
   Input,
   Button,
@@ -39,6 +40,12 @@ const CONTRACT_OPTIONS = ['Month-to-month', 'Fixed term']
 export default function NewTenantScreen() {
   const router = useRouter()
   const { mutateAsync: createTenant, isPending } = useCreateTenant()
+  const { setVisible } = useTabBarVisibility()
+
+  useEffect(() => {
+    setVisible(false)
+    return () => setVisible(true)
+  }, [])
 
   // ── Step ──────────────────────────────────────────────────────────────────
   const [step, setStep] = useState(1)
@@ -150,7 +157,7 @@ export default function NewTenantScreen() {
         due_day: parseInt(billingDay),
       })
       toast.success('Tenant added successfully')
-      router.replace(`/(admin)/tenants/${created.id}` as any)
+      router.replace({ pathname: '/tenants/[id]', params: { id: created.id } })
     } catch {
       toast.error('Could not save tenant. Please try again.')
     }

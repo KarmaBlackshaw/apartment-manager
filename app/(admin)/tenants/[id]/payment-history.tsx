@@ -115,7 +115,7 @@ export default function PaymentHistoryScreen() {
                 variant={bill.status === 'paid' ? 'paid' : 'owed'}
               />
             }
-            onPress={() => router.push(`/(admin)/billing/${bill.id}` as any)}
+            onPress={() => router.push({ pathname: '/billing/[id]', params: { id: bill.id } })}
             showDivider={index < filteredBills.length - 1}
           />
         )}

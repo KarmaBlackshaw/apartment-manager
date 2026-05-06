@@ -31,6 +31,7 @@ export { ReceiptDocument } from './ReceiptDocument'
 export { PINKeypad } from './PINKeypad'
 export { OccupancyBarChart } from './OccupancyBarChart'
 export { CameraCapture } from './CameraCapture'
+export { FAB } from './FAB'
 // existing
 export { AppText } from './AppText'
 export { Button } from './Button'
