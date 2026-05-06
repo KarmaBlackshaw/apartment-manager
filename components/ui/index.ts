@@ -1,3 +1,4 @@
+export { AppHeader } from './AppHeader'
 export { StatusChip } from './StatusChip'
 export type { ChipVariant } from './StatusChip'
 export { AvatarInitials } from './AvatarInitials'

@@ -9,10 +9,11 @@ import { useTenantSearch } from '../../context/TenantSearchContext'
 type IoniconName = React.ComponentProps<typeof Ionicons>['name']
 
 const ICONS: Record<string, { on: IoniconName; off: IoniconName }> = {
-  index:   { on: 'home',      off: 'home-outline' },
-  tenants: { on: 'people',    off: 'people-outline' },
-  billing: { on: 'card',      off: 'card-outline' },
-  reports: { on: 'bar-chart', off: 'bar-chart-outline' },
+  index:      { on: 'home',      off: 'home-outline' },
+  tenants:    { on: 'people',    off: 'people-outline' },
+  billing:    { on: 'card',      off: 'card-outline' },
+  properties: { on: 'business',  off: 'business-outline' },
+  reports:    { on: 'bar-chart', off: 'bar-chart-outline' },
 }
 
 export function FloatingTabBar({ state, descriptors, navigation }: BottomTabBarProps) {

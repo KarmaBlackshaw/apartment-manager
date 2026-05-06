@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { ScrollView, View, Text, Pressable } from 'react-native'
-import { Stack, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../hooks/useTabBarScrollHandler'
 import { useBills } from '../../hooks/useBills'
@@ -8,6 +8,7 @@ import { useUnitCounts, useVacantUnits } from '../../hooks/useUnits'
 import { useSettings } from '../../hooks/useSettings'
 import { useTenantSearch } from '../../context/TenantSearchContext'
 import {
+  AppHeader,
   KPICard,
   SectionHeader,
   CollectionProgressBar,
@@ -126,32 +127,26 @@ export default function HomeScreen() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          headerShown: true,
-          title: 'Home',
-          headerStyle: { backgroundColor: colors.background },
-          headerTintColor: colors.textPrimary,
-          headerShadowVisible: false,
-          headerRight: () => (
-            <View style={{ flexDirection: 'row', gap: 4 }}>
-              <Pressable
-                style={{ padding: 6 }}
-                onPress={() => router.push('/(admin)/notifications' as any)}
-                accessibilityLabel="Notifications"
-              >
-                <Ionicons name="notifications-outline" size={22} color={colors.textSecondary} />
-              </Pressable>
-              <Pressable
-                style={{ padding: 6 }}
-                onPress={() => router.push('/(admin)/settings' as any)}
-                accessibilityLabel="Settings"
-              >
-                <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
-              </Pressable>
-            </View>
-          ),
-        }}
+      <AppHeader
+        title="Home"
+        right={
+          <View style={{ flexDirection: 'row', gap: 4 }}>
+            <Pressable
+              style={{ padding: 6 }}
+              onPress={() => router.push('/(admin)/notifications' as any)}
+              accessibilityLabel="Notifications"
+            >
+              <Ionicons name="notifications-outline" size={22} color={colors.textSecondary} />
+            </Pressable>
+            <Pressable
+              style={{ padding: 6 }}
+              onPress={() => router.push('/(admin)/settings' as any)}
+              accessibilityLabel="Settings"
+            >
+              <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
+            </Pressable>
+          </View>
+        }
       />
 
       <ScrollView
