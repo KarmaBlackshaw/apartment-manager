@@ -48,7 +48,6 @@ export function PropertySelector({ selectedId, onChange }: PropertySelectorProps
         accessibilityLabel={`Property filter: ${label}`}
         className="flex-row items-center gap-[5px] bg-elevated rounded-full px-3 py-[7px] max-w-[180px]"
       >
-        <Ionicons name="business-outline" size={12} color={colors.textSecondary} />
         <Text className="text-xs text-text-secondary font-medium flex-shrink" numberOfLines={1}>{label}</Text>
         <Ionicons name="chevron-down" size={12} color={colors.textSecondary} />
       </Pressable>
