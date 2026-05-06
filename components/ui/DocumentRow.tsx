@@ -10,7 +10,7 @@ import { colors, radius } from '../../constants/theme'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
-type DocCategory = 'contract' | 'photo' | 'permit' | 'gov-id' | 'other'
+export type DocCategory = 'contract' | 'photo' | 'permit' | 'gov-id' | 'other'
 
 interface DocumentRowProps {
   title: string

@@ -12,6 +12,7 @@ import {
   DocumentRow,
   AppText,
 } from '../../../../components/ui'
+import type { DocCategory } from '../../../../components/ui'
 import { colors } from '../../../../constants/theme'
 
 export default function DocumentsScreen() {
@@ -66,7 +67,7 @@ export default function DocumentsScreen() {
         renderItem={({ item: doc }) => (
           <DocumentRow
             title={doc.title}
-            category={doc.category as any}
+            category={doc.category as DocCategory}
             date={doc.created_at ? dayjs(doc.created_at).format('MMM D, YYYY') : '—'}
             onPress={() => Alert.alert('Document', doc.title)}
           />
