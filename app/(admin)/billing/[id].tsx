@@ -1,162 +1,285 @@
 import React from 'react'
-import { View, ScrollView, Alert } from 'react-native'
+import { View, Text, ScrollView, Alert, StyleSheet } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import * as Print from 'expo-print'
-import * as Sharing from 'expo-sharing'
-import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
-import { useBill, useMarkBillPaid, useDeleteBill } from '../../../hooks/useBills'
-import { Button, AppText, LoadingSpinner, Card, Badge, billStatusBadge, billingBadge } from '../../../components/ui'
-import { formatCurrency, formatDateRange } from '../../../lib/billing'
-import { useSettings } from '../../../hooks/useSettings'
+import dayjs from 'dayjs'
+import { colors } from '../../../constants/theme'
+import {
+  ScreenHeader,
+  BottomCTABar,
+  Button,
+  LoadingSpinner,
+  SectionHeader,
+  InfoRow,
+  StatusChip,
+  AvatarInitials,
+} from '../../../components/ui'
+import type { ChipVariant } from '../../../components/ui'
+import { useBill } from '../../../hooks/useBills'
 import { useTenant } from '../../../hooks/useTenants'
 import { useUnit } from '../../../hooks/useUnits'
-import { generateReceiptHTML } from '../../../lib/receipt'
+import { useSettings } from '../../../hooks/useSettings'
+import {
+  formatCurrency,
+  calcElectricityCharge,
+  calcWaterCharge,
+} from '../../../lib/billing'
+
+// ---------------------------------------------------------------------------
+// Bill status → StatusChip variant
+// ---------------------------------------------------------------------------
+function billStatusChip(status: string): { variant: ChipVariant; label: string } {
+  if (status === 'paid') return { variant: 'success', label: 'PAID' }
+  if (status === 'overdue') return { variant: 'danger', label: 'OVERDUE' }
+  return { variant: 'warning', label: 'PENDING' }
+}
 
 export default function BillDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const router = useRouter()
-  const tabBarScroll = useTabBarScrollHandler()
+
   const { data: bill, isLoading, isError } = useBill(id)
-  const { mutateAsync: markPaid, isPending: paying } = useMarkBillPaid()
-  const { mutateAsync: remove, isPending: deleting } = useDeleteBill()
-  const { data: settings } = useSettings()
   const { data: tenant } = useTenant(bill?.tenant_id ?? '')
   const { data: unit } = useUnit(bill?.unit_id ?? '')
+  const { data: settings } = useSettings()
 
   if (!id) return null
-  if (isLoading) return <LoadingSpinner />
-  if (isError) return (
-    <View className="flex-1 items-center justify-center p-8 bg-app">
-      <AppText color="danger" className="text-center">Could not load bill. Please restart the app.</AppText>
-    </View>
-  )
-  if (!bill) return (
-    <View className="flex-1 items-center justify-center p-8 bg-app">
-      <AppText color="danger" className="text-center">Bill not found.</AppText>
-    </View>
-  )
 
-  const statusBadge = billStatusBadge(bill.status)
-  const billing = billingBadge(bill.billing_type)
-
-  async function handleMarkPaid() {
-    try {
-      await markPaid(id)
-    } catch {
-      Alert.alert('Error', 'Could not mark bill as paid. Please try again.')
-    }
+  if (isLoading) {
+    return (
+      <View style={styles.root}>
+        <ScreenHeader title="Bill" left="back" />
+        <LoadingSpinner />
+      </View>
+    )
   }
 
-  function handleDelete() {
-    Alert.alert('Delete Bill', 'Delete this bill permanently?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete', style: 'destructive',
-        onPress: async () => {
-          try {
-            await remove(id)
-            router.back()
-          } catch {
-            Alert.alert('Error', 'Could not delete bill. Please try again.')
-          }
-        }
-      },
-    ])
+  if (isError || !bill) {
+    return (
+      <View style={styles.root}>
+        <ScreenHeader title="Bill" left="back" />
+        <View style={styles.centered}>
+          <Text style={styles.errorText}>
+            {isError ? 'Could not load bill.' : 'Bill not found.'}
+          </Text>
+        </View>
+      </View>
+    )
   }
 
-  async function handleGenerateReceipt() {
-    if (!bill || !settings || !unit) {
-      Alert.alert('Error', 'Still loading data. Please try again.')
-      return
-    }
-    try {
-      const html = generateReceiptHTML({
-        bill,
-        unitNumber: unit.unit_number,
-        settings,
-        includeInternet: tenant?.include_internet ?? false,
-      })
-      const { uri } = await Print.printToFileAsync({ html })
-      await Sharing.shareAsync(uri, { mimeType: 'application/pdf', UTI: 'com.adobe.pdf' })
-    } catch {
-      Alert.alert('Error', 'Could not generate receipt. Please try again.')
-    }
+  // ---------------------------------------------------------------------------
+  // Charge calculations
+  // ---------------------------------------------------------------------------
+  const elecCharge =
+    bill.electricity_previous != null &&
+    bill.electricity_current != null &&
+    settings
+      ? calcElectricityCharge(
+          bill.electricity_previous,
+          bill.electricity_current,
+          settings.electricity_rate,
+        )
+      : 0
+
+  const waterCharge =
+    bill.water_previous != null && bill.water_current != null && settings
+      ? calcWaterCharge(
+          bill.water_previous,
+          bill.water_current,
+          settings.water_rate,
+        )
+      : 0
+
+  const baseRent = bill.amount - elecCharge - waterCharge
+  const lateFee =
+    bill.status === 'overdue'
+      ? parseFloat((bill.amount * 0.05).toFixed(2))
+      : 0
+  const totalDue = bill.amount + lateFee
+
+  // ---------------------------------------------------------------------------
+  // UI helpers
+  // ---------------------------------------------------------------------------
+  const chip = billStatusChip(bill.status)
+  const headerTitle = `${dayjs(bill.period_start).format('MMM YYYY')} Bill`
+  const dueDisplay = dayjs(bill.due_date).format('MMM D, YYYY')
+
+  function handleWaiveLateFee() {
+    // TODO: implement waive late fee mutation
+    Alert.alert('Waive Late Fee', 'Late fee waived (not yet implemented).')
   }
 
   return (
-    <ScrollView className="flex-1 bg-app" contentContainerClassName="p-4 pb-32" {...tabBarScroll}>
-      <Card className="mb-4">
-        <AppText variant="heading" className="mb-1">{formatCurrency(bill.amount)}</AppText>
-        <AppText variant="subheading" color="secondary">{bill.tenant.full_name}</AppText>
-        <View className="flex-row gap-2 mt-2">
-          <Badge label={statusBadge.label} variant={statusBadge.variant} />
-          <Badge label={billing.label} variant={billing.variant} />
-        </View>
-      </Card>
+    <View style={styles.root}>
+      <ScreenHeader title={headerTitle} left="back" />
 
-      <Card>
-        <View className="gap-2">
-          <View className="flex-row justify-between">
-            <AppText color="secondary">Period</AppText>
-            <AppText>{formatDateRange(bill.period_start, bill.period_end)}</AppText>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* 1. Tenant header card */}
+        <View style={styles.tenantCard}>
+          <AvatarInitials name={tenant?.full_name ?? '?'} size="md" />
+          <View style={styles.tenantInfo}>
+            <Text style={styles.tenantName}>{tenant?.full_name ?? '—'}</Text>
+            <Text style={styles.tenantMeta}>
+              {unit ? `Unit ${unit.unit_number}` : '—'} · Due {dueDisplay}
+            </Text>
           </View>
-          <View className="flex-row justify-between">
-            <AppText color="secondary">Due Date</AppText>
-            <AppText>{bill.due_date}</AppText>
-          </View>
-          {bill.paid_at && (
-            <View className="flex-row justify-between">
-              <AppText color="secondary">Paid On</AppText>
-              <AppText>{bill.paid_at.split('T')[0]}</AppText>
-            </View>
-          )}
-          {bill.notes && (
-            <View>
-              <AppText color="secondary">Notes</AppText>
-              <AppText>{bill.notes}</AppText>
-            </View>
-          )}
-          {bill.billing_type === 'monthly' && bill.water_previous != null && bill.water_current != null && (
-            <>
-              <View className="flex-row justify-between">
-                <AppText color="secondary">Water Reading</AppText>
-                <AppText>{bill.water_previous} → {bill.water_current} cu.m</AppText>
-              </View>
-              <View className="flex-row justify-between">
-                <AppText color="secondary">Water Charge</AppText>
-                <AppText>{settings ? formatCurrency((bill.water_current - bill.water_previous) * settings.water_rate) : '—'}</AppText>
-              </View>
-            </>
-          )}
-          {bill.billing_type === 'monthly' && bill.electricity_previous != null && bill.electricity_current != null && (
-            <>
-              <View className="flex-row justify-between">
-                <AppText color="secondary">Electricity Reading</AppText>
-                <AppText>{bill.electricity_previous} → {bill.electricity_current} kWh</AppText>
-              </View>
-              <View className="flex-row justify-between">
-                <AppText color="secondary">Electricity Charge</AppText>
-                <AppText>{settings ? formatCurrency((bill.electricity_current - bill.electricity_previous) * settings.electricity_rate) : '—'}</AppText>
-              </View>
-            </>
-          )}
-          {bill.billing_type === 'monthly' && (
-            <View className="flex-row justify-between">
-              <AppText color="secondary">Internet</AppText>
-              <AppText>{settings && tenant?.include_internet
-                ? formatCurrency(settings.internet_rate)
-                : 'Free'
-              }</AppText>
-            </View>
-          )}
+          <StatusChip variant={chip.variant} label={chip.label} size="sm" />
         </View>
-      </Card>
 
-      {bill.status !== 'paid' && (
-        <Button label="Mark as Paid" onPress={handleMarkPaid} loading={paying} className="mt-4" />
-      )}
-      <Button label="Delete Bill" variant="danger" onPress={handleDelete} loading={deleting} className="mt-3" />
-      <Button label="Generate Receipt (PDF)" variant="secondary" onPress={handleGenerateReceipt} className="mt-3" />
-    </ScrollView>
+        {/* 2. Bill breakdown section */}
+        <SectionHeader title="Bill breakdown" />
+        <View style={styles.sectionCard}>
+          <InfoRow
+            label="Base rent"
+            value={formatCurrency(baseRent)}
+            showDivider={
+              bill.electricity_previous != null ||
+              bill.water_previous != null ||
+              bill.status === 'overdue'
+            }
+          />
+
+          {bill.electricity_previous != null && bill.electricity_current != null && (
+            <InfoRow
+              label={`Electricity (${bill.electricity_current - bill.electricity_previous} kWh)`}
+              value={formatCurrency(elecCharge)}
+              valueColor={colors.textPrimary}
+              showDivider={bill.water_previous != null || bill.status === 'overdue'}
+            />
+          )}
+
+          {bill.water_previous != null && bill.water_current != null && (
+            <InfoRow
+              label={`Water (${bill.water_current - bill.water_previous} cu.m)`}
+              value={formatCurrency(waterCharge)}
+              valueColor={colors.textPrimary}
+              showDivider={bill.status === 'overdue'}
+            />
+          )}
+
+          {bill.status === 'overdue' && (
+            <InfoRow
+              label="Late fee"
+              value={formatCurrency(lateFee)}
+              valueColor={colors.danger}
+              showDivider={false}
+            />
+          )}
+
+          <InfoRow
+            label="Total due"
+            value={formatCurrency(totalDue)}
+            bold
+            showDivider={false}
+          />
+        </View>
+
+        {/* 3. Payment status section */}
+        <SectionHeader title="Payment status" />
+        <View style={[styles.sectionCard, { marginTop: 0 }]}>
+          <InfoRow
+            label="Total paid"
+            value={bill.status === 'paid' ? formatCurrency(bill.amount) : formatCurrency(0)}
+            valueColor={colors.success}
+            showDivider
+          />
+          <InfoRow
+            label="Balance due"
+            value={bill.status === 'paid' ? formatCurrency(0) : formatCurrency(bill.amount)}
+            valueColor={bill.status === 'paid' ? colors.success : colors.danger}
+            showDivider={false}
+          />
+        </View>
+      </ScrollView>
+
+      {/* Bottom CTA */}
+      <BottomCTABar>
+        <Button
+          label="Record Payment"
+          variant="primary"
+          onPress={() =>
+            router.push(
+              `/(admin)/billing/new?tenantId=${bill.tenant_id}&billId=${bill.id}`,
+            )
+          }
+        />
+        <View style={styles.secondaryRow}>
+          <Button
+            label="Waive Late Fee"
+            variant="secondary"
+            className="flex-1"
+            onPress={() =>
+              Alert.alert(
+                'Waive Late Fee',
+                'Remove the late fee from this bill?',
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  { text: 'Waive', onPress: handleWaiveLateFee },
+                ],
+              )
+            }
+          />
+          <Button
+            label="Add Charge"
+            variant="secondary"
+            className="flex-1"
+            onPress={() => Alert.alert('Add Charge', 'Feature coming soon')}
+          />
+        </View>
+      </BottomCTABar>
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  centered: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 32,
+  },
+  errorText: {
+    color: colors.danger,
+    textAlign: 'center',
+    fontSize: 15,
+  },
+  scrollContent: {
+    paddingBottom: 120,
+  },
+  tenantCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    marginHorizontal: 16,
+    marginTop: 16,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  tenantInfo: {
+    flex: 1,
+  },
+  tenantName: {
+    color: colors.textPrimary,
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  tenantMeta: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    marginTop: 2,
+  },
+  sectionCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    marginHorizontal: 16,
+  },
+  secondaryRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 8,
+  },
+})

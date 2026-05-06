@@ -105,6 +105,35 @@ export function initializeDatabase() {
       uri TEXT,
       created_at TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP)
     );
+
+    CREATE TABLE IF NOT EXISTS payments (
+      id TEXT PRIMARY KEY,
+      bill_id TEXT REFERENCES bills(id),
+      tenant_id TEXT NOT NULL REFERENCES tenants(id),
+      unit_id TEXT NOT NULL REFERENCES units(id),
+      amount REAL NOT NULL,
+      date TEXT NOT NULL,
+      notes TEXT,
+      receipt_no TEXT NOT NULL,
+      method TEXT NOT NULL DEFAULT 'cash',
+      balance_before REAL NOT NULL DEFAULT 0,
+      balance_after REAL NOT NULL DEFAULT 0,
+      voided_at TEXT,
+      created_at TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+    );
+
+    CREATE TABLE IF NOT EXISTS utility_readings (
+      id TEXT PRIMARY KEY,
+      unit_id TEXT NOT NULL REFERENCES units(id),
+      month TEXT NOT NULL,
+      type TEXT NOT NULL CHECK (type IN ('electricity', 'water')),
+      previous_reading REAL NOT NULL,
+      current_reading REAL NOT NULL,
+      rate REAL NOT NULL,
+      computed_charge REAL NOT NULL,
+      created_at TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+      UNIQUE(unit_id, month, type)
+    );
   `)
 
   const alterStatements = [

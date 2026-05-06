@@ -81,13 +81,14 @@ export function MonthTabSelector({ months, selected, onChange }: MonthTabSelecto
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    gap: 8,
-    paddingHorizontal: 16,
-  },
-  tab: {
+    gap: 4,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    minHeight: 44,
+  },
+  tab: {
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    minHeight: 32,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   tabText: {
-    fontSize: 14,
+    fontSize: 13,
   },
   tabTextSelected: {
     color: colors.textPrimary,

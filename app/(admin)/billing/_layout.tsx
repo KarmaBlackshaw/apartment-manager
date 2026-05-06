@@ -9,9 +9,13 @@ const darkHeader = {
 export default function BillingLayout() {
   return (
     <Stack screenOptions={darkHeader}>
-      <Stack.Screen name="index" options={{ title: 'Billing' }} />
-      <Stack.Screen name="new" options={{ title: 'New Bill', presentation: 'modal' }} />
-      <Stack.Screen name="[id]" options={{ title: 'Bill' }} />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="new" options={{ headerShown: false, presentation: 'modal' }} />
+      <Stack.Screen name="[id]" options={{ headerShown: false }} />
+      <Stack.Screen name="receipt" options={{ headerShown: false }} />
+      <Stack.Screen name="utility" options={{ headerShown: false }} />
+      <Stack.Screen name="generate" options={{ headerShown: false }} />
+      <Stack.Screen name="payments" options={{ headerShown: false }} />
     </Stack>
   )
 }

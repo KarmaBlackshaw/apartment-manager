@@ -91,3 +91,33 @@ export const documents = sqliteTable('documents', {
   uri: text('uri'),
   created_at: text('created_at').notNull().default(sql`(CURRENT_TIMESTAMP)`),
 })
+
+export const payments = sqliteTable('payments', {
+  id: text('id').primaryKey(),
+  bill_id: text('bill_id').references(() => bills.id),
+  tenant_id: text('tenant_id').notNull().references(() => tenants.id),
+  unit_id: text('unit_id').notNull().references(() => units.id),
+  amount: real('amount').notNull(),
+  date: text('date').notNull(),
+  notes: text('notes'),
+  receipt_no: text('receipt_no').notNull(),
+  method: text('method').notNull().default('cash'),
+  balance_before: real('balance_before').notNull().default(0),
+  balance_after: real('balance_after').notNull().default(0),
+  voided_at: text('voided_at'),
+  created_at: text('created_at').notNull().default(sql`(CURRENT_TIMESTAMP)`),
+})
+
+export const utilityReadings = sqliteTable('utility_readings', {
+  id: text('id').primaryKey(),
+  unit_id: text('unit_id').notNull().references(() => units.id),
+  month: text('month').notNull(),
+  type: text('type', { enum: ['electricity', 'water'] }).notNull(),
+  previous_reading: real('previous_reading').notNull(),
+  current_reading: real('current_reading').notNull(),
+  rate: real('rate').notNull(),
+  computed_charge: real('computed_charge').notNull(),
+  created_at: text('created_at').notNull().default(sql`(CURRENT_TIMESTAMP)`),
+}, (t) => ({
+  uniqueReading: uniqueIndex('utility_readings_unit_month_type_unique').on(t.unit_id, t.month, t.type),
+}))
