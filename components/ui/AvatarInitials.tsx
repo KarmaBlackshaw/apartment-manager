@@ -1,6 +1,5 @@
 import React from 'react'
-import { Text, View, StyleSheet } from 'react-native'
-import { colors, radius } from '../../constants/theme'
+import { Text, View } from 'react-native'
 
 interface AvatarInitialsProps {
   name: string
@@ -53,28 +52,20 @@ export function AvatarInitials({ name, size = 'md' }: AvatarInitialsProps) {
 
   return (
     <View
-      style={[
-        styles.circle,
-        {
-          width: dimension,
-          height: dimension,
-          borderRadius: radius.pill,
-          backgroundColor: bgColor,
-        },
-      ]}
+      className="items-center justify-center"
+      style={{
+        width: dimension,
+        height: dimension,
+        borderRadius: 999,
+        backgroundColor: bgColor,
+      }}
     >
-      <Text style={[styles.text, { fontSize }]}>{initials}</Text>
+      <Text
+        className="text-text-primary font-semibold"
+        style={{ fontSize }}
+      >
+        {initials}
+      </Text>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  circle: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    color: colors.textPrimary,
-    fontWeight: '600',
-  },
-})

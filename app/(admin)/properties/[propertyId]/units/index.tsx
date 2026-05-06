@@ -5,8 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../../../../hooks/useTabBarScrollHandler'
 import { useUnits } from '../../../../../hooks/useUnits'
-import { UnitCard } from '../../../../../components/admin/UnitCard'
-import { LoadingSpinner, EmptyState, AppText } from '../../../../../components/ui'
+import { LoadingSpinner, EmptyState, AppText, UnitCard } from '../../../../../components/ui'
 
 export default function UnitsScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()

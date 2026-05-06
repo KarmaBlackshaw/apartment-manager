@@ -4,8 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useTabBarScrollHandler } from '../../../../hooks/useTabBarScrollHandler'
 import { useProperty, useUpdateProperty, useDeleteProperty } from '../../../../hooks/useProperties'
 import { useUnits } from '../../../../hooks/useUnits'
-import { Input, Button, AppText, LoadingSpinner, Card } from '../../../../components/ui'
-import { UnitCard } from '../../../../components/admin/UnitCard'
+import { Input, Button, AppText, LoadingSpinner, Card, UnitCard } from '../../../../components/ui'
 
 export default function PropertyDetailScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()

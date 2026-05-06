@@ -1,12 +1,11 @@
 import React, { ReactNode } from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { Text, View } from 'react-native'
 import { Pressable } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated'
-import { colors } from '../../constants/theme'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
@@ -49,34 +48,34 @@ export function ListRow({
 
   const inner = (
     <View
-      style={[
-        styles.row,
-        showDivider && styles.divider,
-      ]}
+      className={[
+        'flex-row items-center min-h-[72px] px-4 py-3 bg-surface',
+        showDivider ? 'border-b border-muted' : '',
+      ].join(' ')}
     >
-      {leading != null && <View style={styles.leading}>{leading}</View>}
+      {leading != null && <View className="mr-3">{leading}</View>}
 
-      <View style={styles.body}>
-        <Text style={styles.title} numberOfLines={1}>
+      <View className="flex-1">
+        <Text className="text-[15px] font-semibold text-text-primary" numberOfLines={1}>
           {title}
         </Text>
         {subtitle != null && (
-          <Text style={styles.subtitle} numberOfLines={1}>
+          <Text className="text-[13px] text-text-secondary mt-[2px]" numberOfLines={1}>
             {subtitle}
           </Text>
         )}
       </View>
 
       {hasTrailing && (
-        <View style={styles.trailing}>
+        <View className="items-end gap-1">
           {trailingChip != null && trailingChip}
           {trailingAmount != null && (
-            <View style={trailingChip != null ? styles.trailingAmountGap : undefined}>
+            <View style={trailingChip != null ? { marginTop: 4 } : undefined}>
               {trailingAmount}
             </View>
           )}
           {trailingText != null && (
-            <Text style={styles.trailingText}>{trailingText}</Text>
+            <Text className="text-[13px] text-text-secondary">{trailingText}</Text>
           )}
         </View>
       )}
@@ -98,45 +97,3 @@ export function ListRow({
 
   return inner
 }
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    minHeight: 72,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: colors.surface,
-  },
-  divider: {
-    borderBottomWidth: 1,
-    borderBottomColor: colors.muted,
-  },
-  leading: {
-    marginRight: 12,
-  },
-  body: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: colors.textPrimary,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: colors.textSecondary,
-    marginTop: 2,
-  },
-  trailing: {
-    alignItems: 'flex-end',
-    gap: 4,
-  },
-  trailingAmountGap: {
-    marginTop: 4,
-  },
-  trailingText: {
-    fontSize: 13,
-    color: colors.textSecondary,
-  },
-})

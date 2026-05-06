@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text } from 'react-native'
 import Svg, { Rect, G } from 'react-native-svg'
 import { colors } from '../../constants/theme'
 
@@ -22,7 +22,7 @@ export function OccupancyBarChart({ data, activeMonth }: OccupancyBarChartProps)
   const totalWidth = data.length * BAR_SLOT
 
   return (
-    <View style={styles.container}>
+    <View className="items-center">
       <Svg width={totalWidth} height={CHART_HEIGHT}>
         {data.map((item, i) => {
           const barHeight = Math.max(2, Math.round((item.pct * CHART_HEIGHT) / 100))
@@ -43,9 +43,9 @@ export function OccupancyBarChart({ data, activeMonth }: OccupancyBarChartProps)
           )
         })}
       </Svg>
-      <View style={[styles.labels, { width: totalWidth }]}>
+      <View className="flex-row justify-around mt-1" style={{ width: totalWidth }}>
         {data.map((item) => (
-          <Text key={item.month} style={styles.monthLabel}>
+          <Text key={item.month} className="text-[11px] text-text-secondary w-10 text-center">
             {item.month}
           </Text>
         ))}
@@ -53,20 +53,3 @@ export function OccupancyBarChart({ data, activeMonth }: OccupancyBarChartProps)
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-  },
-  labels: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 4,
-  },
-  monthLabel: {
-    fontSize: 11,
-    color: colors.textSecondary,
-    width: BAR_SLOT,
-    textAlign: 'center',
-  },
-})

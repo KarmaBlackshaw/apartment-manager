@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, StyleSheet, Pressable } from 'react-native'
+import { Text, View, Pressable } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -27,11 +27,11 @@ type IconConfig = {
 }
 
 const TYPE_MAP: Record<NotifType, IconConfig> = {
-  overdue:      { bg: colors.dangerBg,  icon: 'alert-circle-outline',    color: colors.dangerText  },
-  'high-balance': { bg: colors.dangerBg,  icon: 'alert-circle-outline',  color: colors.dangerText  },
-  expiring:     { bg: colors.warningBg, icon: 'time-outline',             color: colors.warningText },
-  vacant:       { bg: colors.neutralBg, icon: 'home-outline',             color: colors.neutralText },
-  resolved:     { bg: colors.successBg, icon: 'checkmark-circle-outline', color: colors.successText },
+  overdue:        { bg: colors.dangerBg,  icon: 'alert-circle-outline',    color: colors.dangerText  },
+  'high-balance': { bg: colors.dangerBg,  icon: 'alert-circle-outline',    color: colors.dangerText  },
+  expiring:       { bg: colors.warningBg, icon: 'time-outline',             color: colors.warningText },
+  vacant:         { bg: colors.neutralBg, icon: 'home-outline',             color: colors.neutralText },
+  resolved:       { bg: colors.successBg, icon: 'checkmark-circle-outline', color: colors.successText },
 }
 
 export function NotificationRow({
@@ -58,21 +58,24 @@ export function NotificationRow({
   const { bg, icon, color } = TYPE_MAP[type]
 
   const inner = (
-    <View style={styles.row}>
-      <View style={[styles.iconContainer, { backgroundColor: bg }]}>
+    <View className="flex-row items-start px-4 py-3 bg-surface border-b border-border">
+      <View
+        className="w-[40px] h-[40px] rounded-[10px] items-center justify-center"
+        style={{ backgroundColor: bg }}
+      >
         <Ionicons name={icon} size={20} color={color} />
       </View>
 
-      <View style={styles.body}>
-        <Text style={styles.title} numberOfLines={1}>
+      <View className="flex-1 ml-3 mr-2">
+        <Text className="text-[15px] font-semibold text-text-primary" numberOfLines={1}>
           {title}
         </Text>
-        <Text style={styles.subtitle} numberOfLines={2}>
+        <Text className="text-[13px] text-text-secondary mt-[2px]" numberOfLines={2}>
           {subtitle}
         </Text>
       </View>
 
-      <Text style={styles.timestamp}>{timestamp}</Text>
+      <Text className="text-xs text-text-muted">{timestamp}</Text>
     </View>
   )
 
@@ -91,41 +94,3 @@ export function NotificationRow({
 
   return inner
 }
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  body: {
-    flex: 1,
-    marginLeft: 12,
-    marginRight: 8,
-  },
-  title: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: colors.textPrimary,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: colors.textSecondary,
-    marginTop: 2,
-  },
-  timestamp: {
-    fontSize: 12,
-    color: colors.textMuted,
-  },
-})

@@ -1,10 +1,9 @@
 import React from 'react'
-import { View, ScrollView, Text, StyleSheet, Pressable, Alert, Share } from 'react-native'
+import { View, ScrollView, Text, Pressable, Alert, Share } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import dayjs from 'dayjs'
 import { ScreenHeader, ReceiptDocument, LoadingSpinner } from '../../../components/ui'
-import { colors } from '../../../constants/theme'
 import { useSettings } from '../../../hooks/useSettings'
 import { usePayment } from '../../../hooks/usePayments'
 
@@ -19,10 +18,10 @@ export default function ReceiptScreen() {
 
   if (!payment) {
     return (
-      <View style={styles.container}>
+      <View className="flex-1 bg-background">
         <ScreenHeader title="Receipt" left="back" />
-        <View style={styles.centered}>
-          <Text style={styles.errorText}>Payment not found.</Text>
+        <View className="flex-1 items-center justify-center p-8">
+          <Text className="text-danger text-center text-base">Payment not found.</Text>
         </View>
       </View>
     )
@@ -43,20 +42,20 @@ export default function ReceiptScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-background">
       <ScreenHeader
         title="Receipt"
         left="back"
         right={
           <Pressable onPress={router.back} hitSlop={8}>
-            <Text style={styles.doneLink}>Done</Text>
+            <Text className="text-primary text-base font-medium">Done</Text>
           </Pressable>
         }
       />
 
       <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
+        className="flex-1"
+        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 24 }}
         showsVerticalScrollIndicator={false}
       >
         <ReceiptDocument
@@ -75,93 +74,28 @@ export default function ReceiptScreen() {
 
       {/* Action row */}
       <View
-        style={[
-          styles.actionRow,
-          { paddingBottom: insets.bottom + 12 },
-        ]}
+        className="bg-surface border-t border-border flex-row gap-3 px-4 pt-3"
+        style={{ paddingBottom: insets.bottom + 12 }}
       >
         <Pressable
-          style={[styles.actionButton, styles.actionButtonPrimary]}
+          className="flex-1 py-[14px] rounded-md items-center justify-center bg-primary"
           onPress={handleShare}
         >
-          <Text style={styles.actionButtonPrimaryText}>Share</Text>
+          <Text className="text-white font-semibold text-[15px]">Share</Text>
         </Pressable>
         <Pressable
-          style={[styles.actionButton, styles.actionButtonSecondary]}
+          className="flex-1 py-[14px] rounded-md items-center justify-center bg-elevated"
           onPress={handlePrint}
         >
-          <Text style={styles.actionButtonSecondaryText}>Print</Text>
+          <Text className="text-text-primary font-semibold text-[15px]">Print</Text>
         </Pressable>
         <Pressable
-          style={[styles.actionButton, styles.actionButtonSecondary]}
+          className="flex-1 py-[14px] rounded-md items-center justify-center bg-elevated"
           onPress={router.back}
         >
-          <Text style={styles.actionButtonSecondaryText}>Done</Text>
+          <Text className="text-text-primary font-semibold text-[15px]">Done</Text>
         </Pressable>
       </View>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  centered: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 32,
-  },
-  errorText: {
-    color: colors.danger,
-    textAlign: 'center',
-    fontSize: 16,
-  },
-  doneLink: {
-    color: colors.primary,
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 24,
-  },
-  actionRow: {
-    backgroundColor: colors.surface,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    flexDirection: 'row',
-    gap: 12,
-  },
-  actionButton: {
-    flex: 1,
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  actionButtonPrimary: {
-    backgroundColor: colors.primary,
-  },
-  actionButtonPrimaryText: {
-    color: '#FFFFFF',
-    fontWeight: '600',
-    fontSize: 15,
-  },
-  actionButtonSecondary: {
-    backgroundColor: colors.elevated,
-  },
-  actionButtonSecondaryText: {
-    color: colors.textPrimary,
-    fontWeight: '600',
-    fontSize: 15,
-  },
-})

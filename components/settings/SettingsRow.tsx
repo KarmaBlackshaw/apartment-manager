@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, StyleSheet, Pressable, Switch } from 'react-native'
+import { Text, View, Pressable, Switch } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -48,13 +48,13 @@ export function SettingsRow({
   const resolvedValueColor = valueColor ?? colors.textSecondary
 
   const inner = (
-    <View style={styles.row}>
-      <Text style={styles.label}>{label}</Text>
+    <View className="flex-row items-center bg-surface px-4 py-4 border-b border-border min-h-[44px]">
+      <Text className="flex-1 text-[15px] text-text-primary">{label}</Text>
 
       {type === 'navigate' && (
-        <View style={styles.trailingRow}>
+        <View className="flex-row items-center gap-1">
           {value != null && (
-            <Text style={[styles.value, { color: resolvedValueColor }]}>
+            <Text style={{ color: resolvedValueColor }} className="text-sm">
               {value}
             </Text>
           )}
@@ -73,7 +73,7 @@ export function SettingsRow({
       )}
 
       {type === 'info' && value != null && (
-        <Text style={[styles.value, { color: resolvedValueColor }]}>
+        <Text style={{ color: resolvedValueColor }} className="text-sm">
           {value}
         </Text>
       )}
@@ -95,29 +95,3 @@ export function SettingsRow({
 
   return inner
 }
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    minHeight: 44,
-  },
-  label: {
-    flex: 1,
-    fontSize: 15,
-    color: colors.textPrimary,
-  },
-  trailingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  value: {
-    fontSize: 14,
-  },
-})

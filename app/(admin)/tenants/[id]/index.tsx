@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { View, ScrollView, StyleSheet } from 'react-native'
+import { View, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
@@ -19,7 +19,6 @@ import {
   LoadingSpinner,
 } from '../../../../components/ui'
 import { Button } from '../../../../components/ui'
-import { colors } from '../../../../constants/theme'
 
 export default function TenantDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -46,9 +45,9 @@ export default function TenantDetailScreen() {
 
   if (!tenant) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+      <SafeAreaView className="flex-1 bg-background">
         <ScreenHeader title="Tenant" left="back" />
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View className="flex-1 items-center justify-center">
           <AppText color="danger">Tenant not found.</AppText>
         </View>
       </SafeAreaView>
@@ -59,25 +58,25 @@ export default function TenantDetailScreen() {
   const statusLabel = tenant.status === 'active' ? 'ACTIVE' : 'INACTIVE'
 
   return (
-    <SafeAreaView edges={['bottom']} style={styles.container}>
+    <SafeAreaView edges={['bottom']} className="flex-1 bg-background">
       <ScreenHeader
         title={tenant.full_name}
         left="back"
         right={<StatusChip variant={statusVariant} label={statusLabel} />}
       />
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 48 }}>
         {/* Profile card */}
-        <View style={styles.profileCard}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View className="bg-surface rounded-md mx-4 mt-3 p-4">
+          <View className="flex-row items-center gap-3">
             <AvatarInitials name={tenant.full_name} size="lg" />
-            <View style={{ flex: 1 }}>
+            <View className="flex-1">
               <AppText variant="subheading">{tenant.full_name}</AppText>
               <AppText color="secondary" variant="caption">
                 {tenant.unit ? `Unit ${tenant.unit.unit_number}` : 'No unit assigned'}
                 {' · '}Move-in {dayjs(tenant.move_in_date).format('MMM D, YYYY')}
               </AppText>
-              <View style={{ marginTop: 6 }}>
+              <View className="mt-[6px]">
                 <StatusChip
                   variant="info"
                   label={tenant.billing_type === 'monthly' ? 'Month-to-month' : 'Daily'}
@@ -89,7 +88,7 @@ export default function TenantDetailScreen() {
         </View>
 
         {/* Balance card */}
-        <View style={{ marginTop: 12 }}>
+        <View className="mt-3">
           <BalanceCard
             amount={currentBalance}
             variant={currentBalance > 0 ? 'danger' : currentBalance < 0 ? 'neutral' : 'success'}
@@ -100,7 +99,7 @@ export default function TenantDetailScreen() {
         </View>
 
         {/* Contract section */}
-        <View style={styles.section}>
+        <View className="bg-surface rounded-md mx-4 mt-3 overflow-hidden">
           <SectionHeader title="Contract" />
           <InfoRow
             label="Rent"
@@ -116,14 +115,14 @@ export default function TenantDetailScreen() {
         </View>
 
         {/* Payment history section */}
-        <View style={{ marginTop: 12 }}>
+        <View className="mt-3">
           <SectionHeader
             title="Payment history"
             onViewAll={() =>
               router.push({ pathname: '/tenants/[id]/payment-history', params: { id } })
             }
           />
-          <View style={styles.section}>
+          <View className="bg-surface rounded-md mx-4 mt-3 overflow-hidden">
             {recentBills.length === 0 ? (
               <AppText color="muted" style={{ padding: 16 }}>
                 No payments yet
@@ -160,7 +159,7 @@ export default function TenantDetailScreen() {
         </View>
 
         {/* Actions */}
-        <View style={styles.actions}>
+        <View className="mx-4 mt-3 mb-8">
           <Button
             label="Move Out"
             variant="danger"
@@ -177,27 +176,3 @@ export default function TenantDetailScreen() {
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  content: { paddingBottom: 48 },
-  profileCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    marginHorizontal: 16,
-    marginTop: 12,
-    padding: 16,
-  },
-  section: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    marginHorizontal: 16,
-    marginTop: 12,
-    overflow: 'hidden',
-  },
-  actions: {
-    marginHorizontal: 16,
-    marginTop: 12,
-    marginBottom: 32,
-  },
-})

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text } from 'react-native'
 import { colors } from '../../constants/theme'
 
 type BannerVariant = 'warning' | 'danger' | 'info'
@@ -23,21 +23,13 @@ const textColor: Record<BannerVariant, string> = {
 
 export function WarningBanner({ message, variant = 'warning' }: WarningBannerProps) {
   return (
-    <View style={[styles.container, { backgroundColor: bgColor[variant] }]}>
-      <Text style={[styles.message, { color: textColor[variant] }]}>
+    <View
+      className="p-3 rounded-md mx-4"
+      style={{ backgroundColor: bgColor[variant] }}
+    >
+      <Text className="text-[13px]" style={{ color: textColor[variant] }}>
         {message}
       </Text>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 12,
-    borderRadius: 8,
-    marginHorizontal: 16,
-  },
-  message: {
-    fontSize: 13,
-  },
-})

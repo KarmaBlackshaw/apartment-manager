@@ -1,12 +1,12 @@
 import React from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { Text, View } from 'react-native'
 import { Pressable } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated'
-import { colors, radius, spacing } from '../../constants/theme'
+import { colors } from '../../constants/theme'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
@@ -64,19 +64,22 @@ export function BalanceCard({
 
   return (
     <View
-      style={[
-        styles.card,
-        { backgroundColor, borderColor },
-      ]}
+      className="rounded-md p-4 mx-4 border"
+      style={{ backgroundColor, borderColor }}
     >
-      <Text style={styles.label}>{label}</Text>
+      <Text className="text-[11px] font-semibold tracking-wider uppercase text-text-muted">
+        {label}
+      </Text>
 
-      <Text style={[styles.amount, { color: amountColor[variant] }]}>
+      <Text
+        className="text-[28px] font-bold mt-1"
+        style={{ color: amountColor[variant], fontVariant: ['tabular-nums'] }}
+      >
         {formatAmount(amount)}
       </Text>
 
       {breakdown != null && (
-        <Text style={styles.breakdown}>{breakdown}</Text>
+        <Text className="text-[13px] text-text-muted mt-1">{breakdown}</Text>
       )}
 
       {onRecordPayment != null && (
@@ -84,51 +87,12 @@ export function BalanceCard({
           onPress={onRecordPayment}
           onPressIn={handlePressIn}
           onPressOut={handlePressOut}
-          style={[styles.button, animatedStyle]}
+          className="mt-3 bg-primary rounded-full h-11 items-center justify-center"
+          style={animatedStyle}
         >
-          <Text style={styles.buttonText}>Record Payment</Text>
+          <Text className="text-[15px] font-semibold text-white">Record Payment</Text>
         </AnimatedPressable>
       )}
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  card: {
-    borderRadius: radius.md,
-    padding: spacing[4],
-    marginHorizontal: spacing[4],
-    borderWidth: 1,
-  },
-  label: {
-    fontSize: 11,
-    fontWeight: '600',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-    color: colors.textMuted,
-  },
-  amount: {
-    fontSize: 28,
-    fontWeight: '700',
-    marginTop: 4,
-    fontVariant: ['tabular-nums'],
-  },
-  breakdown: {
-    fontSize: 13,
-    color: colors.textMuted,
-    marginTop: 4,
-  },
-  button: {
-    marginTop: 12,
-    backgroundColor: colors.primary,
-    borderRadius: radius.pill,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-})

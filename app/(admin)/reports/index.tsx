@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, Pressable, Alert, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, Pressable, Alert } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
@@ -28,52 +28,31 @@ export default function ReportsMenuScreen() {
 
   return (
     <ScrollView
-      style={styles.screen}
+      className="flex-1 bg-background"
       contentContainerStyle={{ paddingTop: insets.top + 16, paddingHorizontal: 16, paddingBottom: 128 }}
       {...tabBarScroll}
     >
-      <Text style={styles.title}>Reports</Text>
-      <Text style={styles.subtitle}>Coming in Phase 6</Text>
+      <Text className="text-2xl font-extrabold text-text-primary mb-1" style={{ letterSpacing: -0.5 }}>Reports</Text>
+      <Text className="text-[13px] text-text-muted mb-6">Coming in Phase 6</Text>
 
-      <View style={styles.grid}>
+      <View className="gap-3">
         {REPORTS.map((r) => (
           <Pressable
             key={r.title}
-            style={styles.card}
+            className="bg-surface rounded-md p-4 border border-border"
             onPress={() => Alert.alert('Coming Soon', `${r.title} report will be available in a future update.`)}
           >
-            <View style={[styles.iconWrap, { backgroundColor: `${r.color}22` }]}>
+            <View
+              className="w-[44px] h-[44px] rounded-md items-center justify-center mb-[10px]"
+              style={{ backgroundColor: `${r.color}22` }}
+            >
               <Ionicons name={r.icon} size={24} color={r.color} />
             </View>
-            <Text style={styles.cardTitle}>{r.title}</Text>
-            <Text style={styles.cardDesc}>{r.description}</Text>
+            <Text className="text-[15px] font-semibold text-text-primary mb-1">{r.title}</Text>
+            <Text className="text-xs text-text-secondary" style={{ lineHeight: 17 }}>{r.description}</Text>
           </Pressable>
         ))}
       </View>
     </ScrollView>
   )
 }
-
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#0d0d0d' },
-  title: { fontSize: 24, fontWeight: '800', color: '#f1f1f1', letterSpacing: -0.5, marginBottom: 4 },
-  subtitle: { fontSize: 13, color: '#555555', marginBottom: 24 },
-  grid: { gap: 12 },
-  card: {
-    backgroundColor: '#171717',
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#2a2a2a',
-  },
-  iconWrap: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 10,
-  },
-  cardTitle: { fontSize: 15, fontWeight: '600', color: '#f1f1f1', marginBottom: 4 },
-  cardDesc: { fontSize: 12, color: '#888888', lineHeight: 17 },
-})

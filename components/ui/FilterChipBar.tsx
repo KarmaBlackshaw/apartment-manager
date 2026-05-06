@@ -1,12 +1,11 @@
 import React from 'react'
-import { ScrollView, Text, StyleSheet, Pressable } from 'react-native'
+import { ScrollView, Text, Pressable } from 'react-native'
 import * as Haptics from 'expo-haptics'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated'
-import { colors, radius, spacing } from '../../constants/theme'
 
 interface FilterOption {
   label: string
@@ -36,11 +35,12 @@ function FilterChip({ option, isSelected, onPress }: ChipProps) {
 
   return (
     <AnimatedPressable
-      style={[
-        styles.chip,
-        isSelected ? styles.chipSelected : styles.chipUnselected,
-        animatedStyle,
-      ]}
+      className={[
+        'px-[14px] py-2 rounded-full min-h-[44px] justify-center',
+        isSelected
+          ? 'bg-primary'
+          : 'bg-surface border border-border',
+      ].join(' ')}
       onPressIn={() => {
         scale.value = withTiming(0.97, { duration: 100 })
       }}
@@ -51,14 +51,15 @@ function FilterChip({ option, isSelected, onPress }: ChipProps) {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         onPress(option.value)
       }}
+      style={animatedStyle}
       accessibilityRole="button"
       accessibilityState={{ selected: isSelected }}
     >
       <Text
-        style={[
-          styles.chipLabel,
-          isSelected ? styles.chipLabelSelected : styles.chipLabelUnselected,
-        ]}
+        className={[
+          'text-[13px] font-medium',
+          isSelected ? 'text-white' : 'text-text-secondary',
+        ].join(' ')}
       >
         {option.label}
       </Text>
@@ -71,8 +72,14 @@ export function FilterChipBar({ options, selected, onChange }: FilterChipBarProp
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.contentContainer}
-      style={styles.scrollView}
+      contentContainerStyle={{
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        gap: 8,
+        alignItems: 'center',
+      }}
+      style={{ flexGrow: 0, flexShrink: 0 }}
     >
       {options.map((option) => (
         <FilterChip
@@ -85,42 +92,3 @@ export function FilterChipBar({ options, selected, onChange }: FilterChipBarProp
     </ScrollView>
   )
 }
-
-const styles = StyleSheet.create({
-  scrollView: {
-    flexGrow: 0,
-    flexShrink: 0,
-  },
-  contentContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: spacing[4],
-    paddingVertical: 8,
-    gap: 8,
-    alignItems: 'center',
-  },
-  chip: {
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: radius.pill,
-    minHeight: 44,
-    justifyContent: 'center',
-  },
-  chipSelected: {
-    backgroundColor: colors.primary,
-  },
-  chipUnselected: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  chipLabel: {
-    fontSize: 13,
-    fontWeight: '500',
-  },
-  chipLabelSelected: {
-    color: '#FFFFFF',
-  },
-  chipLabelUnselected: {
-    color: colors.textSecondary,
-  },
-})

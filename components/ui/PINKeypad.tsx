@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, Pressable, StyleSheet } from 'react-native'
+import { Text, View, Pressable } from 'react-native'
 import * as Haptics from 'expo-haptics'
 import Animated, {
   useSharedValue,
@@ -7,7 +7,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { colors, radius } from '../../constants/theme'
+import { colors } from '../../constants/theme'
 
 interface PINKeypadProps {
   enteredLength: number
@@ -53,7 +53,8 @@ function KeyButton({ onPress, children, haptic = 'light' }: KeyProps) {
       onPress={handlePress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      style={[styles.key, animatedStyle]}
+      className="bg-elevated items-center justify-center"
+      style={[{ width: 72, height: 72, borderRadius: 12 }, animatedStyle]}
     >
       {children}
     </AnimatedPressable>
@@ -73,44 +74,45 @@ export function PINKeypad({
   onBiometric,
 }: PINKeypadProps) {
   return (
-    <View style={styles.container}>
+    <View className="items-center">
       {/* Dot indicators */}
-      <View style={styles.dots}>
+      <View className="flex-row gap-4 mb-8">
         {[0, 1, 2, 3].map((i) => (
           <View
             key={i}
-            style={[
-              styles.dot,
-              i < enteredLength ? styles.dotFilled : styles.dotEmpty,
-            ]}
+            style={{
+              width: 12,
+              height: 12,
+              borderRadius: 6,
+              backgroundColor: i < enteredLength ? colors.primary : colors.border,
+            }}
           />
         ))}
       </View>
 
       {/* Digit rows 1-9 */}
       {DIGIT_ROWS.map((row) => (
-        <View key={row.join('')} style={styles.row}>
+        <View key={row.join('')} className="flex-row gap-3 mb-3 px-6">
           {row.map((digit) => (
             <KeyButton key={digit} onPress={() => onDigit(digit)} haptic="heavy">
-              <Text style={styles.digitText}>{digit}</Text>
+              <Text className="text-[24px] font-medium text-text-primary">{digit}</Text>
             </KeyButton>
           ))}
         </View>
       ))}
 
       {/* Bottom row: biometric | 0 | backspace */}
-      <View style={styles.row}>
-        {/* Biometric or empty placeholder */}
+      <View className="flex-row gap-3 mb-3 px-6">
         {onBiometric != null ? (
           <KeyButton onPress={onBiometric}>
             <Ionicons name="finger-print" size={24} color={colors.textLink} />
           </KeyButton>
         ) : (
-          <View style={styles.keyPlaceholder} />
+          <View style={{ width: 72, height: 72, backgroundColor: 'transparent' }} />
         )}
 
         <KeyButton onPress={() => onDigit('0')} haptic="heavy">
-          <Text style={styles.digitText}>0</Text>
+          <Text className="text-[24px] font-medium text-text-primary">0</Text>
         </KeyButton>
 
         <KeyButton onPress={onBackspace} haptic="light">
@@ -120,49 +122,3 @@ export function PINKeypad({
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-  },
-  dots: {
-    flexDirection: 'row',
-    gap: 16,
-    marginBottom: 32,
-  },
-  dot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-  },
-  dotFilled: {
-    backgroundColor: colors.primary,
-  },
-  dotEmpty: {
-    backgroundColor: colors.border,
-  },
-  row: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 12,
-    paddingHorizontal: 24,
-  },
-  key: {
-    width: 72,
-    height: 72,
-    borderRadius: radius.md,
-    backgroundColor: colors.elevated,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  keyPlaceholder: {
-    width: 72,
-    height: 72,
-    backgroundColor: 'transparent',
-  },
-  digitText: {
-    fontSize: 24,
-    fontWeight: '500',
-    color: colors.textPrimary,
-  },
-})

@@ -1,12 +1,12 @@
 import React from 'react'
-import { Text, View, StyleSheet, Pressable } from 'react-native'
+import { Text, View, Pressable } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated'
 import { colors } from '../../constants/theme'
-import { StatusChip, ChipVariant } from './StatusChip'
+import { StatusChip, ChipVariant } from '../ui/StatusChip'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
@@ -22,21 +22,21 @@ interface MaintenanceRowProps {
 }
 
 const STATUS_DOT_COLOR: Record<MaintenanceStatus, string> = {
-  reported:    colors.warning,
+  reported:      colors.warning,
   'in-progress': colors.danger,
-  resolved:    colors.success,
+  resolved:      colors.success,
 }
 
 const STATUS_CHIP_VARIANT: Record<MaintenanceStatus, ChipVariant> = {
-  reported:    'neutral',
+  reported:      'neutral',
   'in-progress': 'warning',
-  resolved:    'success',
+  resolved:      'success',
 }
 
 const STATUS_CHIP_LABEL: Record<MaintenanceStatus, string> = {
-  reported:    'REPORTED',
+  reported:      'REPORTED',
   'in-progress': 'IN PROGRESS',
-  resolved:    'RESOLVED',
+  resolved:      'RESOLVED',
 }
 
 function formatCost(cost: number): string {
@@ -69,30 +69,28 @@ export function MaintenanceRow({
   }
 
   const inner = (
-    <View style={styles.row}>
+    <View className="flex-row items-center px-4 py-3 bg-surface border-b border-border">
       <View
-        style={[
-          styles.dot,
-          { backgroundColor: STATUS_DOT_COLOR[status] },
-        ]}
+        className="w-[8px] h-[8px] rounded-full mr-3"
+        style={{ backgroundColor: STATUS_DOT_COLOR[status] }}
       />
 
-      <View style={styles.body}>
-        <Text style={styles.title} numberOfLines={1}>
+      <View className="flex-1 mr-3">
+        <Text className="text-[15px] font-semibold text-text-primary" numberOfLines={1}>
           {title}
         </Text>
-        <Text style={styles.subtitle} numberOfLines={1}>
+        <Text className="text-[13px] text-text-secondary mt-[2px]" numberOfLines={1}>
           {category} · {date}
         </Text>
       </View>
 
-      <View style={styles.trailing}>
+      <View className="items-end gap-1">
         <StatusChip
           variant={STATUS_CHIP_VARIANT[status]}
           label={STATUS_CHIP_LABEL[status]}
         />
         {cost != null && (
-          <Text style={styles.cost}>{formatCost(cost)}</Text>
+          <Text className="text-xs text-text-muted">{formatCost(cost)}</Text>
         )}
       </View>
     </View>
@@ -113,43 +111,3 @@ export function MaintenanceRow({
 
   return inner
 }
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: 12,
-  },
-  body: {
-    flex: 1,
-    marginRight: 12,
-  },
-  title: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: colors.textPrimary,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: colors.textSecondary,
-    marginTop: 2,
-  },
-  trailing: {
-    alignItems: 'flex-end',
-    gap: 4,
-  },
-  cost: {
-    fontSize: 12,
-    color: colors.textMuted,
-  },
-})

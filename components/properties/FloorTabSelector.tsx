@@ -1,11 +1,10 @@
 import React from 'react'
-import { ScrollView, Text, StyleSheet, Pressable } from 'react-native'
+import { ScrollView, Text, Pressable } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated'
-import { colors, radius } from '../../constants/theme'
 
 interface FloorTabSelectorProps {
   floors: number[]
@@ -30,11 +29,10 @@ function FloorChip({ floor, isSelected, onPress }: FloorChipProps) {
 
   return (
     <AnimatedPressable
-      style={[
-        styles.chip,
-        isSelected ? styles.chipSelected : styles.chipUnselected,
-        animatedStyle,
-      ]}
+      className={`px-[14px] py-2 rounded-full ${
+        isSelected ? 'bg-primary' : 'bg-surface border border-border'
+      }`}
+      style={animatedStyle}
       onPressIn={() => {
         scale.value = withTiming(0.97, { duration: 100 })
       }}
@@ -46,10 +44,9 @@ function FloorChip({ floor, isSelected, onPress }: FloorChipProps) {
       accessibilityState={{ selected: isSelected }}
     >
       <Text
-        style={[
-          styles.chipLabel,
-          isSelected ? styles.chipLabelSelected : styles.chipLabelUnselected,
-        ]}
+        className={`text-[13px] ${
+          isSelected ? 'text-white font-semibold' : 'text-text-secondary font-normal'
+        }`}
       >
         {`Floor ${floor}`}
       </Text>
@@ -62,7 +59,7 @@ export function FloorTabSelector({ floors, selected, onChange }: FloorTabSelecto
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.contentContainer}
+      contentContainerStyle={{ flexDirection: 'row', gap: 8, paddingHorizontal: 16 }}
     >
       {floors.map((floor) => (
         <FloorChip
@@ -76,34 +73,3 @@ export function FloorTabSelector({ floors, selected, onChange }: FloorTabSelecto
   )
 }
 
-const styles = StyleSheet.create({
-  contentContainer: {
-    flexDirection: 'row',
-    gap: 8,
-    paddingHorizontal: 16,
-  },
-  chip: {
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: radius.pill,
-  },
-  chipSelected: {
-    backgroundColor: colors.primary,
-  },
-  chipUnselected: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  chipLabel: {
-    fontSize: 13,
-  },
-  chipLabelSelected: {
-    color: '#FFFFFF',
-    fontWeight: '600',
-  },
-  chipLabelUnselected: {
-    color: colors.textSecondary,
-    fontWeight: '400',
-  },
-})

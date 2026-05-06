@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, StyleSheet } from 'react-native'
+import { Text } from 'react-native'
 import { colors } from '../../constants/theme'
 
 export type AmountVariant = 'owed' | 'credit' | 'paid' | 'zero' | 'muted' | 'default'
@@ -42,7 +42,7 @@ export function AmountText({
   return (
     <Text
       style={[
-        styles.base,
+        { fontVariant: ['tabular-nums'] },
         { color: textColor[variant] },
         fontStyles[size],
       ]}
@@ -51,9 +51,3 @@ export function AmountText({
     </Text>
   )
 }
-
-const styles = StyleSheet.create({
-  base: {
-    fontVariant: ['tabular-nums'],
-  },
-})

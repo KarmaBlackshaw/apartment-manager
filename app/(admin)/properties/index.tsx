@@ -6,8 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
 import { useProperties } from '../../../hooks/useProperties'
 import { useUnitCounts } from '../../../hooks/useUnits'
-import { PropertyCard } from '../../../components/admin/PropertyCard'
-import { LoadingSpinner, EmptyState, AppText } from '../../../components/ui'
+import { LoadingSpinner, EmptyState, AppText, PropertyCard } from '../../../components/ui'
 
 export default function PropertiesScreen() {
   const router = useRouter()

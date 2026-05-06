@@ -7,11 +7,11 @@ import { useBills } from '../../hooks/useBills'
 import { useUnitCounts, useVacantUnits } from '../../hooks/useUnits'
 import { useSettings } from '../../hooks/useSettings'
 import { useTenantSearch } from '../../context/TenantSearchContext'
-import { SwipeablePaymentRow } from '../../components/admin/SwipeablePaymentRow'
 import {
   KPICard,
   SectionHeader,
   CollectionProgressBar,
+  SwipeablePaymentRow,
 } from '../../components/ui'
 import { colors, radius, spacing } from '../../constants/theme'
 

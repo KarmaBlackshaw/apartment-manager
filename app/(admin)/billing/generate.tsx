@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, ScrollView, Text, StyleSheet, Pressable, Alert } from 'react-native'
+import { View, ScrollView, Text, Pressable, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import {
@@ -53,16 +53,16 @@ export default function GenerateBillsScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-background">
       <ScreenHeader title="Generate Bills" left="back" />
 
       <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
+        className="flex-1"
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
       >
         {/* Month selector */}
-        <View style={styles.monthSelectorWrap}>
+        <View className="mt-4">
           <MonthTabSelector
             months={monthEntries.map((m) => m.label)}
             selected={selectedLabel}
@@ -71,7 +71,7 @@ export default function GenerateBillsScreen() {
         </View>
 
         {/* Scope toggle */}
-        <View style={styles.scopeWrap}>
+        <View className="mx-4 mt-3">
           <SegmentedControl
             options={['All Properties']}
             selected="All Properties"
@@ -81,12 +81,12 @@ export default function GenerateBillsScreen() {
         </View>
 
         {/* Preview card */}
-        <View style={styles.previewCard}>
+        <View className="bg-surface rounded-md mx-4 mt-4 overflow-hidden">
           <SectionHeader
             title={`Preview — ${dayjs(selectedMonth).format('MMMM YYYY')}`}
           />
           {previewLoading ? (
-            <View style={styles.previewLoading}>
+            <View className="h-[120px]">
               <LoadingSpinner />
             </View>
           ) : (
@@ -117,7 +117,7 @@ export default function GenerateBillsScreen() {
         </View>
 
         {/* Warning banner */}
-        <View style={styles.bannerWrap}>
+        <View className="mt-3 mx-4">
           <WarningBanner
             message="Existing bills will not be overwritten."
             variant="info"
@@ -133,52 +133,10 @@ export default function GenerateBillsScreen() {
           loading={isGenerating}
           disabled={(preview?.toGenerate ?? 0) === 0}
         />
-        <Pressable onPress={router.back} style={styles.cancelButton}>
-          <Text style={styles.cancelText}>Cancel</Text>
+        <Pressable onPress={router.back} className="items-center pt-3">
+          <Text className="text-text-secondary text-sm">Cancel</Text>
         </Pressable>
       </BottomCTABar>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 120,
-  },
-  monthSelectorWrap: {
-    marginTop: 16,
-  },
-  scopeWrap: {
-    marginHorizontal: 16,
-    marginTop: 12,
-  },
-  previewCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    marginHorizontal: 16,
-    marginTop: 16,
-    overflow: 'hidden',
-  },
-  previewLoading: {
-    height: 120,
-  },
-  bannerWrap: {
-    marginTop: 12,
-    marginHorizontal: 16,
-  },
-  cancelButton: {
-    alignItems: 'center',
-    paddingTop: 12,
-  },
-  cancelText: {
-    color: colors.textSecondary,
-    fontSize: 14,
-  },
-})

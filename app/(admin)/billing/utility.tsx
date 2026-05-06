@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, ScrollView, Text, StyleSheet } from 'react-native'
+import { View, ScrollView, Text } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import {
@@ -12,7 +12,6 @@ import {
   LoadingSpinner,
 } from '../../../components/ui'
 import { Input } from '../../../components/ui'
-import { colors } from '../../../constants/theme'
 import { useSettings } from '../../../hooks/useSettings'
 import { useUnit } from '../../../hooks/useUnits'
 import { useUtilityReading, useUpsertUtilityReading } from '../../../hooks/useUtilityReadings'
@@ -84,11 +83,11 @@ export default function UtilityReadingScreen() {
   if (unitLoading || readingLoading) return <LoadingSpinner />
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-background">
       <ScreenHeader title="Utility Reading" left="back" />
 
       {/* Context label */}
-      <Text style={styles.contextLabel}>
+      <Text className="text-text-secondary text-[13px] text-center py-2">
         {unit ? `Unit ${unit.unit_number}` : 'Unit —'} · {dayjs(month).format('MMMM YYYY')}
       </Text>
 
@@ -100,21 +99,23 @@ export default function UtilityReadingScreen() {
       />
 
       <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
+        className="flex-1"
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
         {/* Fields section */}
-        <View style={styles.fieldsCard}>
+        <View className="bg-surface rounded-md mx-4 mt-2 overflow-hidden">
           <InfoRow
             label="Previous reading"
             value={`${prevReading.toFixed(1)} ${unitLabel}`}
             showDivider={true}
           />
 
-          <View style={styles.inputWrapper}>
-            <Text style={styles.inputLabel}>Current reading</Text>
+          <View className="px-4 pt-3 pb-1">
+            <Text className="text-[13px] text-text-secondary mb-1.5 font-medium">
+              Current reading
+            </Text>
             <Input
               keyboardType="numeric"
               autoFocus
@@ -125,8 +126,10 @@ export default function UtilityReadingScreen() {
             />
           </View>
 
-          <View style={styles.inputWrapper}>
-            <Text style={styles.inputLabel}>Rate per {unitLabel}</Text>
+          <View className="px-4 pt-3 pb-1">
+            <Text className="text-[13px] text-text-secondary mb-1.5 font-medium">
+              Rate per {unitLabel}
+            </Text>
             <Input
               keyboardType="numeric"
               placeholder="0.00"
@@ -138,10 +141,15 @@ export default function UtilityReadingScreen() {
         </View>
 
         {/* Computed charge card */}
-        <View style={styles.computedCard}>
-          <Text style={styles.computedLabel}>COMPUTED CHARGE</Text>
+        <View className="bg-success-bg rounded-md mx-4 mt-3 p-4 items-center">
+          <Text
+            className="text-text-muted text-xs uppercase mb-1"
+            style={{ letterSpacing: 0.5 }}
+          >
+            COMPUTED CHARGE
+          </Text>
           <AmountText amount={computedCharge} variant="paid" size="large" />
-          <Text style={styles.computedDetail}>
+          <Text className="text-text-muted text-[13px] mt-1">
             {usage.toFixed(1)} {unitLabel} × ₱{parsedRate.toFixed(2)}/unit
           </Text>
         </View>
@@ -158,60 +166,3 @@ export default function UtilityReadingScreen() {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  contextLabel: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    textAlign: 'center',
-    paddingVertical: 8,
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 120,
-  },
-  fieldsCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    marginHorizontal: 16,
-    marginTop: 8,
-    overflow: 'hidden',
-  },
-  inputWrapper: {
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 4,
-  },
-  inputLabel: {
-    fontSize: 13,
-    color: colors.textSecondary,
-    marginBottom: 6,
-    fontWeight: '500',
-  },
-  computedCard: {
-    backgroundColor: colors.successBg,
-    borderRadius: 12,
-    marginHorizontal: 16,
-    marginTop: 12,
-    padding: 16,
-    alignItems: 'center',
-  },
-  computedLabel: {
-    fontSize: 11,
-    color: colors.textMuted,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    marginBottom: 4,
-  },
-  computedDetail: {
-    color: colors.textMuted,
-    fontSize: 13,
-    marginTop: 4,
-  },
-})

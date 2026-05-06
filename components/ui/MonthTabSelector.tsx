@@ -1,12 +1,11 @@
 import React from 'react'
-import { ScrollView, Text, StyleSheet, Pressable } from 'react-native'
+import { ScrollView, Text, Pressable } from 'react-native'
 import * as Haptics from 'expo-haptics'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated'
-import { colors, radius } from '../../constants/theme'
 
 interface MonthTabSelectorProps {
   months: string[]
@@ -39,19 +38,19 @@ function MonthTab({
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         onPress()
       }}
-      style={[
-        styles.tab,
-        isSelected ? styles.tabSelected : styles.tabUnselected,
-        animatedStyle,
-      ]}
+      className={[
+        'px-[14px] py-[6px] min-h-[32px] justify-center items-center',
+        isSelected ? 'bg-primary rounded-full' : 'bg-transparent',
+      ].join(' ')}
+      style={animatedStyle}
       accessibilityRole="tab"
       accessibilityState={{ selected: isSelected }}
     >
       <Text
-        style={[
-          styles.tabText,
-          isSelected ? styles.tabTextSelected : styles.tabTextUnselected,
-        ]}
+        className={[
+          'text-[13px]',
+          isSelected ? 'text-text-primary font-semibold' : 'text-text-secondary font-normal',
+        ].join(' ')}
       >
         {month}
       </Text>
@@ -64,7 +63,12 @@ export function MonthTabSelector({ months, selected, onChange }: MonthTabSelecto
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.container}
+      contentContainerStyle={{
+        flexDirection: 'row',
+        gap: 4,
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+      }}
     >
       {months.map((month) => (
         <MonthTab
@@ -77,37 +81,3 @@ export function MonthTabSelector({ months, selected, onChange }: MonthTabSelecto
     </ScrollView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    gap: 4,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
-  tab: {
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    minHeight: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  tabSelected: {
-    backgroundColor: colors.primary,
-    borderRadius: radius.pill,
-  },
-  tabUnselected: {
-    backgroundColor: 'transparent',
-  },
-  tabText: {
-    fontSize: 13,
-  },
-  tabTextSelected: {
-    color: colors.textPrimary,
-    fontWeight: '600',
-  },
-  tabTextUnselected: {
-    color: colors.textSecondary,
-    fontWeight: '400',
-  },
-})

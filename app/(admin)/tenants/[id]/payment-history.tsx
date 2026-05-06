@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { View, FlatList, Pressable, StyleSheet } from 'react-native'
+import { View, FlatList, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
@@ -39,14 +39,14 @@ export default function PaymentHistoryScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+      <SafeAreaView className="flex-1 bg-background">
         <LoadingSpinner />
       </SafeAreaView>
     )
   }
 
   return (
-    <SafeAreaView edges={['bottom']} style={{ flex: 1, backgroundColor: colors.background }}>
+    <SafeAreaView edges={['bottom']} className="flex-1 bg-background">
       <ScreenHeader
         title="Payment History"
         left="back"
@@ -58,10 +58,10 @@ export default function PaymentHistoryScreen() {
       />
 
       {/* Tenant header card */}
-      <View style={styles.tenantCard}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+      <View className="bg-surface rounded-md mx-4 my-3 p-4">
+        <View className="flex-row items-center gap-3">
           <AvatarInitials name={tenant?.full_name ?? ''} size="md" />
-          <View style={{ flex: 1 }}>
+          <View className="flex-1">
             <AppText variant="subheading">{tenant?.full_name}</AppText>
             <AppText color="secondary" variant="caption">
               {tenant?.unit ? `Unit ${tenant.unit.unit_number}` : 'No unit'}
@@ -120,7 +120,7 @@ export default function PaymentHistoryScreen() {
           />
         )}
         ListEmptyComponent={
-          <View style={{ padding: 32, alignItems: 'center' }}>
+          <View className="p-8 items-center">
             <AppText color="muted">No payment records</AppText>
           </View>
         }
@@ -128,13 +128,3 @@ export default function PaymentHistoryScreen() {
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  tenantCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    marginHorizontal: 16,
-    marginVertical: 12,
-    padding: 16,
-  },
-})

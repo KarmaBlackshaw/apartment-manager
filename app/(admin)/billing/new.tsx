@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, Pressable, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, ScrollView, Pressable, KeyboardAvoidingView, Platform } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
-import { colors } from '../../../constants/theme'
 import {
   ScreenHeader,
   BottomCTABar,
@@ -65,37 +64,37 @@ export default function RecordPaymentScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={styles.root}
+      className="flex-1 bg-background"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScreenHeader title="Record Payment" left="back" />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 160 }}>
         {/* 1. Tenant / unit card (read-only) */}
         {(tenant || unit) && (
-          <View style={styles.tenantCard}>
-            <Text style={styles.tenantName}>{tenant?.full_name ?? '—'}</Text>
-            <Text style={styles.tenantUnit}>
+          <View className="bg-elevated rounded-md m-4 p-[14px]">
+            <Text className="text-text-primary text-base font-semibold">{tenant?.full_name ?? '—'}</Text>
+            <Text className="text-text-secondary text-sm mt-1">
               {unit ? `Unit ${unit.unit_number}` : '—'}
             </Text>
           </View>
         )}
 
         {/* 2. Amount input */}
-        <View style={styles.section}>
-          <Text style={styles.sectionLabel}>Amount received (₱)</Text>
+        <View className="px-4 mb-1">
+          <Text className="text-text-secondary text-[13px] mb-2">Amount received (₱)</Text>
           <Input
             value={amountInput}
             onChangeText={setAmountInput}
             keyboardType="numeric"
             placeholder="0.00"
             autoFocus
-            style={styles.amountInput}
+            style={{ fontSize: 28 }}
           />
         </View>
 
         {/* 3. Date */}
-        <View style={styles.section}>
+        <View className="px-4 mb-1">
           <DateInput
             label="Date"
             value={selectedDate}
@@ -104,14 +103,14 @@ export default function RecordPaymentScreen() {
         </View>
 
         {/* 4. Covers month (read-only) */}
-        <View style={styles.section}>
-          <Text style={styles.sectionLabel}>
+        <View className="px-4 mb-1">
+          <Text className="text-text-secondary text-[13px]">
             Covers month — {coversMonth} (auto-detected)
           </Text>
         </View>
 
         {/* 5. Notes */}
-        <View style={styles.section}>
+        <View className="px-4 mb-1">
           <Input
             label="Notes (optional)"
             value={notes}
@@ -122,13 +121,13 @@ export default function RecordPaymentScreen() {
         </View>
 
         {/* 6. Balance preview */}
-        <View style={styles.balanceCard}>
-          <View style={styles.balanceRow}>
-            <Text style={styles.balanceLabel}>Balance before</Text>
+        <View className="bg-surface rounded-md m-4 p-[14px]">
+          <View className="flex-row items-center justify-between">
+            <Text className="text-text-secondary text-sm">Balance before</Text>
             <AmountText amount={balanceBefore} variant="owed" size="small" />
           </View>
-          <View style={[styles.balanceRow, { marginTop: 12 }]}>
-            <Text style={styles.balanceLabel}>Balance after</Text>
+          <View className="flex-row items-center justify-between mt-3">
+            <Text className="text-text-secondary text-sm">Balance after</Text>
             <AmountText amount={balanceAfter} variant={balanceAfterVariant()} size="small" />
           </View>
         </View>
@@ -144,73 +143,12 @@ export default function RecordPaymentScreen() {
         />
         <Pressable
           onPress={() => handleSave(false)}
-          style={styles.saveWithoutReceiptBtn}
+          className="items-center pt-3"
           disabled={isPending}
         >
-          <Text style={styles.saveWithoutReceiptText}>Save without receipt</Text>
+          <Text className="text-text-secondary text-sm">Save without receipt</Text>
         </Pressable>
       </BottomCTABar>
     </KeyboardAvoidingView>
   )
 }
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  scrollContent: {
-    paddingBottom: 160,
-  },
-  tenantCard: {
-    backgroundColor: colors.elevated,
-    borderRadius: 12,
-    margin: 16,
-    padding: 14,
-  },
-  tenantName: {
-    color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  tenantUnit: {
-    color: colors.textSecondary,
-    fontSize: 14,
-    marginTop: 4,
-  },
-  section: {
-    paddingHorizontal: 16,
-    marginBottom: 4,
-  },
-  sectionLabel: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    marginBottom: 8,
-  },
-  amountInput: {
-    fontSize: 28,
-  },
-  balanceCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    margin: 16,
-    padding: 14,
-  },
-  balanceRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  balanceLabel: {
-    color: colors.textSecondary,
-    fontSize: 14,
-  },
-  saveWithoutReceiptBtn: {
-    alignItems: 'center',
-    paddingTop: 12,
-  },
-  saveWithoutReceiptText: {
-    color: colors.textSecondary,
-    fontSize: 14,
-  },
-})

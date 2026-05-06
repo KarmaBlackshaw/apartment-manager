@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { View, ScrollView, Alert, StyleSheet, TextInput, Pressable } from 'react-native'
+import { View, ScrollView, Alert, TextInput, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
@@ -79,14 +79,14 @@ export default function MoveOutScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+      <SafeAreaView className="flex-1 bg-background">
         <LoadingSpinner />
       </SafeAreaView>
     )
   }
 
   return (
-    <SafeAreaView edges={['bottom']} style={{ flex: 1, backgroundColor: colors.background }}>
+    <SafeAreaView edges={['bottom']} className="flex-1 bg-background">
       <ScreenHeader
         title="Move-Out"
         left="back"
@@ -98,7 +98,7 @@ export default function MoveOutScreen() {
         }}
       />
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
-        <View style={{ marginTop: 12 }}>
+        <View className="mt-3">
           <WarningBanner
             message="Review settlement before confirming. This cannot be undone."
             variant="warning"
@@ -106,8 +106,13 @@ export default function MoveOutScreen() {
         </View>
 
         {/* Settlement breakdown */}
-        <AppText style={styles.sectionLabel}>SETTLEMENT BREAKDOWN</AppText>
-        <View style={styles.settlementGroup}>
+        <AppText
+          className="text-[11px] font-semibold text-text-muted mx-4 mt-5 mb-2"
+          style={{ letterSpacing: 0.5, textTransform: 'uppercase' }}
+        >
+          SETTLEMENT BREAKDOWN
+        </AppText>
+        <View className="bg-surface mx-4 rounded-md overflow-hidden">
           <SettlementRow label="Deposit held" amount={depositHeld} variant="credit" />
           <SettlementRow label="Open balance" amount={openBalance} variant="deduction" />
           {proratedRent > 0 && (
@@ -130,16 +135,16 @@ export default function MoveOutScreen() {
 
         {/* Add damage row */}
         {addingDamage ? (
-          <View style={styles.damageInputRow}>
+          <View className="flex-row gap-2 px-4 py-3 items-center">
             <TextInput
-              style={[styles.damageInput, { flex: 1 }]}
+              className="flex-1 bg-elevated rounded-lg p-[10px] text-text-primary text-sm"
               placeholder="Description"
               placeholderTextColor={colors.textMuted}
               value={newDamageLabel}
               onChangeText={setNewDamageLabel}
             />
             <TextInput
-              style={[styles.damageInput, { width: 100 }]}
+              className="bg-elevated rounded-lg p-[10px] text-text-primary text-sm w-[100px]"
               placeholder="Amount"
               placeholderTextColor={colors.textMuted}
               value={newDamageAmount}
@@ -167,16 +172,22 @@ export default function MoveOutScreen() {
             />
           </View>
         ) : (
-          <Pressable onPress={() => setAddingDamage(true)} style={styles.addDamageRow}>
+          <Pressable onPress={() => setAddingDamage(true)} className="px-4 py-4">
             <AppText style={{ color: colors.textLink }}>+ Add damage deduction</AppText>
           </Pressable>
         )}
 
         {/* Notes */}
-        <AppText style={styles.sectionLabel}>MOVE-OUT NOTES</AppText>
-        <View style={styles.notesContainer}>
+        <AppText
+          className="text-[11px] font-semibold text-text-muted mx-4 mt-5 mb-2"
+          style={{ letterSpacing: 0.5, textTransform: 'uppercase' }}
+        >
+          MOVE-OUT NOTES
+        </AppText>
+        <View className="mx-4 bg-surface rounded-md">
           <TextInput
-            style={styles.notesInput}
+            className="p-4 text-text-primary text-sm"
+            style={{ minHeight: 100, textAlignVertical: 'top' }}
             multiline
             numberOfLines={4}
             placeholder="Any additional notes..."
@@ -189,59 +200,10 @@ export default function MoveOutScreen() {
 
       <BottomCTABar>
         <Button label="Confirm Move-Out" onPress={handleConfirm} loading={deactivating} />
-        <Pressable onPress={() => router.back()} style={{ alignItems: 'center', marginTop: 12 }}>
+        <Pressable onPress={() => router.back()} className="items-center mt-3">
           <AppText color="secondary">Cancel</AppText>
         </Pressable>
       </BottomCTABar>
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  sectionLabel: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: colors.textMuted,
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-    marginHorizontal: 16,
-    marginTop: 20,
-    marginBottom: 8,
-  },
-  settlementGroup: {
-    backgroundColor: colors.surface,
-    marginHorizontal: 16,
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  addDamageRow: {
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-  },
-  damageInputRow: {
-    flexDirection: 'row',
-    gap: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    alignItems: 'center',
-  },
-  damageInput: {
-    backgroundColor: colors.elevated,
-    borderRadius: 8,
-    padding: 10,
-    color: colors.textPrimary,
-    fontSize: 14,
-  },
-  notesContainer: {
-    marginHorizontal: 16,
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-  },
-  notesInput: {
-    padding: 16,
-    color: colors.textPrimary,
-    fontSize: 14,
-    minHeight: 100,
-    textAlignVertical: 'top',
-  },
-})

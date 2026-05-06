@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ScrollView, Text, StyleSheet, Alert } from 'react-native'
+import { View, ScrollView, Text, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import {
@@ -26,10 +26,10 @@ export default function PaymentDetailScreen() {
 
   if (!payment) {
     return (
-      <View style={styles.container}>
+      <View className="flex-1 bg-background">
         <ScreenHeader title="Payment Detail" left="back" />
-        <View style={styles.centered}>
-          <Text style={styles.errorText}>Payment not found.</Text>
+        <View className="flex-1 items-center justify-center p-8">
+          <Text className="text-danger text-center text-base">Payment not found.</Text>
         </View>
       </View>
     )
@@ -63,26 +63,31 @@ export default function PaymentDetailScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-background">
       <ScreenHeader title="Payment Detail" left="back" />
 
       <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
+        className="flex-1"
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
       >
         {/* Amount header card */}
-        <View style={styles.amountCard}>
-          <Text style={styles.amountLabel}>AMOUNT PAID</Text>
+        <View className="bg-success-bg rounded-md mx-4 mt-4 p-5 items-center">
+          <Text
+            className="text-text-muted text-xs uppercase mb-1"
+            style={{ letterSpacing: 0.5 }}
+          >
+            AMOUNT PAID
+          </Text>
           <AmountText amount={payment.amount} variant="paid" size="large" />
-          <Text style={styles.amountDate}>
+          <Text className="text-text-secondary text-[13px] mt-1">
             {dayjs(payment.date).format('MMMM D, YYYY')}
           </Text>
         </View>
 
         {/* Payment info section */}
         <SectionHeader title="Payment Info" />
-        <View style={styles.infoCard}>
+        <View className="bg-surface rounded-md mx-4 overflow-hidden">
           <InfoRow label="Receipt #" value={payment.receipt_no} showDivider={true} />
           <InfoRow label="Tenant" value={payment.tenant.full_name} showDivider={true} />
           <InfoRow label="Unit" value={`Unit ${payment.unit.unit_number}`} showDivider={true} />
@@ -117,53 +122,3 @@ export default function PaymentDetailScreen() {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  centered: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 32,
-  },
-  errorText: {
-    color: colors.danger,
-    textAlign: 'center',
-    fontSize: 16,
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 120,
-  },
-  amountCard: {
-    backgroundColor: colors.successBg,
-    borderRadius: 12,
-    marginHorizontal: 16,
-    marginTop: 16,
-    padding: 20,
-    alignItems: 'center',
-  },
-  amountLabel: {
-    fontSize: 11,
-    color: colors.textMuted,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    marginBottom: 4,
-  },
-  amountDate: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    marginTop: 4,
-  },
-  infoCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    marginHorizontal: 16,
-    overflow: 'hidden',
-  },
-})

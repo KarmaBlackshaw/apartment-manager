@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import {
-  Modal, View, TextInput, ScrollView, Pressable, Text, StyleSheet,
+  Modal, View, TextInput, ScrollView, Pressable, Text,
 } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -44,24 +44,43 @@ function ResultCard({
   const chip = bill ? (STATUS_CHIP[bill.status] ?? STATUS_CHIP.pending) : null
 
   return (
-    <Pressable style={styles.card} onPress={onView} accessibilityRole="button">
-      <View style={styles.cardRow}>
-        <View style={[styles.avatar, { backgroundColor: color }]}>
-          <Text style={styles.avatarText}>{initial}</Text>
+    <Pressable
+      className="bg-elevated rounded-md p-[14px] mb-2 border border-border"
+      onPress={onView}
+      accessibilityRole="button"
+    >
+      <View className="flex-row items-center gap-[10px] mb-[6px]">
+        <View
+          className="w-[36px] h-[36px] rounded-[8px] items-center justify-center"
+          style={{ backgroundColor: color }}
+        >
+          <Text className="text-white font-bold text-sm">{initial}</Text>
         </View>
-        <View style={styles.cardInfo}>
-          <Text style={styles.tenantName}>{tenant.full_name}</Text>
-          <Text style={styles.unitText}>Unit {tenant.unit?.unit_number ?? '?'}</Text>
+        <View className="flex-1">
+          <Text className="text-text-primary font-semibold text-[15px]">
+            {tenant.full_name}
+          </Text>
+          <Text className="text-text-muted text-xs mt-[1px]">
+            Unit {tenant.unit?.unit_number ?? '?'}
+          </Text>
         </View>
         {chip && (
-          <View style={[styles.chip, { backgroundColor: chip.bg }]}>
-            <Text style={[styles.chipText, { color: chip.text }]}>
+          <View
+            className="px-2 py-[3px] rounded-sm"
+            style={{ backgroundColor: chip.bg }}
+          >
+            <Text
+              className="text-[10px] font-bold tracking-[0.5px]"
+              style={{ color: chip.text }}
+            >
               {bill!.status.toUpperCase()}
             </Text>
           </View>
         )}
       </View>
-      <Text style={[styles.balanceText, { color: balanceColor }]}>{balanceLabel}</Text>
+      <Text className="text-[13px] font-semibold" style={{ color: balanceColor }}>
+        {balanceLabel}
+      </Text>
     </Pressable>
   )
 }
@@ -106,14 +125,15 @@ export function TenantQuickSearchModal({ visible, onClose }: Props) {
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <Pressable style={styles.scrim} onPress={onClose}>
+      <Pressable className="flex-1 bg-black/60 justify-start" onPress={onClose}>
         <Pressable
-          style={[styles.sheet, { paddingTop: insets.top + 16 }]}
+          className="bg-background px-4 pb-8 min-h-[200px] max-h-[80%]"
+          style={{ paddingTop: insets.top + 16 }}
           onPress={(e) => e.stopPropagation()}
         >
-          <View style={styles.header}>
+          <View className="flex-row items-center gap-2 mb-3">
             <TextInput
-              style={styles.searchInput}
+              className="flex-1 h-[48px] rounded-md border border-border bg-elevated px-4 text-[15px] text-text-primary"
               placeholder="Search tenants..."
               placeholderTextColor="#555555"
               value={query}
@@ -123,7 +143,7 @@ export function TenantQuickSearchModal({ visible, onClose }: Props) {
             />
             <Pressable
               onPress={() => { onClose(); setQuery('') }}
-              style={styles.closeBtn}
+              className="w-[40px] h-[40px] items-center justify-center"
               accessibilityLabel="Close search"
               accessibilityRole="button"
             >
@@ -132,12 +152,14 @@ export function TenantQuickSearchModal({ visible, onClose }: Props) {
           </View>
 
           <ScrollView
-            style={styles.results}
+            className="flex-1"
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
           >
             {query.trim().length > 0 && results.length === 0 && (
-              <Text style={styles.emptyText}>No tenants found</Text>
+              <Text className="text-text-muted text-center mt-6 text-sm">
+                No tenants found
+              </Text>
             )}
             {results.map((t) => (
               <ResultCard
@@ -153,76 +175,3 @@ export function TenantQuickSearchModal({ visible, onClose }: Props) {
     </Modal>
   )
 }
-
-const styles = StyleSheet.create({
-  scrim: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    justifyContent: 'flex-start',
-  },
-  sheet: {
-    backgroundColor: '#0d0d0d',
-    paddingHorizontal: 16,
-    paddingBottom: 32,
-    minHeight: 200,
-    maxHeight: '80%',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 12,
-  },
-  searchInput: {
-    flex: 1,
-    height: 48,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#2a2a2a',
-    backgroundColor: '#171717',
-    paddingHorizontal: 16,
-    fontSize: 15,
-    color: '#f1f1f1',
-  },
-  closeBtn: {
-    width: 40,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  results: { flex: 1 },
-  emptyText: {
-    color: '#555555',
-    textAlign: 'center',
-    marginTop: 24,
-    fontSize: 14,
-  },
-  card: {
-    backgroundColor: '#171717',
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: '#2a2a2a',
-  },
-  cardRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    marginBottom: 6,
-  },
-  avatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  avatarText: { color: '#fff', fontWeight: '700', fontSize: 14 },
-  cardInfo: { flex: 1 },
-  tenantName: { color: '#f1f1f1', fontWeight: '600', fontSize: 15 },
-  unitText: { color: '#888888', fontSize: 12, marginTop: 1 },
-  chip: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-  chipText: { fontSize: 10, fontWeight: '700', letterSpacing: 0.5 },
-  balanceText: { fontSize: 13, fontWeight: '600' },
-})

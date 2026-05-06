@@ -6,8 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../../../hooks/useTabBarScrollHandler'
 import { useProperties } from '../../../../hooks/useProperties'
 import { useUnits } from '../../../../hooks/useUnits'
-import { UnitCard } from '../../../../components/admin/UnitCard'
-import { AppText, LoadingSpinner } from '../../../../components/ui'
+import { AppText, LoadingSpinner, UnitCard } from '../../../../components/ui'
 import type { Property } from '../../../../types'
 
 function PropertySection({ property, router }: { property: Property; router: ReturnType<typeof useRouter> }) {

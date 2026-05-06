@@ -1,6 +1,6 @@
 import React from 'react'
-import { Text, View, StyleSheet } from 'react-native'
-import { colors, radius } from '../../constants/theme'
+import { Text, View } from 'react-native'
+import { colors } from '../../constants/theme'
 
 export type ChipVariant = 'success' | 'warning' | 'danger' | 'info' | 'neutral' | 'advance'
 
@@ -32,47 +32,15 @@ export function StatusChip({ variant, label, size = 'sm' }: StatusChipProps) {
   const isMd = size === 'md'
   return (
     <View
-      style={[
-        styles.base,
-        { backgroundColor: bgColor[variant] },
-        isMd ? styles.containerMd : styles.containerSm,
-      ]}
+      className={`rounded-sm self-start ${isMd ? 'px-3 py-[6px]' : 'px-2 py-1'}`}
+      style={{ backgroundColor: bgColor[variant] }}
     >
       <Text
-        style={[
-          styles.text,
-          { color: textColor[variant] },
-          isMd ? styles.textMd : styles.textSm,
-        ]}
+        className={`font-semibold uppercase tracking-wide ${isMd ? 'text-xs' : 'text-[11px]'}`}
+        style={{ color: textColor[variant] }}
       >
         {label}
       </Text>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  base: {
-    borderRadius: radius.sm,
-    alignSelf: 'flex-start',
-  },
-  containerSm: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-  },
-  containerMd: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  text: {
-    fontWeight: '600',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-  },
-  textSm: {
-    fontSize: 11,
-  },
-  textMd: {
-    fontSize: 12,
-  },
-})

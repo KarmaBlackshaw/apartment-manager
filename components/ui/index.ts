@@ -7,30 +7,13 @@ export { BottomCTABar } from './BottomCTABar'
 export { FilterChipBar } from './FilterChipBar'
 export { SectionHeader } from './SectionHeader'
 export { ListRow } from './ListRow'
-export { BalanceCard } from './BalanceCard'
-export { KPICard } from './KPICard'
-export { CollectionProgressBar } from './CollectionProgressBar'
 // s03
 export { MonthTabSelector } from './MonthTabSelector'
 export { SegmentedControl } from './SegmentedControl'
-export { PropertyCard } from './PropertyCard'
-export { FloorTabSelector } from './FloorTabSelector'
-export { UnitGridCard } from './UnitGridCard'
-export { DocumentRow } from './DocumentRow'
-export type { DocCategory } from './DocumentRow'
-export { MaintenanceRow } from './MaintenanceRow'
-export { SettingsRow } from './SettingsRow'
-export { NotificationRow } from './NotificationRow'
 export { InfoRow } from './InfoRow'
-export { AmenityChipSelector } from './AmenityChipSelector'
-export { ReportMenuCard } from './ReportMenuCard'
 export { WarningBanner } from './WarningBanner'
-export { SettlementRow } from './SettlementRow'
 export { ProgressStepIndicator } from './ProgressStepIndicator'
-export { BedSlotCard } from './BedSlotCard'
-export { ReceiptDocument } from './ReceiptDocument'
 export { PINKeypad } from './PINKeypad'
-export { OccupancyBarChart } from './OccupancyBarChart'
 export { CameraCapture } from './CameraCapture'
 export { FAB } from './FAB'
 // existing
@@ -45,3 +28,50 @@ export { EmptyState } from './EmptyState'
 export { LoadingSpinner } from './LoadingSpinner'
 export type { BadgeVariant } from './Badge'
 export { DateInput } from './DateInput'
+
+// billing/
+export { ReceiptDocument } from '../billing/ReceiptDocument'
+export { BalanceCard } from '../billing/BalanceCard'
+export { CollectionProgressBar } from '../billing/CollectionProgressBar'
+export { SettlementRow } from '../billing/SettlementRow'
+export { BillCard } from '../billing/BillCard'
+export { SwipeablePaymentRow } from '../billing/SwipeablePaymentRow'
+export type { SwipeablePaymentRowProps } from '../billing/SwipeablePaymentRow'
+
+// home/
+export { OccupancyBarChart } from '../home/OccupancyBarChart'
+export { KPICard } from '../home/KPICard'
+
+// properties/
+export { PropertyOverviewCard } from '../properties/PropertyOverviewCard'
+export { PropertyCard } from '../properties/PropertyCard'
+export { PropertySelector } from '../properties/PropertySelector'
+export { UnitGridCard } from '../properties/UnitGridCard'
+export type { UnitStatus } from '../properties/UnitGridCard'
+export { FloorTabSelector } from '../properties/FloorTabSelector'
+export { AmenityChipSelector } from '../properties/AmenityChipSelector'
+export { BedSlotCard } from '../properties/BedSlotCard'
+export { UnitCard } from '../properties/UnitCard'
+
+// documents/
+export { DocumentRow } from '../documents/DocumentRow'
+export type { DocCategory } from '../documents/DocumentRow'
+
+// maintenance/
+export { MaintenanceRow } from '../maintenance/MaintenanceRow'
+
+// notifications/
+export { NotificationRow } from '../notifications/NotificationRow'
+
+// reports/
+export { ReportMenuCard } from '../reports/ReportMenuCard'
+
+// settings/
+export { SettingsRow } from '../settings/SettingsRow'
+
+// navigation/
+export { FloatingTabBar } from '../navigation/FloatingTabBar'
+
+// tenants/
+export { TenantCard } from '../tenants/TenantCard'
+export { TenantQuickSearchModal } from '../tenants/TenantQuickSearchModal'

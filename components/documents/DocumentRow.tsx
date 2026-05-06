@@ -1,12 +1,12 @@
 import React from 'react'
-import { Text, View, StyleSheet, Pressable } from 'react-native'
+import { Text, View, Pressable } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated'
 import { Ionicons } from '@expo/vector-icons'
-import { colors, radius } from '../../constants/theme'
+import { colors } from '../../constants/theme'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
@@ -56,16 +56,19 @@ export function DocumentRow({ title, category, date, onPress }: DocumentRowProps
       onPressOut={handlePressOut}
       style={animatedStyle}
     >
-      <View style={styles.row}>
-        <View style={[styles.iconContainer, { backgroundColor: bg }]}>
+      <View className="flex-row items-center px-4 py-3 bg-surface border-b border-border">
+        <View
+          className="w-[40px] h-[40px] rounded-[8px] items-center justify-center mr-3"
+          style={{ backgroundColor: bg }}
+        >
           <Ionicons name={icon} size={20} color="#FFFFFF" />
         </View>
 
-        <View style={styles.body}>
-          <Text style={styles.title} numberOfLines={1}>
+        <View className="flex-1 mr-2">
+          <Text className="text-[15px] font-semibold text-text-primary" numberOfLines={1}>
             {title}
           </Text>
-          <Text style={styles.subtitle} numberOfLines={1}>
+          <Text className="text-[13px] text-text-secondary mt-[2px]" numberOfLines={1}>
             {category} · {date}
           </Text>
         </View>
@@ -75,37 +78,3 @@ export function DocumentRow({ title, category, date, onPress }: DocumentRowProps
     </AnimatedPressable>
   )
 }
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  body: {
-    flex: 1,
-    marginRight: 8,
-  },
-  title: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: colors.textPrimary,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: colors.textSecondary,
-    marginTop: 2,
-  },
-})

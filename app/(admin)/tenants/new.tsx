@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, ScrollView, KeyboardAvoidingView, Platform, Pressable, StyleSheet } from 'react-native'
+import { View, ScrollView, KeyboardAvoidingView, Platform, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 import { toast } from 'sonner-native'
@@ -19,7 +19,6 @@ import {
   BottomCTABar,
   CameraCapture,
 } from '../../../components/ui'
-import { colors } from '../../../constants/theme'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -237,7 +236,7 @@ export default function NewTenantScreen() {
           onCapture={setIdBackUri}
           captured={idBackUri}
         />
-        <Pressable onPress={() => handleNext(true)} style={{ alignItems: 'center', marginTop: 16 }}>
+        <Pressable onPress={() => handleNext(true)} className="items-center mt-4">
           <AppText color="muted" variant="caption">
             Skip (not recommended)
           </AppText>
@@ -320,7 +319,7 @@ export default function NewTenantScreen() {
           onChange={(v) => setContractType(v === 'Fixed term' ? 'fixed' : 'monthly')}
         />
         {contractType === 'fixed' && (
-          <View style={{ marginTop: 12 }}>
+          <View className="mt-3">
             <DateInput
               label="Contract End Date"
               value={contractEndDate}
@@ -391,10 +390,10 @@ export default function NewTenantScreen() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.root}
+      className="flex-1 bg-background"
     >
-      <SafeAreaView edges={['top']} style={{ backgroundColor: colors.surface }}>
-        <View style={styles.header}>
+      <SafeAreaView edges={['top']} className="bg-surface">
+        <View className="px-4 pt-3 pb-2 bg-surface">
           <ProgressStepIndicator steps={5} current={step} />
           <AppText
             variant="caption"
@@ -406,7 +405,7 @@ export default function NewTenantScreen() {
         </View>
       </SafeAreaView>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>{renderStep()}</ScrollView>
+      <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 120 }}>{renderStep()}</ScrollView>
 
       <BottomCTABar>
         <Button
@@ -415,8 +414,8 @@ export default function NewTenantScreen() {
           loading={isPending}
         />
         {step > 1 && (
-          <Pressable onPress={handleBack} style={styles.backButton}>
-            <AppText color="primary" style={{ color: colors.textLink }}>
+          <Pressable onPress={handleBack} className="items-center mt-3">
+            <AppText color="primary">
               Back
             </AppText>
           </Pressable>
@@ -425,26 +424,3 @@ export default function NewTenantScreen() {
     </KeyboardAvoidingView>
   )
 }
-
-// ─── Styles ───────────────────────────────────────────────────────────────────
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  header: {
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 8,
-    backgroundColor: colors.surface,
-  },
-  scrollContent: {
-    padding: 16,
-    paddingBottom: 120,
-  },
-  backButton: {
-    alignItems: 'center',
-    marginTop: 12,
-  },
-})

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { View, Text, FlatList, Pressable, StyleSheet } from 'react-native'
+import { View, Text, FlatList, Pressable } from 'react-native'
 import { useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import dayjs from 'dayjs'
-import { colors, radius, spacing } from '../../../constants/theme'
+import { colors } from '../../../constants/theme'
 import {
   ScreenHeader,
   MonthTabSelector,
@@ -14,6 +14,7 @@ import {
   LoadingSpinner,
   EmptyState,
   FAB,
+  PropertySelector,
 } from '../../../components/ui'
 import type { ChipVariant } from '../../../components/ui'
 import { useBillingOverview } from '../../../hooks/useBillingOverview'
@@ -51,8 +52,9 @@ export default function BillingScreen() {
     monthEntries.find((m) => m.label === selectedLabel)?.value ?? dayjs().format('YYYY-MM')
 
   const [filterValue, setFilterValue] = useState('all')
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>(undefined)
 
-  const { data, isLoading } = useBillingOverview(selectedMonth)
+  const { data, isLoading } = useBillingOverview(selectedMonth, selectedPropertyId)
 
   const entries: BillingOverviewEntry[] = data?.entries ?? []
   const stats = data?.stats ?? { collected: 0, billed: 0, rate: 0, overdueCount: 0 }
@@ -63,7 +65,7 @@ export default function BillingScreen() {
       : entries.filter((e) => e.month_status === filterValue)
 
   return (
-    <View style={styles.root}>
+    <View className="flex-1 bg-background">
       <ScreenHeader
         title="Billing"
         right={
@@ -80,17 +82,16 @@ export default function BillingScreen() {
       <FlatList
         data={filteredEntries}
         keyExtractor={(item) => `${item.tenant_id}-${item.unit_id ?? 'none'}`}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={{ paddingBottom: 120 }}
         ListHeaderComponent={
           <>
             {/* Property selector + month label */}
-            <View style={styles.propRow}>
-              <Pressable style={styles.propPill} hitSlop={4} accessibilityRole="button">
-                <Ionicons name="business-outline" size={12} color={colors.textSecondary} />
-                <Text style={styles.propText}>All properties</Text>
-                <Ionicons name="chevron-down" size={12} color={colors.textSecondary} />
-              </Pressable>
-              <Text style={styles.monthLabel}>
+            <View className="flex-row items-center justify-between px-4 pt-[10px] pb-1">
+              <PropertySelector
+                selectedId={selectedPropertyId}
+                onChange={setSelectedPropertyId}
+              />
+              <Text className="text-[13px] text-text-secondary font-medium">
                 {dayjs(selectedMonth).format('MMM YYYY')}
               </Text>
             </View>
@@ -103,27 +104,43 @@ export default function BillingScreen() {
             />
 
             {/* KPI 2×2 */}
-            <View style={styles.kpiGrid}>
-              <View style={styles.kpiRow}>
-                <View style={styles.kpiCard}>
-                  <Text style={styles.kpiLabel}>Collected</Text>
-                  <Text style={styles.kpiValue}>{fmtAmount(stats.collected)}</Text>
+            <View className="px-4 pt-3 pb-1 gap-[10px]">
+              <View className="flex-row gap-[10px]">
+                <View className="flex-1 bg-surface rounded-md p-[14px]">
+                  <Text className="text-xs text-text-secondary mb-[6px]">Collected</Text>
+                  <Text
+                    className="text-[22px] font-bold text-text-primary"
+                    style={{ fontVariant: ['tabular-nums'] }}
+                  >
+                    {fmtAmount(stats.collected)}
+                  </Text>
                 </View>
-                <View style={styles.kpiCard}>
-                  <Text style={styles.kpiLabel}>Billed</Text>
-                  <Text style={styles.kpiValue}>{fmtAmount(stats.billed)}</Text>
+                <View className="flex-1 bg-surface rounded-md p-[14px]">
+                  <Text className="text-xs text-text-secondary mb-[6px]">Billed</Text>
+                  <Text
+                    className="text-[22px] font-bold text-text-primary"
+                    style={{ fontVariant: ['tabular-nums'] }}
+                  >
+                    {fmtAmount(stats.billed)}
+                  </Text>
                 </View>
               </View>
-              <View style={styles.kpiRow}>
-                <View style={styles.kpiCard}>
-                  <Text style={styles.kpiLabel}>Rate</Text>
-                  <Text style={[styles.kpiValue, { color: colors.success }]}>
+              <View className="flex-row gap-[10px]">
+                <View className="flex-1 bg-surface rounded-md p-[14px]">
+                  <Text className="text-xs text-text-secondary mb-[6px]">Rate</Text>
+                  <Text
+                    className="text-[22px] font-bold text-success"
+                    style={{ fontVariant: ['tabular-nums'] }}
+                  >
                     {stats.rate}%
                   </Text>
                 </View>
-                <View style={styles.kpiCard}>
-                  <Text style={styles.kpiLabel}>Overdue</Text>
-                  <Text style={[styles.kpiValue, { color: colors.danger }]}>
+                <View className="flex-1 bg-surface rounded-md p-[14px]">
+                  <Text className="text-xs text-text-secondary mb-[6px]">Overdue</Text>
+                  <Text
+                    className="text-[22px] font-bold text-danger"
+                    style={{ fontVariant: ['tabular-nums'] }}
+                  >
                     {stats.overdueCount}
                   </Text>
                 </View>
@@ -179,69 +196,3 @@ export default function BillingScreen() {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  listContent: {
-    paddingBottom: 120,
-  },
-  // Property selector row
-  propRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing[4],
-    paddingTop: 10,
-    paddingBottom: 4,
-  },
-  propPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    backgroundColor: colors.elevated,
-    borderRadius: radius.pill,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  propText: {
-    fontSize: 12,
-    color: colors.textSecondary,
-    fontWeight: '500',
-  },
-  monthLabel: {
-    fontSize: 13,
-    color: colors.textSecondary,
-    fontWeight: '500',
-  },
-  // KPI grid
-  kpiGrid: {
-    paddingHorizontal: spacing[4],
-    paddingTop: 12,
-    paddingBottom: 4,
-    gap: 10,
-  },
-  kpiRow: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  kpiCard: {
-    flex: 1,
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    padding: 14,
-  },
-  kpiLabel: {
-    fontSize: 12,
-    color: colors.textSecondary,
-    marginBottom: 6,
-  },
-  kpiValue: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: colors.textPrimary,
-    fontVariant: ['tabular-nums'],
-  },
-})

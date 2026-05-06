@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { Text, View } from 'react-native'
 import { colors } from '../../constants/theme'
 
 type SettlementVariant = 'deduction' | 'credit' | 'neutral' | 'total'
@@ -37,53 +37,25 @@ export function SettlementRow({ label, amount, variant }: SettlementRowProps) {
 
   return (
     <View
-      style={[
-        styles.row,
-        { backgroundColor: isTotal ? colors.surface : colors.elevated },
-      ]}
+      className="flex-row justify-between py-3 px-4"
+      style={{ backgroundColor: isTotal ? colors.surface : colors.elevated }}
     >
       <Text
-        style={[
-          styles.label,
-          isTotal && styles.labelTotal,
-        ]}
+        className={isTotal ? 'text-[15px] font-bold text-text-primary' : 'text-sm text-text-secondary'}
       >
         {label}
       </Text>
 
       <Text
-        style={[
-          styles.amount,
-          {
-            color: amountCfg.color,
-            fontWeight: amountCfg.fontWeight,
-            fontSize: amountCfg.fontSize,
-          },
-        ]}
+        style={{
+          color: amountCfg.color,
+          fontWeight: amountCfg.fontWeight,
+          fontSize: amountCfg.fontSize,
+          fontVariant: ['tabular-nums'],
+        }}
       >
         {amountCfg.prefix}{formatAmount(amount)}
       </Text>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-  },
-  label: {
-    fontSize: 14,
-    color: colors.textSecondary,
-  },
-  labelTotal: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: colors.textPrimary,
-  },
-  amount: {
-    fontVariant: ['tabular-nums'],
-  },
-})

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { View, FlatList, Pressable, Alert, StyleSheet } from 'react-native'
+import { View, FlatList, Pressable, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useLocalSearchParams } from 'expo-router'
 import * as ImagePicker from 'expo-image-picker'
@@ -43,7 +43,7 @@ export default function DocumentsScreen() {
   }
 
   return (
-    <SafeAreaView edges={['bottom']} style={{ flex: 1, backgroundColor: colors.background }}>
+    <SafeAreaView edges={['bottom']} className="flex-1 bg-background">
       <ScreenHeader
         title={tenant ? `${tenant.full_name.split(' ').pop()} — Docs` : 'Documents'}
         left="back"
@@ -73,12 +73,16 @@ export default function DocumentsScreen() {
           />
         )}
         ListFooterComponent={
-          <Pressable onPress={handleAddDocument} style={styles.addRow}>
+          <Pressable
+            onPress={handleAddDocument}
+            className="p-4 border border-border rounded-md mx-4 mt-2 items-center"
+            style={{ borderStyle: 'dashed', borderWidth: 1.5 }}
+          >
             <AppText style={{ color: colors.textLink }}>+ Add document or photo</AppText>
           </Pressable>
         }
         ListEmptyComponent={
-          <View style={{ padding: 32, alignItems: 'center' }}>
+          <View className="p-8 items-center">
             <AppText color="muted">No documents yet</AppText>
           </View>
         }
@@ -86,16 +90,3 @@ export default function DocumentsScreen() {
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  addRow: {
-    padding: 16,
-    borderWidth: 1.5,
-    borderStyle: 'dashed',
-    borderColor: colors.border,
-    borderRadius: 12,
-    marginHorizontal: 16,
-    marginTop: 8,
-    alignItems: 'center',
-  },
-})

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text } from 'react-native'
 import { colors } from '../../constants/theme'
 
 interface InfoRowProps {
@@ -19,59 +19,28 @@ export function InfoRow({
 }: InfoRowProps) {
   return (
     <View
-      style={[
-        styles.row,
-        showDivider ? styles.divider : styles.noDivider,
-      ]}
+      className={[
+        'flex-row justify-between px-4 py-3',
+        showDivider ? 'border-b border-border' : '',
+      ].join(' ')}
     >
       <Text
-        style={[
-          styles.label,
-          bold && styles.labelBold,
-        ]}
+        className={[
+          'text-sm text-text-secondary',
+          bold ? 'font-bold' : 'font-normal',
+        ].join(' ')}
       >
         {label}
       </Text>
       <Text
-        style={[
-          styles.value,
-          bold && styles.valueBold,
-          { color: valueColor ?? colors.textPrimary },
-        ]}
+        className={[
+          'text-sm',
+          bold ? 'font-bold' : 'font-medium',
+        ].join(' ')}
+        style={{ color: valueColor ?? colors.textPrimary }}
       >
         {value}
       </Text>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  divider: {
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  noDivider: {
-    borderBottomWidth: 0,
-  },
-  label: {
-    fontSize: 14,
-    color: colors.textSecondary,
-    fontWeight: '400',
-  },
-  labelBold: {
-    fontWeight: '700',
-  },
-  value: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  valueBold: {
-    fontWeight: '700',
-  },
-})

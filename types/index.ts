@@ -97,3 +97,69 @@ export interface BillWithTenant extends Bill {
 export interface UnitWithProperty extends Unit {
   property: Pick<Property, 'name' | 'address'>
 }
+
+export type UtilityType = 'electricity' | 'water'
+
+export interface Payment {
+  id: string
+  bill_id: string | null
+  tenant_id: string
+  unit_id: string
+  amount: number
+  date: string
+  notes: string | null
+  receipt_no: string
+  method: string
+  balance_before: number
+  balance_after: number
+  voided_at: string | null
+  created_at: string
+}
+
+export interface PaymentWithDetails extends Payment {
+  tenant: Pick<Tenant, 'full_name' | 'email'>
+  unit: Pick<Unit, 'unit_number'>
+}
+
+export interface UtilityReading {
+  id: string
+  unit_id: string
+  month: string
+  type: UtilityType
+  previous_reading: number
+  current_reading: number
+  rate: number
+  computed_charge: number
+  created_at: string
+}
+
+export interface BillingStats {
+  collected: number
+  billed: number
+  rate: number
+  overdueCount: number
+}
+
+export interface BillingOverviewEntry {
+  tenant_id: string
+  unit_id: string | null
+  tenant_full_name: string
+  unit_number: string | null
+  monthly_rate: number
+  bill_id: string | null
+  bill_amount: number
+  bill_status: string | null
+  month_status: 'paid' | 'overdue' | 'unpaid' | 'no_bill'
+}
+
+export interface BillingOverview {
+  entries: BillingOverviewEntry[]
+  stats: BillingStats
+}
+
+export interface BillPreview {
+  activeTenants: number
+  toGenerate: number
+  alreadyGenerated: number
+  totalBilled: number
+}

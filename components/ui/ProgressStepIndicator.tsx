@@ -1,6 +1,5 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
-import { colors, radius } from '../../constants/theme'
+import { View } from 'react-native'
 
 interface ProgressStepIndicatorProps {
   steps: number
@@ -9,38 +8,16 @@ interface ProgressStepIndicatorProps {
 
 export function ProgressStepIndicator({ steps, current }: ProgressStepIndicatorProps) {
   return (
-    <View style={styles.container}>
+    <View className="flex-row gap-1 w-full">
       {Array.from({ length: steps }, (_, i) => {
         const stepIndex = i + 1
         return (
           <View
             key={stepIndex}
-            style={[
-              styles.bar,
-              stepIndex <= current ? styles.barActive : styles.barInactive,
-            ]}
+            className={`flex-1 h-[3px] rounded-full ${stepIndex <= current ? 'bg-primary' : 'bg-border'}`}
           />
         )
       })}
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    gap: 4,
-    width: '100%',
-  },
-  bar: {
-    flex: 1,
-    height: 3,
-    borderRadius: radius.pill,
-  },
-  barActive: {
-    backgroundColor: colors.primary,
-  },
-  barInactive: {
-    backgroundColor: colors.border,
-  },
-})

@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, fireEvent, screen } from '@testing-library/react-native'
-import { TenantQuickSearchModal } from '../../components/admin/TenantQuickSearchModal'
+import { TenantQuickSearchModal } from '../../components/ui'
 
 jest.mock('../../hooks/useTenants', () => ({
   useTenants: () => ({

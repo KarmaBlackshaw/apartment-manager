@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, Alert, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import { colors } from '../../../constants/theme'
@@ -46,7 +46,7 @@ export default function BillDetailScreen() {
 
   if (isLoading) {
     return (
-      <View style={styles.root}>
+      <View className="flex-1 bg-background">
         <ScreenHeader title="Bill" left="back" />
         <LoadingSpinner />
       </View>
@@ -55,10 +55,10 @@ export default function BillDetailScreen() {
 
   if (isError || !bill) {
     return (
-      <View style={styles.root}>
+      <View className="flex-1 bg-background">
         <ScreenHeader title="Bill" left="back" />
-        <View style={styles.centered}>
-          <Text style={styles.errorText}>
+        <View className="flex-1 items-center justify-center p-8">
+          <Text className="text-danger text-center text-[15px]">
             {isError ? 'Could not load bill.' : 'Bill not found.'}
           </Text>
         </View>
@@ -109,16 +109,18 @@ export default function BillDetailScreen() {
   }
 
   return (
-    <View style={styles.root}>
+    <View className="flex-1 bg-background">
       <ScreenHeader title={headerTitle} left="back" />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         {/* 1. Tenant header card */}
-        <View style={styles.tenantCard}>
+        <View className="bg-surface rounded-md mx-4 mt-4 p-4 flex-row items-center gap-3">
           <AvatarInitials name={tenant?.full_name ?? '?'} size="md" />
-          <View style={styles.tenantInfo}>
-            <Text style={styles.tenantName}>{tenant?.full_name ?? '—'}</Text>
-            <Text style={styles.tenantMeta}>
+          <View className="flex-1">
+            <Text className="text-text-primary text-[15px] font-semibold">
+              {tenant?.full_name ?? '—'}
+            </Text>
+            <Text className="text-text-secondary text-[13px] mt-0.5">
               {unit ? `Unit ${unit.unit_number}` : '—'} · Due {dueDisplay}
             </Text>
           </View>
@@ -127,7 +129,7 @@ export default function BillDetailScreen() {
 
         {/* 2. Bill breakdown section */}
         <SectionHeader title="Bill breakdown" />
-        <View style={styles.sectionCard}>
+        <View className="bg-surface rounded-md mx-4">
           <InfoRow
             label="Base rent"
             value={formatCurrency(baseRent)}
@@ -175,7 +177,7 @@ export default function BillDetailScreen() {
 
         {/* 3. Payment status section */}
         <SectionHeader title="Payment status" />
-        <View style={[styles.sectionCard, { marginTop: 0 }]}>
+        <View className="bg-surface rounded-md mx-4" style={{ marginTop: 0 }}>
           <InfoRow
             label="Total paid"
             value={bill.status === 'paid' ? formatCurrency(bill.amount) : formatCurrency(0)}
@@ -202,7 +204,7 @@ export default function BillDetailScreen() {
             )
           }
         />
-        <View style={styles.secondaryRow}>
+        <View className="flex-row gap-2 mt-2">
           <Button
             label="Waive Late Fee"
             variant="secondary"
@@ -229,57 +231,3 @@ export default function BillDetailScreen() {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  centered: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 32,
-  },
-  errorText: {
-    color: colors.danger,
-    textAlign: 'center',
-    fontSize: 15,
-  },
-  scrollContent: {
-    paddingBottom: 120,
-  },
-  tenantCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    marginHorizontal: 16,
-    marginTop: 16,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  tenantInfo: {
-    flex: 1,
-  },
-  tenantName: {
-    color: colors.textPrimary,
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  tenantMeta: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    marginTop: 2,
-  },
-  sectionCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    marginHorizontal: 16,
-  },
-  secondaryRow: {
-    flexDirection: 'row',
-    gap: 8,
-    marginTop: 8,
-  },
-})

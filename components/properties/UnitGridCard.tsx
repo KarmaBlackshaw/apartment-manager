@@ -1,13 +1,13 @@
 import React from 'react'
-import { View, Text, StyleSheet, Pressable } from 'react-native'
+import { View, Text, Pressable } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated'
 import { colors } from '../../constants/theme'
-import { StatusChip } from './StatusChip'
-import type { ChipVariant } from './StatusChip'
+import { StatusChip } from '../ui/StatusChip'
+import type { ChipVariant } from '../ui/StatusChip'
 
 export type UnitStatus = 'paid' | 'overdue' | 'vacant' | 'partial'
 
@@ -51,10 +51,10 @@ export function UnitGridCard({ unitName, tenantName, status, onPress }: UnitGrid
   return (
     <AnimatedPressable
       style={[
-        styles.card,
-        { borderLeftColor: borderColorMap[status] },
         animatedStyle,
+        { borderLeftColor: borderColorMap[status], borderLeftWidth: 3 },
       ]}
+      className="bg-surface rounded-[10px] p-3"
       onPressIn={() => {
         scale.value = withTiming(0.97, { duration: 100 })
       }}
@@ -64,35 +64,13 @@ export function UnitGridCard({ unitName, tenantName, status, onPress }: UnitGrid
       onPress={onPress}
       accessibilityRole="button"
     >
-      <Text style={styles.unitName}>{unitName}</Text>
-      <Text style={styles.tenantName}>
+      <Text className="text-sm font-semibold text-text-primary">{unitName}</Text>
+      <Text className="text-xs text-text-secondary mt-[2px]">
         {tenantName ?? 'Vacant'}
       </Text>
-      <View style={styles.chipContainer}>
+      <View className="mt-[6px]">
         <StatusChip variant={chipVariantMap[status]} label={chipLabelMap[status]} size="sm" />
       </View>
     </AnimatedPressable>
   )
 }
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: 10,
-    padding: 12,
-    borderLeftWidth: 3,
-  },
-  unitName: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.textPrimary,
-  },
-  tenantName: {
-    fontSize: 12,
-    color: colors.textSecondary,
-    marginTop: 2,
-  },
-  chipContainer: {
-    marginTop: 6,
-  },
-})

@@ -1,6 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Pressable } from 'react-native'
-import { colors, spacing } from '../../constants/theme'
+import { View, Text, Pressable } from 'react-native'
 
 interface SectionHeaderProps {
   title: string
@@ -12,34 +11,15 @@ export function SectionHeader({ title, count, onViewAll }: SectionHeaderProps) {
   const displayTitle = count !== undefined ? `${title} (${count})` : title
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{displayTitle}</Text>
+    <View className="flex-row items-center justify-between px-4 py-3">
+      <Text className="text-[13px] font-semibold text-text-secondary uppercase tracking-wide">
+        {displayTitle}
+      </Text>
       {onViewAll && (
         <Pressable onPress={onViewAll} hitSlop={8} accessibilityRole="button">
-          <Text style={styles.viewAll}>View all</Text>
+          <Text className="text-[13px] text-primary">View all</Text>
         </Pressable>
       )}
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing[4],
-    paddingVertical: 12,
-  },
-  title: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: colors.textSecondary,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  viewAll: {
-    fontSize: 13,
-    color: colors.textLink,
-  },
-})

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Animated, Pressable, Text, StyleSheet, View } from 'react-native'
+import { Animated, Pressable, Text, View } from 'react-native'
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
@@ -36,9 +36,14 @@ export function FloatingTabBar({ state, descriptors, navigation }: BottomTabBarP
   return (
     <Animated.View
       pointerEvents={pointerEvents}
-      style={[styles.wrap, { bottom: insets.bottom + 10, opacity: visibility, transform: [{ translateY }] }]}
+      style={{
+        bottom: insets.bottom + 10,
+        opacity: visibility,
+        transform: [{ translateY }],
+      }}
+      className="absolute left-4 right-4 flex-row items-center bg-[#161616] rounded-[36px] py-[10px] px-2 border border-[#2a2a2a]"
     >
-      <View style={styles.tabs}>
+      <View className="flex-1 flex-row">
         {visible.map((route) => {
           const focused = route.key === activeKey
           const icons = ICONS[route.name] ?? { on: 'apps', off: 'apps-outline' }
@@ -47,7 +52,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: BottomTabBarP
           return (
             <Pressable
               key={route.key}
-              style={styles.tab}
+              className="flex-1 items-center justify-center gap-[3px] py-[2px]"
               onPress={() => {
                 const e = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true })
                 if (!focused && !e.defaultPrevented) navigation.navigate(route.name)
@@ -60,16 +65,18 @@ export function FloatingTabBar({ state, descriptors, navigation }: BottomTabBarP
                 size={20}
                 color={focused ? '#3b82f6' : '#64748B'}
               />
-              <Text style={[styles.label, focused && styles.labelActive]}>{label}</Text>
+              <Text className={`text-[9px] font-semibold tracking-[0.3px] ${focused ? 'text-[#3b82f6]' : 'text-[#64748B]'}`}>
+                {label}
+              </Text>
             </Pressable>
           )
         })}
       </View>
 
-      <View style={styles.divider} />
+      <View className="w-px h-7 bg-[#2a2a2a] mx-1" />
 
       <Pressable
-        style={styles.searchBtn}
+        className="w-11 h-11 items-center justify-center"
         onPress={openSearch}
         accessibilityRole="button"
         accessibilityLabel="Search tenants"
@@ -79,56 +86,3 @@ export function FloatingTabBar({ state, descriptors, navigation }: BottomTabBarP
     </Animated.View>
   )
 }
-
-const styles = StyleSheet.create({
-  wrap: {
-    position: 'absolute',
-    left: 16,
-    right: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#161616',
-    borderRadius: 36,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#2a2a2a',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.5,
-    shadowRadius: 20,
-    elevation: 14,
-  },
-  tabs: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  tab: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 3,
-    paddingVertical: 2,
-  },
-  label: {
-    fontSize: 9,
-    fontWeight: '600',
-    color: '#64748B',
-    letterSpacing: 0.3,
-  },
-  labelActive: {
-    color: '#3b82f6',
-  },
-  divider: {
-    width: 1,
-    height: 28,
-    backgroundColor: '#2a2a2a',
-    marginHorizontal: 4,
-  },
-  searchBtn: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})

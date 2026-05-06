@@ -1,12 +1,11 @@
 import React from 'react'
-import { View, Text, StyleSheet, Pressable } from 'react-native'
+import { View, Text, Pressable } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated'
 import { Ionicons } from '@expo/vector-icons'
-import { colors, radius } from '../../constants/theme'
 
 interface ReportMenuCardProps {
   icon: string
@@ -26,7 +25,8 @@ export function ReportMenuCard({ icon, iconBg, label, onPress }: ReportMenuCardP
 
   return (
     <AnimatedPressable
-      style={[styles.card, animatedStyle]}
+      className="bg-surface rounded-md p-4 items-center"
+      style={animatedStyle}
       onPressIn={() => {
         scale.value = withTiming(0.96, { duration: 100 })
       }}
@@ -36,33 +36,15 @@ export function ReportMenuCard({ icon, iconBg, label, onPress }: ReportMenuCardP
       onPress={onPress}
       accessibilityRole="button"
     >
-      <View style={[styles.iconSquare, { backgroundColor: iconBg }]}>
+      <View
+        className="w-[48px] h-[48px] rounded-md items-center justify-center"
+        style={{ backgroundColor: iconBg }}
+      >
         <Ionicons name={icon as any} size={24} color="#FFFFFF" />
       </View>
-      <Text style={styles.label}>{label}</Text>
+      <Text className="text-[13px] font-medium text-text-secondary mt-2 text-center">
+        {label}
+      </Text>
     </AnimatedPressable>
   )
 }
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    padding: 16,
-    alignItems: 'center',
-  },
-  iconSquare: {
-    width: 48,
-    height: 48,
-    borderRadius: radius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  label: {
-    fontSize: 13,
-    fontWeight: '500',
-    color: colors.textSecondary,
-    marginTop: 8,
-    textAlign: 'center',
-  },
-})

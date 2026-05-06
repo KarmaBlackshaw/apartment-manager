@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, Pressable, StyleSheet } from 'react-native'
+import { Text, View, Pressable } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -44,15 +44,13 @@ export function BedSlotCard({
     scale.value = withTiming(1, { duration: 100 })
   }
 
-  const cardStyle = [
-    styles.card,
-    { backgroundColor: statusBg[status] },
-  ]
-
   const inner = (
-    <View style={cardStyle}>
-      <Text style={styles.bedLabel}>{bedLabel}</Text>
-      <Text style={styles.tenantName}>
+    <View
+      className="rounded-md p-[10px]"
+      style={{ backgroundColor: statusBg[status] }}
+    >
+      <Text className="text-xs font-semibold text-text-primary">{bedLabel}</Text>
+      <Text className="text-[11px] text-text-secondary mt-[2px]">
         {tenantName ?? 'Vacant'}
       </Text>
     </View>
@@ -74,19 +72,3 @@ export function BedSlotCard({
   return inner
 }
 
-const styles = StyleSheet.create({
-  card: {
-    borderRadius: 8,
-    padding: 10,
-  },
-  bedLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: colors.textPrimary,
-  },
-  tenantName: {
-    fontSize: 11,
-    color: colors.textSecondary,
-    marginTop: 2,
-  },
-})

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react'
 import {
   View, Text, ScrollView, FlatList, Pressable,
-  StyleSheet, ActivityIndicator,
+  ActivityIndicator,
 } from 'react-native'
 import { Swipeable } from 'react-native-gesture-handler'
 import { useRouter } from 'expo-router'
@@ -85,26 +85,36 @@ function PaymentRow({
   return (
     <Swipeable
       renderLeftActions={() => (
-        <Pressable style={styles.swipeAction} onPress={onRecordPayment}>
+        <Pressable
+          className="w-[120px] bg-warning justify-center items-center gap-1"
+          onPress={onRecordPayment}
+        >
           <Ionicons name="cash-outline" size={20} color="#000" />
-          <Text style={styles.swipeActionText}>Record{'\n'}Payment</Text>
+          <Text className="text-[10px] font-bold text-center" style={{ color: '#000' }}>Record{'\n'}Payment</Text>
         </Pressable>
       )}
       overshootLeft={false}
     >
-      <Pressable onPress={onPress} style={styles.row}>
-        <View style={[styles.avatar, { backgroundColor: color }]}>
-          <Text style={styles.avatarText}>{initial}</Text>
+      <Pressable
+        onPress={onPress}
+        className="flex-row items-center px-4 bg-background gap-3"
+        style={{ paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: '#1a1a1a' }}
+      >
+        <View
+          className="w-[40px] h-[40px] rounded-[10px] items-center justify-center"
+          style={{ backgroundColor: color }}
+        >
+          <Text className="text-[15px] font-bold" style={{ color: '#fff' }}>{initial}</Text>
         </View>
-        <View style={styles.rowInfo}>
-          <Text style={styles.rowName}>{entry.tenant_full_name}</Text>
-          <Text style={styles.rowUnit}>
+        <View className="flex-1">
+          <Text className="text-[15px] font-semibold text-text-primary">{entry.tenant_full_name}</Text>
+          <Text className="text-xs text-text-secondary mt-[2px]">
             Unit {entry.unit_number ?? '?'}
             {entry.bill_amount > 0 ? ` · ${formatPHP(entry.bill_amount)}` : ''}
           </Text>
         </View>
-        <View style={[styles.statusChip, { backgroundColor: chip.bg }]}>
-          <Text style={[styles.statusChipText, { color: chip.color }]}>{chip.label}</Text>
+        <View className="px-2 py-1 rounded-sm" style={{ backgroundColor: chip.bg }}>
+          <Text className="text-[10px] font-bold" style={{ color: chip.color, letterSpacing: 0.5 }}>{chip.label}</Text>
         </View>
       </Pressable>
     </Swipeable>
@@ -151,13 +161,18 @@ export default function PaymentsOverviewScreen() {
   }, [router])
 
   return (
-    <View style={[styles.screen, { paddingTop: insets.top }]}>
+    <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
       {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Payments</Text>
+      <View className="flex-row items-center justify-between px-4 py-3">
+        <Text
+          className="text-2xl text-text-primary"
+          style={{ fontWeight: '800', letterSpacing: -0.5 }}
+        >
+          Payments
+        </Text>
         <Pressable
           onPress={() => router.push('/(admin)/settings' as any)}
-          style={styles.headerIcon}
+          className="p-1"
           accessibilityLabel="Settings"
         >
           <Ionicons name="settings-outline" size={22} color="#888888" />
@@ -172,15 +187,18 @@ export default function PaymentsOverviewScreen() {
         showsHorizontalScrollIndicator={false}
         initialScrollIndex={todayIndex}
         getItemLayout={(_, i) => ({ length: 100, offset: 100 * i, index: i })}
-        contentContainerStyle={styles.monthList}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 8, gap: 8 }}
         renderItem={({ item, index }) => {
           const active = index === selectedIdx
           return (
             <Pressable
               onPress={() => setSelectedIdx(index)}
-              style={[styles.monthPill, active && styles.monthPillActive]}
+              className={`px-4 py-2 rounded-full items-center border ${
+                active ? 'bg-primary border-primary' : 'bg-surface border-border'
+              }`}
+              style={{ minWidth: 96 }}
             >
-              <Text style={[styles.monthLabel, active && styles.monthLabelActive]}>
+              <Text className={`text-[13px] font-semibold ${active ? 'text-white' : 'text-text-secondary'}`}>
                 {item.label}
               </Text>
             </Pressable>
@@ -189,20 +207,20 @@ export default function PaymentsOverviewScreen() {
       />
 
       {/* Summary strip */}
-      <View style={styles.summaryStrip}>
-        <View style={styles.summaryChip}>
-          <Text style={[styles.summaryVal, { color: '#22c55e' }]}>{formatPHP(summary.collected)}</Text>
-          <Text style={styles.summaryKey}>Collected</Text>
+      <View className="flex-row bg-surface mx-4 rounded-md p-3 mb-2 border border-border">
+        <View className="flex-1 items-center">
+          <Text className="text-[15px] font-bold" style={{ color: '#22c55e' }}>{formatPHP(summary.collected)}</Text>
+          <Text className="text-[11px] text-text-secondary mt-[2px]">Collected</Text>
         </View>
-        <View style={styles.summaryDivider} />
-        <View style={styles.summaryChip}>
-          <Text style={[styles.summaryVal, { color: '#f59e0b' }]}>{summary.pending}</Text>
-          <Text style={styles.summaryKey}>Pending</Text>
+        <View className="w-[1px] bg-border mx-2" />
+        <View className="flex-1 items-center">
+          <Text className="text-[15px] font-bold" style={{ color: '#f59e0b' }}>{summary.pending}</Text>
+          <Text className="text-[11px] text-text-secondary mt-[2px]">Pending</Text>
         </View>
-        <View style={styles.summaryDivider} />
-        <View style={styles.summaryChip}>
-          <Text style={[styles.summaryVal, { color: '#ef4444' }]}>{summary.overdue}</Text>
-          <Text style={styles.summaryKey}>Overdue</Text>
+        <View className="w-[1px] bg-border mx-2" />
+        <View className="flex-1 items-center">
+          <Text className="text-[15px] font-bold" style={{ color: '#ef4444' }}>{summary.overdue}</Text>
+          <Text className="text-[11px] text-text-secondary mt-[2px]">Overdue</Text>
         </View>
       </View>
 
@@ -210,16 +228,19 @@ export default function PaymentsOverviewScreen() {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={styles.filterScroll}
-        contentContainerStyle={styles.filterContent}
+        style={{ maxHeight: 44 }}
+        contentContainerStyle={{ paddingHorizontal: 16, gap: 8, paddingVertical: 4 }}
       >
         {FILTERS.map(({ key, label }) => (
           <Pressable
             key={key}
             onPress={() => setFilter(key)}
-            style={[styles.filterTab, filter === key && styles.filterTabActive]}
+            className={`px-4 rounded-full border ${
+              filter === key ? 'bg-elevated border-primary' : 'bg-surface border-border'
+            }`}
+            style={{ paddingVertical: 6 }}
           >
-            <Text style={[styles.filterLabel, filter === key && styles.filterLabelActive]}>
+            <Text className={`text-[13px] font-medium ${filter === key ? 'text-primary' : 'text-text-secondary'}`}>
               {label}
             </Text>
           </Pressable>
@@ -230,9 +251,9 @@ export default function PaymentsOverviewScreen() {
       {isLoading ? (
         <ActivityIndicator color="#3b82f6" style={{ marginTop: 32 }} />
       ) : filtered.length === 0 ? (
-        <Text style={styles.emptyText}>No tenants match this filter</Text>
+        <Text className="text-sm text-center mt-12" style={{ color: '#555555' }}>No tenants match this filter</Text>
       ) : (
-        <ScrollView {...tabBarScroll} style={styles.list}>
+        <ScrollView {...tabBarScroll} className="flex-1 mt-2">
           {filtered.map((entry) => (
             <PaymentRow
               key={entry.tenant_id}
@@ -247,95 +268,3 @@ export default function PaymentsOverviewScreen() {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#0d0d0d' },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  headerTitle: { fontSize: 24, fontWeight: '800', color: '#f1f1f1', letterSpacing: -0.5 },
-  headerIcon: { padding: 4 },
-  monthList: { paddingHorizontal: 16, paddingVertical: 8, gap: 8 },
-  monthPill: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 999,
-    backgroundColor: '#171717',
-    borderWidth: 1,
-    borderColor: '#2a2a2a',
-    minWidth: 96,
-    alignItems: 'center',
-  },
-  monthPillActive: { backgroundColor: '#3b82f6', borderColor: '#3b82f6' },
-  monthLabel: { fontSize: 13, fontWeight: '600', color: '#888888' },
-  monthLabelActive: { color: '#fff' },
-  summaryStrip: {
-    flexDirection: 'row',
-    backgroundColor: '#171717',
-    marginHorizontal: 16,
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: '#2a2a2a',
-  },
-  summaryChip: { flex: 1, alignItems: 'center' },
-  summaryVal: { fontSize: 15, fontWeight: '700' },
-  summaryKey: { fontSize: 11, color: '#888888', marginTop: 2 },
-  summaryDivider: { width: 1, backgroundColor: '#2a2a2a', marginHorizontal: 8 },
-  filterScroll: { maxHeight: 44 },
-  filterContent: { paddingHorizontal: 16, gap: 8, paddingVertical: 4 },
-  filterTab: {
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    borderRadius: 999,
-    backgroundColor: '#171717',
-    borderWidth: 1,
-    borderColor: '#2a2a2a',
-  },
-  filterTabActive: { backgroundColor: '#252525', borderColor: '#3b82f6' },
-  filterLabel: { fontSize: 13, fontWeight: '500', color: '#888888' },
-  filterLabelActive: { color: '#3b82f6' },
-  list: { flex: 1, marginTop: 8 },
-  emptyText: {
-    color: '#555555',
-    textAlign: 'center',
-    marginTop: 48,
-    fontSize: 14,
-  },
-  swipeAction: {
-    width: 120,
-    backgroundColor: '#f59e0b',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 4,
-  },
-  swipeActionText: { color: '#000', fontSize: 10, fontWeight: '700', textAlign: 'center' },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    backgroundColor: '#0d0d0d',
-    borderBottomWidth: 1,
-    borderBottomColor: '#1a1a1a',
-    gap: 12,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  avatarText: { color: '#fff', fontWeight: '700', fontSize: 15 },
-  rowInfo: { flex: 1 },
-  rowName: { fontSize: 15, fontWeight: '600', color: '#f1f1f1' },
-  rowUnit: { fontSize: 12, color: '#888888', marginTop: 2 },
-  statusChip: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
-  statusChipText: { fontSize: 10, fontWeight: '700', letterSpacing: 0.5 },
-})

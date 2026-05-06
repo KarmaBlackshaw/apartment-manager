@@ -1,12 +1,11 @@
 import React from 'react'
-import { Text, View, StyleSheet, Pressable } from 'react-native'
+import { Text, View, Pressable } from 'react-native'
 import * as Haptics from 'expo-haptics'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated'
-import { colors, radius } from '../../constants/theme'
 
 interface SegmentedControlProps {
   options: string[]
@@ -42,20 +41,13 @@ function Segment({
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         onPress()
       }}
-      style={[
-        styles.option,
-        fullWidth && styles.optionFlex,
-        isSelected ? styles.optionSelected : styles.optionUnselected,
-        animatedStyle,
-      ]}
+      className={`py-2 items-center justify-center min-h-[44px] rounded-md ${fullWidth ? 'flex-1' : ''} ${isSelected ? 'bg-primary' : 'bg-transparent'}`}
+      style={animatedStyle}
       accessibilityRole="tab"
       accessibilityState={{ selected: isSelected }}
     >
       <Text
-        style={[
-          styles.optionText,
-          isSelected ? styles.optionTextSelected : styles.optionTextUnselected,
-        ]}
+        className={`text-sm ${isSelected ? 'text-white font-semibold' : 'text-text-secondary font-normal'}`}
       >
         {label}
       </Text>
@@ -70,7 +62,7 @@ export function SegmentedControl({
   fullWidth = true,
 }: SegmentedControlProps) {
   return (
-    <View style={styles.container}>
+    <View className="bg-elevated rounded-md p-1 flex-row">
       {options.map((option) => (
         <Segment
           key={option}
@@ -83,39 +75,3 @@ export function SegmentedControl({
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.elevated,
-    borderRadius: radius.md,
-    padding: 4,
-    flexDirection: 'row',
-  },
-  option: {
-    paddingVertical: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 44,
-    borderRadius: 8,
-  },
-  optionFlex: {
-    flex: 1,
-  },
-  optionSelected: {
-    backgroundColor: colors.primary,
-  },
-  optionUnselected: {
-    backgroundColor: 'transparent',
-  },
-  optionText: {
-    fontSize: 14,
-  },
-  optionTextSelected: {
-    color: '#FFFFFF',
-    fontWeight: '600',
-  },
-  optionTextUnselected: {
-    color: colors.textSecondary,
-    fontWeight: '400',
-  },
-})
