@@ -1,6 +1,6 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { View, Text, Pressable } from 'react-native'
-import { BottomSheetModal, BottomSheetFlatList, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
+import { BottomSheetModal, BottomSheetFlatList, BottomSheetBackdrop, BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import * as Haptics from 'expo-haptics'
 import { colors } from '../../constants/theme'
@@ -15,6 +15,7 @@ const ALL_ID = '__all__'
 
 export function PropertySelector({ selectedId, onChange }: PropertySelectorProps) {
   const sheetRef = useRef<BottomSheetModal>(null)
+  const [query, setQuery] = useState('')
   const { data: properties = [] } = useProperties()
 
   const selectedProperty = properties.find((p) => p.id === selectedId)
@@ -25,15 +26,27 @@ export function PropertySelector({ selectedId, onChange }: PropertySelectorProps
     sheetRef.current?.present()
   }
 
+  function handleDismiss() {
+    sheetRef.current?.dismiss()
+    setQuery('')
+  }
+
   function handleSelect(id: string) {
     onChange(id === ALL_ID ? undefined : id)
-    sheetRef.current?.dismiss()
+    handleDismiss()
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
   }
 
+  const filtered = query.trim()
+    ? properties.filter((p) =>
+        p.name.toLowerCase().includes(query.toLowerCase()) ||
+        p.address?.toLowerCase().includes(query.toLowerCase())
+      )
+    : properties
+
   const listData: Array<{ id: string; name: string; subtitle?: string }> = [
-    { id: ALL_ID, name: 'All properties' },
-    ...properties.map((p) => ({ id: p.id, name: p.name, subtitle: p.address })),
+    ...(query.trim() ? [] : [{ id: ALL_ID, name: 'All properties' }]),
+    ...filtered.map((p) => ({ id: p.id, name: p.name, subtitle: p.address })),
   ]
 
   const activeId = selectedId ?? ALL_ID
@@ -57,6 +70,7 @@ export function PropertySelector({ selectedId, onChange }: PropertySelectorProps
         snapPoints={['92%']}
         enableDynamicSizing={false}
         enablePanDownToClose
+        onDismiss={() => setQuery('')}
         backdropComponent={(props) => (
           <BottomSheetBackdrop
             {...props}
@@ -73,7 +87,7 @@ export function PropertySelector({ selectedId, onChange }: PropertySelectorProps
         <View className="flex-row items-center justify-between px-5 py-[14px] border-b border-border">
           <Text className="text-base font-bold text-text-primary">Select property</Text>
           <Pressable
-            onPress={() => sheetRef.current?.dismiss()}
+            onPress={handleDismiss}
             hitSlop={12}
             accessibilityRole="button"
             accessibilityLabel="Close"
@@ -82,11 +96,38 @@ export function PropertySelector({ selectedId, onChange }: PropertySelectorProps
           </Pressable>
         </View>
 
+        {/* Search bar */}
+        <View className="px-4 py-3 border-b border-border">
+          <View className="flex-row items-center bg-elevated rounded-xl px-3 gap-2">
+            <Ionicons name="search" size={16} color={colors.textMuted} />
+            <BottomSheetTextInput
+              value={query}
+              onChangeText={setQuery}
+              placeholder="Search properties…"
+              placeholderTextColor={colors.textMuted}
+              returnKeyType="search"
+              clearButtonMode="while-editing"
+              style={{
+                flex: 1,
+                height: 40,
+                color: colors.textPrimary,
+                fontSize: 15,
+              }}
+            />
+          </View>
+        </View>
+
         {/* Property list */}
         <BottomSheetFlatList
           data={listData}
           keyExtractor={(item) => item.id}
+          keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ padding: 12, paddingBottom: 40 }}
+          ListEmptyComponent={
+            <View className="items-center py-10">
+              <Text className="text-text-muted text-sm">No properties found</Text>
+            </View>
+          }
           renderItem={({ item }) => {
             const isSelected = item.id === activeId
             return (
