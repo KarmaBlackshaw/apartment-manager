@@ -1,8 +1,7 @@
-import React, { useState, useMemo, useLayoutEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import { View, FlatList, TextInput, Pressable } from 'react-native'
 import { Text } from 'react-native'
 import { useRouter } from 'expo-router'
-import { useNavigation } from '@react-navigation/native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import dayjs from 'dayjs'
 import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
@@ -17,13 +16,13 @@ import {
   LoadingSpinner,
   EmptyState,
   FAB,
+  AppHeader,
 } from '../../../components/ui'
 import { colors } from '../../../constants/theme'
 import type { ChipVariant } from '../../../components/ui'
 
 export default function TenantsScreen() {
   const router = useRouter()
-  const navigation = useNavigation()
   const tabBarScroll = useTabBarScrollHandler()
 
   const [chipFilter, setChipFilter] = useState('all')
@@ -67,24 +66,21 @@ export default function TenantsScreen() {
     )
   }, [tenants, search])
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Pressable
-          onPress={() => router.push('/notifications')}
-          style={{ padding: 4, marginRight: 8 }}
-          hitSlop={8}
-        >
-          <Ionicons name="notifications-outline" size={24} color={colors.textSecondary} />
-        </Pressable>
-      ),
-    })
-  }, [navigation])
-
   if (isLoading) return <LoadingSpinner />
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <AppHeader
+        title="Tenants"
+        right={
+          <Pressable
+            onPress={() => router.push('/notifications')}
+            hitSlop={8}
+          >
+            <Ionicons name="notifications-outline" size={24} color={colors.textSecondary} />
+          </Pressable>
+        }
+      />
       {/* Search bar */}
       <View
         style={{

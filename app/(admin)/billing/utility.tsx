@@ -3,7 +3,7 @@ import { View, ScrollView, Text } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import {
-  ScreenHeader,
+  AppHeader,
   FilterChipBar,
   InfoRow,
   AmountText,
@@ -84,7 +84,7 @@ export default function UtilityReadingScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <ScreenHeader title="Utility Reading" left="back" />
+      <AppHeader title="Utility Reading" />
 
       {/* Context label */}
       <Text className="text-text-secondary text-[13px] text-center py-2">

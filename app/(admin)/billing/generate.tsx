@@ -3,7 +3,7 @@ import { View, ScrollView, Text, Pressable, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import {
-  ScreenHeader,
+  AppHeader,
   MonthTabSelector,
   SegmentedControl,
   SectionHeader,
@@ -54,7 +54,7 @@ export default function GenerateBillsScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <ScreenHeader title="Generate Bills" left="back" />
+      <AppHeader title="Generate Bills" />
 
       <ScrollView
         className="flex-1"

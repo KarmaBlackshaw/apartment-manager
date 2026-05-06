@@ -5,7 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import dayjs from 'dayjs'
 import { colors } from '../../../constants/theme'
 import {
-  ScreenHeader,
+  AppHeader,
   MonthTabSelector,
   FilterChipBar,
   ListRow,
@@ -66,7 +66,7 @@ export default function BillingScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <ScreenHeader
+      <AppHeader
         title="Billing"
         right={
           <Pressable

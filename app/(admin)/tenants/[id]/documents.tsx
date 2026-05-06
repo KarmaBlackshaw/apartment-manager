@@ -7,7 +7,7 @@ import dayjs from 'dayjs'
 import { useTenant } from '../../../../hooks/useTenants'
 import { useDocuments } from '../../../../hooks/useDocuments'
 import {
-  ScreenHeader,
+  AppHeader,
   FilterChipBar,
   DocumentRow,
   AppText,
@@ -44,9 +44,8 @@ export default function DocumentsScreen() {
 
   return (
     <SafeAreaView edges={['bottom']} className="flex-1 bg-background">
-      <ScreenHeader
+      <AppHeader
         title={tenant ? `${tenant.full_name.split(' ').pop()} — Docs` : 'Documents'}
-        left="back"
       />
 
       <FilterChipBar

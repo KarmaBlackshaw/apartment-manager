@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useTenant } from '../../../../hooks/useTenants'
 import { fetchBills } from '../../../../lib/api/bills'
 import {
-  ScreenHeader,
+  AppHeader,
   StatusChip,
   AvatarInitials,
   AmountText,
@@ -45,12 +45,12 @@ export default function TenantDetailScreen() {
 
   if (!tenant) {
     return (
-      <SafeAreaView className="flex-1 bg-background">
-        <ScreenHeader title="Tenant" left="back" />
+      <View className="flex-1 bg-background">
+        <AppHeader title="Tenant" />
         <View className="flex-1 items-center justify-center">
           <AppText color="danger">Tenant not found.</AppText>
         </View>
-      </SafeAreaView>
+      </View>
     )
   }
 
@@ -59,9 +59,8 @@ export default function TenantDetailScreen() {
 
   return (
     <SafeAreaView edges={['bottom']} className="flex-1 bg-background">
-      <ScreenHeader
+      <AppHeader
         title={tenant.full_name}
-        left="back"
         right={<StatusChip variant={statusVariant} label={statusLabel} />}
       />
 

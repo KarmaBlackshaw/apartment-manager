@@ -3,7 +3,7 @@ import { View, Text, ScrollView, Pressable, KeyboardAvoidingView, Platform } fro
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import {
-  ScreenHeader,
+  AppHeader,
   BottomCTABar,
   Button,
   Input,
@@ -67,7 +67,7 @@ export default function RecordPaymentScreen() {
       className="flex-1 bg-background"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScreenHeader title="Record Payment" left="back" />
+      <AppHeader title="Record Payment" />
 
       <ScrollView contentContainerStyle={{ paddingBottom: 160 }}>
         {/* 1. Tenant / unit card (read-only) */}

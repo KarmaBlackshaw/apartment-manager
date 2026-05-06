@@ -1,31 +1,16 @@
-import React, { useLayoutEffect } from 'react'
+import React from 'react'
 import { View, FlatList, TouchableOpacity } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { useNavigation } from '@react-navigation/native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../../../../hooks/useTabBarScrollHandler'
 import { useUnits } from '../../../../../hooks/useUnits'
-import { LoadingSpinner, EmptyState, AppText, UnitCard } from '../../../../../components/ui'
+import { LoadingSpinner, EmptyState, AppText, UnitCard, AppHeader } from '../../../../../components/ui'
 
 export default function UnitsScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()
   const router = useRouter()
-  const navigation = useNavigation()
   const tabBarScroll = useTabBarScrollHandler()
   const { data: units, isLoading, isError } = useUnits(propertyId)
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => router.push(`/(admin)/properties/${propertyId}/units/new`)}
-          style={{ marginRight: 8, padding: 4 }}
-        >
-          <Ionicons name="add" size={26} color="#3b82f6" />
-        </TouchableOpacity>
-      ),
-    })
-  }, [navigation, propertyId])
 
   if (isLoading) return <LoadingSpinner />
   if (isError) return (
@@ -36,6 +21,17 @@ export default function UnitsScreen() {
 
   return (
     <View className="flex-1 bg-app">
+      <AppHeader
+        title="Units"
+        right={
+          <TouchableOpacity
+            onPress={() => router.push(`/(admin)/properties/${propertyId}/units/new`)}
+            hitSlop={8}
+          >
+            <Ionicons name="add" size={26} color="#3b82f6" />
+          </TouchableOpacity>
+        }
+      />
       <FlatList
         data={units}
         keyExtractor={(u) => u.id}

@@ -3,7 +3,7 @@ import { View, ScrollView, Text, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import {
-  ScreenHeader,
+  AppHeader,
   AmountText,
   SectionHeader,
   InfoRow,
@@ -27,7 +27,7 @@ export default function PaymentDetailScreen() {
   if (!payment) {
     return (
       <View className="flex-1 bg-background">
-        <ScreenHeader title="Payment Detail" left="back" />
+        <AppHeader title="Payment Detail" />
         <View className="flex-1 items-center justify-center p-8">
           <Text className="text-danger text-center text-base">Payment not found.</Text>
         </View>
@@ -64,7 +64,7 @@ export default function PaymentDetailScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <ScreenHeader title="Payment Detail" left="back" />
+      <AppHeader title="Payment Detail" />
 
       <ScrollView
         className="flex-1"

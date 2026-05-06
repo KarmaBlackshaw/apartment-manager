@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import { useTenant } from '../../../../hooks/useTenants'
 import { useBills } from '../../../../hooks/useBills'
 import {
-  ScreenHeader,
+  AppHeader,
   AvatarInitials,
   AmountText,
   FilterChipBar,
@@ -47,9 +47,8 @@ export default function PaymentHistoryScreen() {
 
   return (
     <SafeAreaView edges={['bottom']} className="flex-1 bg-background">
-      <ScreenHeader
+      <AppHeader
         title="Payment History"
-        left="back"
         right={
           <Pressable hitSlop={8} onPress={() => { /* export placeholder */ }}>
             <AppText style={{ fontSize: 14, color: colors.textLink }}>Export</AppText>

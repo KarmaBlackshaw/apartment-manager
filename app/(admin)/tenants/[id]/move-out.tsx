@@ -3,10 +3,11 @@ import { View, ScrollView, Alert, TextInput, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
+import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTenant, useDeactivateTenant } from '../../../../hooks/useTenants'
 import { useBills } from '../../../../hooks/useBills'
 import {
-  ScreenHeader,
+  AppHeader,
   WarningBanner,
   SettlementRow,
   BottomCTABar,
@@ -87,15 +88,21 @@ export default function MoveOutScreen() {
 
   return (
     <SafeAreaView edges={['bottom']} className="flex-1 bg-background">
-      <ScreenHeader
+      <AppHeader
         title="Move-Out"
-        left="back"
-        onLeftPress={() => {
-          Alert.alert('Discard changes?', 'The move-out will not be processed.', [
-            { text: 'Keep editing', style: 'cancel' },
-            { text: 'Discard', style: 'destructive', onPress: () => router.back() },
-          ])
-        }}
+        left={
+          <Pressable
+            onPress={() => {
+              Alert.alert('Discard changes?', 'The move-out will not be processed.', [
+                { text: 'Keep editing', style: 'cancel' },
+                { text: 'Discard', style: 'destructive', onPress: () => router.back() },
+              ])
+            }}
+            hitSlop={8}
+          >
+            <Ionicons name="chevron-back" size={28} color={colors.textPrimary} />
+          </Pressable>
+        }
       />
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         <View className="mt-3">

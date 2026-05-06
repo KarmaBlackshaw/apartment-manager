@@ -4,7 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import { colors } from '../../../constants/theme'
 import {
-  ScreenHeader,
+  AppHeader,
   BottomCTABar,
   Button,
   LoadingSpinner,
@@ -47,7 +47,7 @@ export default function BillDetailScreen() {
   if (isLoading) {
     return (
       <View className="flex-1 bg-background">
-        <ScreenHeader title="Bill" left="back" />
+        <AppHeader title="Bill" />
         <LoadingSpinner />
       </View>
     )
@@ -56,7 +56,7 @@ export default function BillDetailScreen() {
   if (isError || !bill) {
     return (
       <View className="flex-1 bg-background">
-        <ScreenHeader title="Bill" left="back" />
+        <AppHeader title="Bill" />
         <View className="flex-1 items-center justify-center p-8">
           <Text className="text-danger text-center text-[15px]">
             {isError ? 'Could not load bill.' : 'Bill not found.'}
@@ -110,7 +110,7 @@ export default function BillDetailScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <ScreenHeader title={headerTitle} left="back" />
+      <AppHeader title={headerTitle} />
 
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         {/* 1. Tenant header card */}

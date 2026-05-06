@@ -1,12 +1,11 @@
-import React, { useLayoutEffect } from 'react'
+import React from 'react'
 import { View, ScrollView, TouchableOpacity } from 'react-native'
 import { useRouter } from 'expo-router'
-import { useNavigation } from '@react-navigation/native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../../../hooks/useTabBarScrollHandler'
 import { useProperties } from '../../../../hooks/useProperties'
 import { useUnits } from '../../../../hooks/useUnits'
-import { AppText, LoadingSpinner, UnitCard } from '../../../../components/ui'
+import { AppText, LoadingSpinner, UnitCard, AppHeader } from '../../../../components/ui'
 import type { Property } from '../../../../types'
 
 function PropertySection({ property, router }: { property: Property; router: ReturnType<typeof useRouter> }) {
@@ -39,39 +38,37 @@ function PropertySection({ property, router }: { property: Property; router: Ret
   )
 }
 
+const AddUnitButton = ({ onPress }: { onPress: () => void }) => (
+  <TouchableOpacity onPress={onPress} hitSlop={8}>
+    <Ionicons name="add" size={26} color="#3b82f6" />
+  </TouchableOpacity>
+)
+
 export default function AllUnitsScreen() {
   const router = useRouter()
-  const navigation = useNavigation()
   const tabBarScroll = useTabBarScrollHandler()
   const { data: properties, isLoading } = useProperties()
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => router.push('/(admin)/settings/units/new')}
-          style={{ marginRight: 8, padding: 4 }}
-        >
-          <Ionicons name="add" size={26} color="#3b82f6" />
-        </TouchableOpacity>
-      ),
-    })
-  }, [navigation])
 
   if (isLoading) return <LoadingSpinner />
 
   if (!properties?.length) return (
-    <View className="flex-1 items-center justify-center p-8 bg-app">
-      <Ionicons name="business-outline" size={48} color="#555555" />
-      <AppText color="muted" className="text-center mt-4">Add a property first before managing units.</AppText>
-    </View>
+    <>
+      <AppHeader title="Units" right={<AddUnitButton onPress={() => router.push('/(admin)/settings/units/new')} />} />
+      <View className="flex-1 items-center justify-center p-8 bg-app">
+        <Ionicons name="business-outline" size={48} color="#555555" />
+        <AppText color="muted" className="text-center mt-4">Add a property first before managing units.</AppText>
+      </View>
+    </>
   )
 
   return (
-    <ScrollView className="flex-1 bg-app" contentContainerStyle={{ padding: 16, paddingBottom: 128 }} {...tabBarScroll}>
+    <>
+      <AppHeader title="Units" right={<AddUnitButton onPress={() => router.push('/(admin)/settings/units/new')} />} />
+      <ScrollView className="flex-1 bg-app" contentContainerStyle={{ padding: 16, paddingBottom: 128 }} {...tabBarScroll}>
       {properties.map((p) => (
         <PropertySection key={p.id} property={p} router={router} />
       ))}
     </ScrollView>
+    </>
   )
 }

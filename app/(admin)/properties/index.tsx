@@ -1,33 +1,18 @@
-import React, { useState, useLayoutEffect, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { View, FlatList, TouchableOpacity, TextInput } from 'react-native'
 import { useRouter } from 'expo-router'
-import { useNavigation } from '@react-navigation/native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
 import { useProperties } from '../../../hooks/useProperties'
 import { useUnitCounts } from '../../../hooks/useUnits'
-import { LoadingSpinner, EmptyState, AppText, PropertyCard } from '../../../components/ui'
+import { LoadingSpinner, EmptyState, AppText, PropertyCard, AppHeader } from '../../../components/ui'
 
 export default function PropertiesScreen() {
   const router = useRouter()
-  const navigation = useNavigation()
   const tabBarScroll = useTabBarScrollHandler()
   const { data: properties, isLoading, isError } = useProperties()
   const { data: unitCounts } = useUnitCounts()
   const [query, setQuery] = useState('')
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => router.push('/(admin)/properties/new')}
-          style={{ marginRight: 8, padding: 4 }}
-        >
-          <Ionicons name="add" size={26} color="#3b82f6" />
-        </TouchableOpacity>
-      ),
-    })
-  }, [navigation])
 
   const filtered = useMemo(() => {
     if (!properties) return []
@@ -47,6 +32,17 @@ export default function PropertiesScreen() {
 
   return (
     <View className="flex-1 bg-app">
+      <AppHeader
+        title="Properties"
+        right={
+          <TouchableOpacity
+            onPress={() => router.push('/(admin)/properties/new')}
+            style={{ marginRight: 8, padding: 4 }}
+          >
+            <Ionicons name="add" size={26} color="#3b82f6" />
+          </TouchableOpacity>
+        }
+      />
       {/* Search bar */}
       <View className="px-4 pt-3 pb-2">
         {/* @ts-ignore */}
