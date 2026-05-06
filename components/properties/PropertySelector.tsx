@@ -54,7 +54,8 @@ export function PropertySelector({ selectedId, onChange }: PropertySelectorProps
 
       <BottomSheetModal
         ref={sheetRef}
-        snapPoints={['45%', '75%']}
+        snapPoints={['92%']}
+        enableDynamicSizing={false}
         enablePanDownToClose
         backdropComponent={(props) => (
           <BottomSheetBackdrop
