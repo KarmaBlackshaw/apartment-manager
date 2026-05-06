@@ -72,6 +72,7 @@ export function FilterChipBar({ options, selected, onChange }: FilterChipBarProp
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.contentContainer}
+      style={styles.scrollView}
     >
       {options.map((option) => (
         <FilterChip
@@ -86,9 +87,14 @@ export function FilterChipBar({ options, selected, onChange }: FilterChipBarProp
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flexGrow: 0,
+    flexShrink: 0,
+  },
   contentContainer: {
     flexDirection: 'row',
     paddingHorizontal: spacing[4],
+    paddingVertical: 8,
     gap: 8,
     alignItems: 'center',
   },

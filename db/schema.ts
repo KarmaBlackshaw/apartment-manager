@@ -81,3 +81,13 @@ export const contracts = sqliteTable('contracts', {
   signed_at: text('signed_at'),
   created_at: text('created_at').notNull().default(sql`(CURRENT_TIMESTAMP)`),
 })
+
+export const documents = sqliteTable('documents', {
+  id: text('id').primaryKey(),
+  ref_type: text('ref_type').notNull(),
+  ref_id: text('ref_id').notNull(),
+  title: text('title').notNull(),
+  category: text('category').notNull().default('other'),
+  uri: text('uri'),
+  created_at: text('created_at').notNull().default(sql`(CURRENT_TIMESTAMP)`),
+})

@@ -1,404 +1,443 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import { View, ScrollView, KeyboardAvoidingView, Platform, Switch } from 'react-native'
+import React, { useState } from 'react'
+import { View, ScrollView, KeyboardAvoidingView, Platform, Pressable, StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
-import { useForm, Controller } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { toast } from 'sonner-native'
 import dayjs from 'dayjs'
-import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
 import { useCreateTenant } from '../../../hooks/useTenants'
 import { useProperties } from '../../../hooks/useProperties'
 import { useUnits } from '../../../hooks/useUnits'
-import { Input, Button, AppText, Select, DateInput } from '../../../components/ui'
-import type { BillingType } from '../../../types'
-import { fetchUnit } from '../../../lib/api/units'
-import { createBill as createBillFn } from '../../../lib/api/bills'
+import {
+  Input,
+  Button,
+  AppText,
+  Select,
+  DateInput,
+  SegmentedControl,
+  ProgressStepIndicator,
+  BottomCTABar,
+  CameraCapture,
+} from '../../../components/ui'
+import { colors } from '../../../constants/theme'
 
-const schema = z.object({
-  fullName: z.string().min(1, 'Name is required'),
-  email: z.string().min(1, 'Email is required'),
-  phone: z.string().min(1, 'Phone is required'),
-  moveInDate: z.string().min(1, 'Move-in date is required'),
-  selectedUnitId: z.string().min(1, 'Please select a unit'),
-  // monthly-only (optional at schema level, validated conditionally in onSubmit)
-  address: z.string().optional(),
-  emergencyContact: z.string().optional(),
-  waterReading: z.string().optional(),
-  electricityReading: z.string().optional(),
-  dueDay: z.string().optional(),
-  // daily-only
-  days: z.string().optional(),
-})
+// ─── Constants ────────────────────────────────────────────────────────────────
 
-type FormData = z.infer<typeof schema>
+const STEP_TITLES: Record<number, string> = {
+  1: 'Personal Info',
+  2: 'ID Capture',
+  3: 'Emergency Contact',
+  4: 'Unit Assignment',
+  5: 'Billing Setup',
+}
+
+// SegmentedControl only accepts string[], not { label, value } objects.
+// We store display labels and map back to our typed value on change.
+const CONTRACT_OPTIONS = ['Month-to-month', 'Fixed term']
+
+// ─── Screen ───────────────────────────────────────────────────────────────────
 
 export default function NewTenantScreen() {
   const router = useRouter()
-  const tabBarScroll = useTabBarScrollHandler()
-  const { mutateAsync, isPending } = useCreateTenant()
-  const { data: properties } = useProperties()
+  const { mutateAsync: createTenant, isPending } = useCreateTenant()
 
-  // UI mode toggles — not validated fields
-  const [billingType, setBillingType] = useState<BillingType>('monthly')
-  const [includeInternet, setIncludeInternet] = useState(false)
+  // ── Step ──────────────────────────────────────────────────────────────────
+  const [step, setStep] = useState(1)
+
+  // ── Step 1 — Personal Info ────────────────────────────────────────────────
+  const [fullName, setFullName] = useState('')
+  const [nickname, setNickname] = useState('')
+  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
+  const [occupation, setOccupation] = useState('')
+  const [homeProvince, setHomeProvince] = useState('')
+
+  // ── Step 2 — ID Capture ───────────────────────────────────────────────────
+  const [idFrontUri, setIdFrontUri] = useState<string | undefined>()
+  const [idBackUri, setIdBackUri] = useState<string | undefined>()
+
+  // ── Step 3 — Emergency Contact ────────────────────────────────────────────
+  const [emergencyName, setEmergencyName] = useState('')
+  const [emergencyRelation, setEmergencyRelation] = useState('')
+  const [emergencyPhone, setEmergencyPhone] = useState('')
+
+  // ── Step 4 — Unit Assignment ──────────────────────────────────────────────
   const [selectedPropertyId, setSelectedPropertyId] = useState('')
+  const [selectedUnitId, setSelectedUnitId] = useState('')
+  const [moveInDate, setMoveInDate] = useState(dayjs().format('YYYY-MM-DD'))
+  const [contractType, setContractType] = useState<'monthly' | 'fixed'>('monthly')
+  const [contractEndDate, setContractEndDate] = useState('')
 
-  const {
-    control,
-    handleSubmit,
-    watch,
-    setValue,
-    setError,
-    formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      fullName: '',
-      email: '',
-      phone: '',
-      moveInDate: dayjs().format('YYYY-MM-DD'),
-      selectedUnitId: '',
-      address: '',
-      emergencyContact: '',
-      waterReading: '',
-      electricityReading: '',
-      dueDay: '15',
-      days: '1',
-    },
-  })
+  // ── Step 5 — Billing Setup ────────────────────────────────────────────────
+  const [monthlyRent, setMonthlyRent] = useState('')
+  const [securityDeposit, setSecurityDeposit] = useState('')
+  const [advance, setAdvance] = useState('')
+  const [billingDay, setBillingDay] = useState('1')
 
-  const moveInDate = watch('moveInDate')
+  // ── Validation errors ─────────────────────────────────────────────────────
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
-  useEffect(() => {
-    const day = parseInt(moveInDate.split('-')[2] ?? '1', 10)
-    if (!isNaN(day) && day >= 1 && day <= 28) setValue('dueDay', String(day))
-  }, [moveInDate, setValue])
-
+  // ── Data ──────────────────────────────────────────────────────────────────
+  const { data: properties } = useProperties()
   const { data: units } = useUnits(selectedPropertyId)
-  const availableUnits =
-    units?.filter((u) => u.status === 'available' && u.billing_type === billingType) ?? []
 
-  const propertyOptions = useMemo(
-    () => (properties ?? []).map((p) => ({ value: p.id, label: p.name })),
-    [properties],
-  )
+  // ─── Navigation / Validation ─────────────────────────────────────────────
 
-  const unitOptions = useMemo(
-    () =>
-      availableUnits.map((u) => ({
-        value: u.id,
-        label:
-          billingType === 'monthly'
-            ? `Unit ${u.unit_number}${u.monthly_rate != null ? ` — PHP ${u.monthly_rate.toFixed(2)}/mo` : ''}`
-            : `Unit ${u.unit_number}${u.daily_rate != null ? ` — PHP ${u.daily_rate.toFixed(2)}/day` : ''}`,
-      })),
-    [availableUnits, billingType],
-  )
+  function handleNext(skipValidation = false) {
+    setErrors({})
 
-  const onSubmit = async (data: FormData) => {
-    // Conditional validation for billing-type-specific fields
-    let hasConditionalError = false
+    if (!skipValidation) {
+      const errs: Record<string, string> = {}
 
-    if (billingType === 'monthly') {
-      if (!data.address?.trim()) {
-        setError('address', { message: 'Address is required' })
-        hasConditionalError = true
+      if (step === 1) {
+        if (!fullName.trim()) errs.fullName = 'Name is required'
+        if (!phone.trim()) errs.phone = 'Phone is required'
       }
-      if (!data.emergencyContact?.trim()) {
-        setError('emergencyContact', { message: 'Emergency contact is required' })
-        hasConditionalError = true
-      }
-      const wd = parseFloat(data.waterReading ?? '')
-      if (isNaN(wd) || wd < 0) {
-        setError('waterReading', { message: 'Valid water reading required' })
-        hasConditionalError = true
-      }
-      const ed = parseFloat(data.electricityReading ?? '')
-      if (isNaN(ed) || ed < 0) {
-        setError('electricityReading', { message: 'Valid electricity reading required' })
-        hasConditionalError = true
-      }
-      const dd = parseInt(data.dueDay ?? '')
-      if (isNaN(dd) || dd < 1 || dd > 28) {
-        setError('dueDay', { message: 'Due day must be 1–28' })
-        hasConditionalError = true
-      }
-    }
 
-    if (billingType === 'daily') {
-      const d = parseInt(data.days ?? '')
-      if (isNaN(d) || d < 1) {
-        setError('days', { message: 'Number of days must be at least 1' })
-        hasConditionalError = true
+      if (step === 3) {
+        if (!emergencyName.trim()) errs.emergencyName = 'Contact name is required'
+        if (!emergencyPhone.trim()) errs.emergencyPhone = 'Phone is required'
       }
-    }
 
-    if (hasConditionalError) return
+      if (step === 4) {
+        if (!selectedPropertyId) errs.selectedPropertyId = 'Select a property'
+        if (!selectedUnitId) errs.selectedUnitId = 'Select a unit'
+      }
 
-    try {
-      const createdTenant = await mutateAsync({
-        unit_id: data.selectedUnitId,
-        full_name: data.fullName.trim(),
-        email: data.email.trim(),
-        phone: data.phone.trim(),
-        billing_type: billingType,
-        move_in_date: data.moveInDate,
-        ...(billingType === 'monthly'
-          ? {
-              address: data.address!.trim(),
-              emergency_contact: data.emergencyContact!.trim(),
-              water_reading: parseFloat(data.waterReading!),
-              electricity_reading: parseFloat(data.electricityReading!),
-              due_day: parseInt(data.dueDay!),
-              include_internet: includeInternet,
-            }
-          : {}),
-      })
-
-      if (billingType === 'daily' && data.selectedUnitId) {
-        const unit = await fetchUnit(data.selectedUnitId)
-        if (unit && unit.daily_rate) {
-          const numDays = parseInt(data.days!)
-          const periodEnd = (() => {
-            const d = new Date(data.moveInDate)
-            d.setDate(d.getDate() + numDays - 1)
-            return dayjs(d).format('YYYY-MM-DD')
-          })()
-          await createBillFn({
-            tenant_id: createdTenant.id,
-            unit_id: data.selectedUnitId,
-            amount: parseFloat((unit.daily_rate * numDays).toFixed(2)),
-            billing_type: 'daily',
-            period_start: data.moveInDate,
-            period_end: periodEnd,
-            due_date: periodEnd,
-          })
+      if (step === 5) {
+        if (!monthlyRent.trim() || isNaN(parseFloat(monthlyRent))) {
+          errs.monthlyRent = 'Enter rent amount'
+        }
+        const dd = parseInt(billingDay)
+        if (isNaN(dd) || dd < 1 || dd > 28) {
+          errs.billingDay = 'Enter a day between 1 and 28'
         }
       }
 
-      toast.success('Tenant added')
+      if (Object.keys(errs).length > 0) {
+        setErrors(errs)
+        return
+      }
+    }
+
+    if (step < 5) {
+      setStep((s) => s + 1)
+      return
+    }
+
+    void handleSubmit()
+  }
+
+  function handleBack() {
+    if (step === 1) {
       router.back()
+      return
+    }
+    setStep((s) => s - 1)
+  }
+
+  async function handleSubmit() {
+    try {
+      const created = await createTenant({
+        unit_id: selectedUnitId,
+        full_name: fullName.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        billing_type: 'monthly',
+        move_in_date: moveInDate,
+        emergency_contact: `${emergencyName.trim()}${
+          emergencyRelation ? ' (' + emergencyRelation + ')' : ''
+        } — ${emergencyPhone.trim()}`,
+        due_day: parseInt(billingDay),
+      })
+      toast.success('Tenant added successfully')
+      router.replace(`/(admin)/tenants/${created.id}` as any)
     } catch {
-      toast.error('Could not create tenant')
+      toast.error('Could not save tenant. Please try again.')
     }
   }
 
-  return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1 bg-app">
-      <ScrollView contentContainerClassName="p-4 pb-32" {...tabBarScroll}>
-        <Controller
-          control={control}
-          name="fullName"
-          render={({ field }) => (
-            <Input
-              label="Full Name"
-              value={field.value}
-              onChangeText={field.onChange}
-              error={errors.fullName?.message}
-              placeholder="Jane Doe"
-            />
-          )}
-        />
+  // ─── Step Renderers ───────────────────────────────────────────────────────
 
-        <Controller
-          control={control}
-          name="email"
-          render={({ field }) => (
-            <Input
-              label="Email"
-              value={field.value}
-              onChangeText={field.onChange}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              error={errors.email?.message}
-              placeholder="jane@example.com"
-            />
-          )}
+  function renderStep1() {
+    return (
+      <>
+        <Input
+          label="Full Name *"
+          value={fullName}
+          onChangeText={setFullName}
+          autoFocus
+          error={errors.fullName}
+          placeholder="e.g. Maria Santos"
         />
-
-        <Controller
-          control={control}
-          name="phone"
-          render={({ field }) => (
-            <Input
-              label="Phone"
-              value={field.value}
-              onChangeText={field.onChange}
-              keyboardType="phone-pad"
-              error={errors.phone?.message}
-              placeholder="+1 555 0100"
-            />
-          )}
+        <Input
+          label="Nickname"
+          value={nickname}
+          onChangeText={setNickname}
+          placeholder="Optional"
         />
-
-        <Controller
-          control={control}
-          name="moveInDate"
-          render={({ field }) => (
-            <DateInput
-              label="Move-in Date"
-              value={field.value}
-              onChange={field.onChange}
-              error={errors.moveInDate?.message}
-            />
-          )}
+        <Input
+          label="Phone *"
+          value={phone}
+          onChangeText={setPhone}
+          keyboardType="phone-pad"
+          error={errors.phone}
+          placeholder="+63 912 345 6789"
         />
+        <Input
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          placeholder="Optional"
+        />
+        <Input
+          label="Occupation"
+          value={occupation}
+          onChangeText={setOccupation}
+          placeholder="Optional"
+        />
+        <Input
+          label="Home Province"
+          value={homeProvince}
+          onChangeText={setHomeProvince}
+          placeholder="Optional"
+        />
+      </>
+    )
+  }
 
-        <AppText variant="label" color="secondary" className="mb-2">
-          Billing Type
+  function renderStep2() {
+    return (
+      <>
+        <AppText variant="caption" color="muted" style={{ marginBottom: 16 }}>
+          Accepted: UMID · Driver's License · Passport · PhilHealth · Voter's ID
         </AppText>
-        <View className="flex-row gap-2 mb-4">
-          {(['monthly', 'daily'] as BillingType[]).map((t) => (
-            <Button
-              key={t}
-              label={t === 'monthly' ? 'Monthly' : 'Daily'}
-              size="sm"
-              variant={billingType === t ? 'primary' : 'secondary'}
-              onPress={() => {
-                setBillingType(t)
-                setValue('selectedUnitId', '')
-                setSelectedPropertyId('')
-              }}
-              className="flex-1"
-            />
-          ))}
-        </View>
+        <AppText variant="label" color="secondary" style={{ marginBottom: 8 }}>
+          Front of valid ID
+        </AppText>
+        <CameraCapture
+          label="Tap to capture front of ID"
+          onCapture={setIdFrontUri}
+          captured={idFrontUri}
+        />
+        <View style={{ height: 16 }} />
+        <AppText variant="label" color="secondary" style={{ marginBottom: 8 }}>
+          Back of ID
+        </AppText>
+        <CameraCapture
+          label="Tap to capture back of ID"
+          onCapture={setIdBackUri}
+          captured={idBackUri}
+        />
+        <Pressable onPress={() => handleNext(true)} style={{ alignItems: 'center', marginTop: 16 }}>
+          <AppText color="muted" variant="caption">
+            Skip (not recommended)
+          </AppText>
+        </Pressable>
+      </>
+    )
+  }
 
-        {billingType === 'daily' && (
-          <Controller
-            control={control}
-            name="days"
-            render={({ field }) => (
-              <Input
-                label="Number of Days"
-                value={field.value}
-                onChangeText={field.onChange}
-                keyboardType="number-pad"
-                error={errors.days?.message}
-                placeholder="1"
-              />
-            )}
-          />
-        )}
+  function renderStep3() {
+    return (
+      <>
+        <Input
+          label="Contact Name *"
+          value={emergencyName}
+          onChangeText={setEmergencyName}
+          error={errors.emergencyName}
+          placeholder="Full name"
+        />
+        <Input
+          label="Relationship"
+          value={emergencyRelation}
+          onChangeText={setEmergencyRelation}
+          placeholder="e.g. Spouse, Parent"
+        />
+        <Input
+          label="Phone *"
+          value={emergencyPhone}
+          onChangeText={setEmergencyPhone}
+          keyboardType="phone-pad"
+          error={errors.emergencyPhone}
+          placeholder="+63 912 345 6789"
+        />
+      </>
+    )
+  }
 
-        {billingType === 'monthly' && (
-          <>
-            <Controller
-              control={control}
-              name="address"
-              render={({ field }) => (
-                <Input
-                  label="Address"
-                  value={field.value}
-                  onChangeText={field.onChange}
-                  error={errors.address?.message}
-                  multiline
-                  numberOfLines={2}
-                />
-              )}
-            />
+  function renderStep4() {
+    const propertyOptions = (properties ?? []).map((p) => ({ value: p.id, label: p.name }))
+    const unitOptions = (units ?? [])
+      .filter((u) => u.status === 'available')
+      .map((u) => ({
+        value: u.id,
+        label: `Unit ${u.unit_number}${
+          u.monthly_rate != null ? ` — ₱${u.monthly_rate.toFixed(0)}/mo` : ''
+        }`,
+      }))
 
-            <Controller
-              control={control}
-              name="emergencyContact"
-              render={({ field }) => (
-                <Input
-                  label="Emergency Contact"
-                  value={field.value}
-                  onChangeText={field.onChange}
-                  error={errors.emergencyContact?.message}
-                  placeholder="Name — Phone"
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="waterReading"
-              render={({ field }) => (
-                <Input
-                  label="Water Reading (cu.m)"
-                  value={field.value}
-                  onChangeText={field.onChange}
-                  keyboardType="decimal-pad"
-                  error={errors.waterReading?.message}
-                  placeholder="0"
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="electricityReading"
-              render={({ field }) => (
-                <Input
-                  label="Electricity Reading (kWh)"
-                  value={field.value}
-                  onChangeText={field.onChange}
-                  keyboardType="decimal-pad"
-                  error={errors.electricityReading?.message}
-                  placeholder="0"
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="dueDay"
-              render={({ field }) => (
-                <Input
-                  label="Due Day (1–28)"
-                  value={field.value}
-                  onChangeText={field.onChange}
-                  keyboardType="number-pad"
-                  error={errors.dueDay?.message}
-                  placeholder="15"
-                />
-              )}
-            />
-
-            <View className="flex-row justify-between items-center mb-4">
-              <AppText>Include Internet</AppText>
-              <Switch
-                value={includeInternet}
-                onValueChange={setIncludeInternet}
-                trackColor={{ true: '#3b82f6', false: '#2a2a2a' }}
-                thumbColor="#f1f1f1"
-              />
-            </View>
-          </>
-        )}
-
+    return (
+      <>
         <Select
-          label="Property"
-          placeholder="Select a property…"
+          label="Property *"
+          placeholder="Select property..."
           options={propertyOptions}
           value={selectedPropertyId}
-          onChange={(val) => {
-            setSelectedPropertyId(val)
-            setValue('selectedUnitId', '')
+          onChange={(v) => {
+            setSelectedPropertyId(v)
+            setSelectedUnitId('')
           }}
+          error={errors.selectedPropertyId}
         />
-
-        <Controller
-          control={control}
-          name="selectedUnitId"
-          render={({ field }) => (
-            <Select
-              label={`Available ${billingType === 'monthly' ? 'Monthly' : 'Daily'} Units`}
-              placeholder={selectedPropertyId ? 'Select a unit…' : 'Select a property first'}
-              options={unitOptions}
-              value={field.value}
-              onChange={field.onChange}
-              error={errors.selectedUnitId?.message}
-              searchable={unitOptions.length > 5}
+        <Select
+          label="Unit *"
+          placeholder={selectedPropertyId ? 'Select unit...' : 'Select property first'}
+          options={unitOptions}
+          value={selectedUnitId}
+          onChange={(v) => {
+            setSelectedUnitId(v)
+            const unit = units?.find((u) => u.id === v)
+            if (unit?.monthly_rate) setMonthlyRent(unit.monthly_rate.toFixed(0))
+          }}
+          error={errors.selectedUnitId}
+        />
+        <DateInput label="Move-in Date *" value={moveInDate} onChange={setMoveInDate} />
+        <AppText variant="label" color="secondary" style={{ marginTop: 8, marginBottom: 8 }}>
+          Contract Type
+        </AppText>
+        <SegmentedControl
+          options={CONTRACT_OPTIONS}
+          selected={contractType === 'monthly' ? 'Month-to-month' : 'Fixed term'}
+          onChange={(v) => setContractType(v === 'Fixed term' ? 'fixed' : 'monthly')}
+        />
+        {contractType === 'fixed' && (
+          <View style={{ marginTop: 12 }}>
+            <DateInput
+              label="Contract End Date"
+              value={contractEndDate}
+              onChange={setContractEndDate}
             />
-          )}
-        />
+          </View>
+        )}
+      </>
+    )
+  }
 
-        <Button label="Add Tenant" onPress={handleSubmit(onSubmit)} loading={isPending} className="mt-2" />
-      </ScrollView>
+  function renderStep5() {
+    return (
+      <>
+        <Input
+          label="Monthly Rent *"
+          value={monthlyRent}
+          onChangeText={setMonthlyRent}
+          keyboardType="decimal-pad"
+          error={errors.monthlyRent}
+          placeholder="e.g. 3500"
+        />
+        <Input
+          label="Security Deposit"
+          value={securityDeposit}
+          onChangeText={setSecurityDeposit}
+          keyboardType="decimal-pad"
+          placeholder="e.g. 3500"
+        />
+        <Input
+          label="Advance Payment"
+          value={advance}
+          onChangeText={setAdvance}
+          keyboardType="decimal-pad"
+          placeholder="e.g. 3500"
+        />
+        <Input
+          label="Billing Day (1–28)"
+          value={billingDay}
+          onChangeText={setBillingDay}
+          keyboardType="number-pad"
+          error={errors.billingDay}
+          placeholder="1"
+        />
+      </>
+    )
+  }
+
+  function renderStep() {
+    switch (step) {
+      case 1:
+        return renderStep1()
+      case 2:
+        return renderStep2()
+      case 3:
+        return renderStep3()
+      case 4:
+        return renderStep4()
+      case 5:
+        return renderStep5()
+      default:
+        return null
+    }
+  }
+
+  // ─── Render ───────────────────────────────────────────────────────────────
+
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.root}
+    >
+      <SafeAreaView edges={['top']} style={{ backgroundColor: colors.surface }}>
+        <View style={styles.header}>
+          <ProgressStepIndicator steps={5} current={step} />
+          <AppText
+            variant="caption"
+            color="muted"
+            style={{ marginTop: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}
+          >
+            Step {step} of 5 — {STEP_TITLES[step]}
+          </AppText>
+        </View>
+      </SafeAreaView>
+
+      <ScrollView contentContainerStyle={styles.scrollContent}>{renderStep()}</ScrollView>
+
+      <BottomCTABar>
+        <Button
+          label={step === 5 ? 'Save Tenant' : `Next — ${STEP_TITLES[step + 1]}`}
+          onPress={() => handleNext()}
+          loading={isPending}
+        />
+        {step > 1 && (
+          <Pressable onPress={handleBack} style={styles.backButton}>
+            <AppText color="primary" style={{ color: colors.textLink }}>
+              Back
+            </AppText>
+          </Pressable>
+        )}
+      </BottomCTABar>
     </KeyboardAvoidingView>
   )
 }
+
+// ─── Styles ───────────────────────────────────────────────────────────────────
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  header: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 8,
+    backgroundColor: colors.surface,
+  },
+  scrollContent: {
+    padding: 16,
+    paddingBottom: 120,
+  },
+  backButton: {
+    alignItems: 'center',
+    marginTop: 12,
+  },
+})
