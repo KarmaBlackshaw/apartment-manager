@@ -1,0 +1,86 @@
+import React from 'react'
+import { View, Text, FlatList, Pressable, Share } from 'react-native'
+import { useLocalSearchParams } from 'expo-router'
+import { ScreenHeader } from '../../../components/ui/ScreenHeader'
+import { ListRow } from '../../../components/ui/ListRow'
+import { AvatarInitials } from '../../../components/ui/AvatarInitials'
+import { StatusChip } from '../../../components/ui/StatusChip'
+import { AmountText } from '../../../components/ui/AmountText'
+import { EmptyState } from '../../../components/ui/EmptyState'
+import { LoadingSpinner } from '../../../components/ui/LoadingSpinner'
+import { colors } from '../../../constants/theme'
+import { buildCSV } from '../../../lib/csv'
+import { useDepositSummary } from '../../../hooks/useReports'
+
+export default function DepositSummaryScreen() {
+  const { propertyId } = useLocalSearchParams<{ propertyId?: string }>()
+  const { data, isLoading } = useDepositSummary(propertyId)
+
+  async function handleExport() {
+    if (!data) return
+    const csv = buildCSV(
+      ['Tenant', 'Unit', 'Deposit', 'Status'],
+      data.entries.map((e) => [e.tenant_name, e.unit_number ?? '', e.deposit, e.status]),
+    )
+    await Share.share({ message: csv })
+  }
+
+  const exportBtn = (
+    <Pressable onPress={handleExport} hitSlop={8} disabled={!data}>
+      <Text className="text-primary text-sm font-medium pr-3">Export</Text>
+    </Pressable>
+  )
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 bg-background">
+        <ScreenHeader title="Deposit Summary" left="back" right={exportBtn} />
+        <LoadingSpinner />
+      </View>
+    )
+  }
+
+  const report = data ?? { entries: [], totalHeld: 0, tenantCount: 0 }
+
+  return (
+    <View className="flex-1 bg-background">
+      <ScreenHeader title="Deposit Summary" left="back" right={exportBtn} />
+      <FlatList
+        data={report.entries}
+        keyExtractor={(e) => e.tenant_id}
+        ListHeaderComponent={
+          <View
+            className="mx-4 mt-2 mb-3 rounded-xl p-4"
+            style={{ backgroundColor: colors.surface }}
+          >
+            <Text className="text-[11px] font-semibold uppercase tracking-wide mb-1" style={{ color: colors.textMuted }}>
+              Total deposits held
+            </Text>
+            <AmountText amount={report.totalHeld} size="large" />
+            <Text className="text-sm mt-1" style={{ color: colors.textSecondary }}>
+              {report.tenantCount} tenant{report.tenantCount !== 1 ? 's' : ''}
+            </Text>
+          </View>
+        }
+        ListEmptyComponent={
+          <EmptyState title="No deposits" description="No deposit records found." />
+        }
+        renderItem={({ item }) => (
+          <ListRow
+            leading={<AvatarInitials name={item.tenant_name} />}
+            title={item.tenant_name}
+            subtitle={`Unit ${item.unit_number ?? '—'} · ₱${item.deposit.toLocaleString('en-PH', { minimumFractionDigits: 0 })} deposit`}
+            trailingChip={
+              <StatusChip
+                variant={item.status === 'ACTIVE' ? 'success' : 'neutral'}
+                label={item.status}
+              />
+            }
+            trailingAmount={<AmountText amount={item.deposit} />}
+          />
+        )}
+        contentContainerStyle={{ paddingBottom: 128 }}
+      />
+    </View>
+  )
+}

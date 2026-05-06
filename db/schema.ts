@@ -135,3 +135,18 @@ export const utilityReadings = sqliteTable('utility_readings', {
 }, (t) => ({
   uniqueReading: uniqueIndex('utility_readings_unit_month_type_unique').on(t.unit_id, t.month, t.type),
 }))
+
+export const maintenanceIssues = sqliteTable('maintenance_issues', {
+  id: text('id').primaryKey(),
+  unit_id: text('unit_id').notNull().references(() => units.id),
+  category: text('category').notNull(),
+  priority: text('priority').notNull().default('MEDIUM'),
+  description: text('description').notNull(),
+  status: text('status').notNull().default('REPORTED'),
+  photo_uri: text('photo_uri'),
+  repair_cost: real('repair_cost'),
+  charged_to_tenant: integer('charged_to_tenant').default(0),
+  reported_at: text('reported_at').notNull(),
+  resolved_at: text('resolved_at'),
+  created_at: text('created_at').notNull().default(sql`(CURRENT_TIMESTAMP)`),
+})

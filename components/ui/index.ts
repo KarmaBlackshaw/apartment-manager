@@ -66,6 +66,7 @@ export { NotificationRow } from '../notifications/NotificationRow'
 
 // reports/
 export { ReportMenuCard } from '../reports/ReportMenuCard'
+export { UnitIncomeRow } from '../reports/UnitIncomeRow'
 
 // settings/
 export { SettingsRow } from '../settings/SettingsRow'

@@ -144,6 +144,21 @@ export function initializeDatabase() {
       created_at TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP),
       UNIQUE(unit_id, month, type)
     );
+
+    CREATE TABLE IF NOT EXISTS maintenance_issues (
+      id TEXT PRIMARY KEY,
+      unit_id TEXT NOT NULL REFERENCES units(id),
+      category TEXT NOT NULL,
+      priority TEXT NOT NULL DEFAULT 'MEDIUM',
+      description TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'REPORTED',
+      photo_uri TEXT,
+      repair_cost REAL,
+      charged_to_tenant INTEGER DEFAULT 0,
+      reported_at TEXT NOT NULL,
+      resolved_at TEXT,
+      created_at TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+    );
   `)
 
   const alterStatements = [

@@ -1,58 +1,59 @@
-import React from 'react'
-import { View, Text, ScrollView, Pressable, Alert } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Ionicons from '@expo/vector-icons/Ionicons'
-import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
+import React, { useState } from 'react'
+import { View, FlatList } from 'react-native'
+import { useRouter } from 'expo-router'
+import { ScreenHeader } from '../../../components/ui/ScreenHeader'
+import { PropertySelector } from '../../../components/properties/PropertySelector'
+import { ReportMenuCard } from '../../../components/reports/ReportMenuCard'
 
-type IoniconName = React.ComponentProps<typeof Ionicons>['name']
-
-interface ReportCard {
-  title: string
-  description: string
-  icon: IoniconName
-  color: string
+interface ReportItem {
+  label: string
+  icon: string
+  iconBg: string
+  route: string
 }
 
-const REPORTS: ReportCard[] = [
-  { title: 'Monthly Income',       description: 'Collections vs expected per month',   icon: 'trending-up-outline',  color: '#22c55e' },
-  { title: 'Occupancy Report',     description: 'Occupancy rate over time',             icon: 'home-outline',         color: '#3b82f6' },
-  { title: 'Outstanding Balances', description: 'Tenants with unpaid / overdue bills',  icon: 'alert-circle-outline', color: '#ef4444' },
-  { title: 'Payment History',      description: 'All payments in a date range',         icon: 'receipt-outline',      color: '#8b5cf6' },
-  { title: 'Vacancy Report',       description: 'Vacant units and duration',            icon: 'business-outline',     color: '#f59e0b' },
-  { title: 'Tenant Ledger',        description: 'Full ledger for a single tenant',      icon: 'person-outline',       color: '#ec4899' },
+const REPORTS: ReportItem[] = [
+  { label: 'Monthly collection', icon: 'briefcase-outline',    iconBg: '#052E16', route: '/(admin)/reports/monthly-collection' },
+  { label: 'Outstanding balances', icon: 'alert-circle-outline', iconBg: '#200C0C', route: '/(admin)/reports/outstanding-balances' },
+  { label: 'Occupancy rate',      icon: 'home-outline',         iconBg: '#0C1A3D', route: '/(admin)/reports/occupancy' },
+  { label: 'Per-unit income',     icon: 'stats-chart-outline',  iconBg: '#1A1040', route: '/(admin)/reports/per-unit-income' },
+  { label: 'Annual summary',      icon: 'calendar-outline',     iconBg: '#052E16', route: '/(admin)/reports/annual-summary' },
+  { label: 'Maintenance costs',   icon: 'construct-outline',    iconBg: '#2A1A00', route: '/(admin)/reports/maintenance-costs' },
+  { label: 'Deposit summary',     icon: 'wallet-outline',       iconBg: '#1E2533', route: '/(admin)/reports/deposit-summary' },
 ]
 
 export default function ReportsMenuScreen() {
-  const insets = useSafeAreaInsets()
-  const tabBarScroll = useTabBarScrollHandler()
+  const router = useRouter()
+  const [propertyId, setPropertyId] = useState<string | undefined>()
 
   return (
-    <ScrollView
-      className="flex-1 bg-background"
-      contentContainerStyle={{ paddingTop: insets.top + 16, paddingHorizontal: 16, paddingBottom: 128 }}
-      {...tabBarScroll}
-    >
-      <Text className="text-2xl font-extrabold text-text-primary mb-1" style={{ letterSpacing: -0.5 }}>Reports</Text>
-      <Text className="text-[13px] text-text-muted mb-6">Coming in Phase 6</Text>
-
-      <View className="gap-3">
-        {REPORTS.map((r) => (
-          <Pressable
-            key={r.title}
-            className="bg-surface rounded-md p-4 border border-border"
-            onPress={() => Alert.alert('Coming Soon', `${r.title} report will be available in a future update.`)}
-          >
-            <View
-              className="w-[44px] h-[44px] rounded-md items-center justify-center mb-[10px]"
-              style={{ backgroundColor: `${r.color}22` }}
-            >
-              <Ionicons name={r.icon} size={24} color={r.color} />
-            </View>
-            <Text className="text-[15px] font-semibold text-text-primary mb-1">{r.title}</Text>
-            <Text className="text-xs text-text-secondary" style={{ lineHeight: 17 }}>{r.description}</Text>
-          </Pressable>
-        ))}
+    <View className="flex-1 bg-background">
+      <ScreenHeader title="Reports" />
+      <View className="px-4 py-2 flex-row items-center">
+        <PropertySelector selectedId={propertyId} onChange={setPropertyId} />
       </View>
-    </ScrollView>
+      <FlatList
+        data={REPORTS}
+        keyExtractor={(item) => item.route}
+        numColumns={2}
+        contentContainerStyle={{ padding: 16, paddingBottom: 128 }}
+        columnWrapperStyle={{ gap: 12, marginBottom: 12 }}
+        renderItem={({ item }) => (
+          <View className="flex-1">
+            <ReportMenuCard
+              icon={item.icon}
+              iconBg={item.iconBg}
+              label={item.label}
+              onPress={() =>
+                router.push({
+                  pathname: item.route as any,
+                  params: propertyId ? { propertyId } : {},
+                })
+              }
+            />
+          </View>
+        )}
+      />
+    </View>
   )
 }

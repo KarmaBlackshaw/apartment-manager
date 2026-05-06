@@ -223,3 +223,160 @@ export interface BillPreview {
   alreadyGenerated: number
   totalBilled: number
 }
+
+// ─── Maintenance ─────────────────────────────────────────────────────────────
+
+export type MaintenanceStatus = 'REPORTED' | 'IN_PROGRESS' | 'RESOLVED'
+export type MaintenancePriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
+
+export interface MaintenanceIssue {
+  id: string
+  unit_id: string
+  category: string
+  priority: MaintenancePriority
+  description: string
+  status: MaintenanceStatus
+  photo_uri: string | null
+  repair_cost: number | null
+  charged_to_tenant: boolean
+  reported_at: string
+  resolved_at: string | null
+  created_at: string
+}
+
+// ─── Report return types ──────────────────────────────────────────────────────
+
+export interface MonthlyCollectionEntry {
+  tenant_id: string
+  tenant_full_name: string
+  unit_number: string | null
+  unit_id: string | null
+  monthly_rate: number
+  bill_amount: number
+  bill_status: string | null
+  month_status: 'paid' | 'overdue' | 'unpaid' | 'no_bill'
+}
+
+export interface MonthlyCollectionReport {
+  entries: MonthlyCollectionEntry[]
+  stats: {
+    totalCollected: number
+    totalBilled: number
+    paidCount: number
+    partialCount: number
+    unpaidCount: number
+  }
+}
+
+export interface OutstandingBalanceEntry {
+  tenant_id: string
+  tenant_full_name: string
+  unit_number: string | null
+  balance: number
+  overdueMonthCount: number
+}
+
+export interface OutstandingBalancesReport {
+  entries: OutstandingBalanceEntry[]
+  totalOutstanding: number
+  tenantCount: number
+}
+
+export interface OccupancyTrendPoint {
+  month: string
+  pct: number
+}
+
+export interface OccupancyByProperty {
+  property_id: string
+  property_name: string
+  totalUnits: number
+  occupiedUnits: number
+  pct: number
+}
+
+export interface VacantUnitEntry {
+  unit_id: string
+  unit_number: string
+  property_name: string
+  daysVacant: number
+  lostRevenue: number
+}
+
+export interface OccupancyReport {
+  overallPct: number
+  totalUnits: number
+  occupiedUnits: number
+  vacantUnits: number
+  trend: OccupancyTrendPoint[]
+  byProperty: OccupancyByProperty[]
+  vacantList: VacantUnitEntry[]
+}
+
+export type PerUnitIncomeStatus = 'success' | 'warning' | 'danger' | 'neutral'
+
+export interface PerUnitIncomeEntry {
+  unit_id: string
+  unit_label: string
+  unit_type: string | null
+  tenant_name: string | null
+  status: PerUnitIncomeStatus
+  collected: number
+  expected: number
+  pct: number
+}
+
+export interface PerUnitIncomeReport {
+  entries: PerUnitIncomeEntry[]
+  totalCollected: number
+  bestUnitLabel: string | null
+}
+
+export interface AnnualMonthEntry {
+  month: string
+  billed: number
+  collected: number
+}
+
+export interface AnnualSummaryReport {
+  year: number
+  ytdIncome: number
+  projectedFullYear: number
+  totalBilled: number
+  totalCollected: number
+  collectionRate: number
+  maintenanceSpend: number
+  monthly: AnnualMonthEntry[]
+}
+
+export interface MaintenanceCostByUnit {
+  unit_id: string
+  unit_label: string
+  categories: string
+  count: number
+  cost: number
+  fromTenant: number | null
+}
+
+export interface MaintenanceCostsReport {
+  thisMonthCost: number
+  ytdCost: number
+  openCount: number
+  resolvedCount: number
+  chargedToTenantCount: number
+  byUnit: MaintenanceCostByUnit[]
+}
+
+export interface DepositSummaryEntry {
+  tenant_id: string
+  tenant_name: string
+  unit_number: string | null
+  deposit: number
+  status: 'ACTIVE' | 'FORMER'
+}
+
+export interface DepositSummaryReport {
+  entries: DepositSummaryEntry[]
+  totalHeld: number
+  tenantCount: number
+}
