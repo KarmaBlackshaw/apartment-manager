@@ -130,6 +130,9 @@ export default function HomeScreen() {
         options={{
           headerShown: true,
           title: 'Home',
+          headerStyle: { backgroundColor: colors.background },
+          headerTintColor: colors.textPrimary,
+          headerShadowVisible: false,
           headerRight: () => (
             <View style={{ flexDirection: 'row', gap: 4 }}>
               <Pressable

@@ -19,36 +19,38 @@ export function CollectionProgressBar({
 }: CollectionProgressBarProps) {
   const isEmpty = total === 0
 
+  if (isEmpty) {
+    return (
+      <View className="items-center py-2">
+        <Text className="text-xs text-text-muted">No bills this month</Text>
+      </View>
+    )
+  }
+
   return (
     <View>
       <View className="h-[6px] rounded-full overflow-hidden flex-row">
-        {isEmpty ? (
-          <View style={{ flex: 1, backgroundColor: colors.muted }} />
-        ) : (
-          <>
-            {paid > 0 && (
-              <View
-                className="h-[6px]"
-                style={{ flex: paid / total, backgroundColor: colors.success }}
-              />
-            )}
-            {partial > 0 && (
-              <View
-                className="h-[6px]"
-                style={{ flex: partial / total, backgroundColor: colors.warning }}
-              />
-            )}
-            {unpaid > 0 && (
-              <View
-                className="h-[6px]"
-                style={{ flex: unpaid / total, backgroundColor: colors.danger }}
-              />
-            )}
-          </>
+        {paid > 0 && (
+          <View
+            className="h-[6px]"
+            style={{ flex: paid / total, backgroundColor: colors.success }}
+          />
+        )}
+        {partial > 0 && (
+          <View
+            className="h-[6px]"
+            style={{ flex: partial / total, backgroundColor: colors.warning }}
+          />
+        )}
+        {unpaid > 0 && (
+          <View
+            className="h-[6px]"
+            style={{ flex: unpaid / total, backgroundColor: colors.danger }}
+          />
         )}
       </View>
 
-      {showCounts && !isEmpty && (
+      {showCounts && (
         <View className="flex-row mt-2 gap-4">
           <View className="flex-row items-center">
             <View className="w-[6px] h-[6px] rounded-full" style={{ backgroundColor: colors.success }} />
