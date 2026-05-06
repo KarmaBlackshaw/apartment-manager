@@ -4,6 +4,8 @@ import { Slot, useRouter } from 'expo-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import { Toaster } from 'sonner-native'
 import { DatabaseProvider, useDatabase } from '../context/DatabaseContext'
 import { AuthProvider, useAuth } from '../context/AuthContext'
 import { AppText, LoadingSpinner } from '../components/ui'
@@ -44,7 +46,10 @@ export default function RootLayout() {
         <AuthProvider>
           <DatabaseProvider>
             <QueryClientProvider client={queryClient}>
-              <AppContent />
+              <BottomSheetModalProvider>
+                <AppContent />
+                <Toaster />
+              </BottomSheetModalProvider>
             </QueryClientProvider>
           </DatabaseProvider>
         </AuthProvider>

@@ -6,11 +6,12 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import Ionicons from '@expo/vector-icons/Ionicons'
+import * as ImagePicker from 'expo-image-picker'
 import { colors } from '../../constants/theme'
 
 interface CameraCaptureProps {
   label: string
-  onCapture: () => void
+  onCapture: (uri: string) => void
   captured?: string
   hint?: string
 }
@@ -37,10 +38,19 @@ export function CameraCapture({
     scale.value = withTiming(1, { duration: 100 })
   }
 
+  const handleCapture = async () => {
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 0.8,
+      allowsEditing: true,
+    })
+    if (!result.canceled) onCapture(result.assets[0].uri)
+  }
+
   return (
     <View>
       <AnimatedPressable
-        onPress={onCapture}
+        onPress={handleCapture}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         style={[styles.zone, animatedStyle]}

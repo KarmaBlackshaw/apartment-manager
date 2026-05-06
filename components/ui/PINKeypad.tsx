@@ -1,5 +1,6 @@
 import React from 'react'
 import { Text, View, Pressable, StyleSheet } from 'react-native'
+import * as Haptics from 'expo-haptics'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -20,9 +21,10 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 interface KeyProps {
   onPress: () => void
   children: React.ReactNode
+  haptic?: 'light' | 'heavy'
 }
 
-function KeyButton({ onPress, children }: KeyProps) {
+function KeyButton({ onPress, children, haptic = 'light' }: KeyProps) {
   const scale = useSharedValue(1)
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -37,9 +39,18 @@ function KeyButton({ onPress, children }: KeyProps) {
     scale.value = withTiming(1, { duration: 100 })
   }
 
+  const handlePress = () => {
+    Haptics.impactAsync(
+      haptic === 'heavy'
+        ? Haptics.ImpactFeedbackStyle.Heavy
+        : Haptics.ImpactFeedbackStyle.Light
+    )
+    onPress()
+  }
+
   return (
     <AnimatedPressable
-      onPress={onPress}
+      onPress={handlePress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       style={[styles.key, animatedStyle]}
@@ -80,7 +91,7 @@ export function PINKeypad({
       {DIGIT_ROWS.map((row) => (
         <View key={row.join('')} style={styles.row}>
           {row.map((digit) => (
-            <KeyButton key={digit} onPress={() => onDigit(digit)}>
+            <KeyButton key={digit} onPress={() => onDigit(digit)} haptic="heavy">
               <Text style={styles.digitText}>{digit}</Text>
             </KeyButton>
           ))}
@@ -98,11 +109,11 @@ export function PINKeypad({
           <View style={styles.keyPlaceholder} />
         )}
 
-        <KeyButton onPress={() => onDigit('0')}>
+        <KeyButton onPress={() => onDigit('0')} haptic="heavy">
           <Text style={styles.digitText}>0</Text>
         </KeyButton>
 
-        <KeyButton onPress={onBackspace}>
+        <KeyButton onPress={onBackspace} haptic="light">
           <Ionicons name="backspace-outline" size={24} color={colors.textSecondary} />
         </KeyButton>
       </View>

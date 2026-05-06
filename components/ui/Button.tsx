@@ -1,5 +1,6 @@
 import React from 'react'
 import { TouchableOpacity, ActivityIndicator, Text, View } from 'react-native'
+import * as Haptics from 'expo-haptics'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'hero'
@@ -61,9 +62,16 @@ export function Button({
   disabled = false, loading = false, className = '',
   icon,
 }: ButtonProps) {
+  const handlePress = () => {
+    if (variant === 'primary' || variant === 'danger') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+    }
+    onPress()
+  }
+
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={handlePress}
       disabled={disabled || loading}
       // @ts-ignore — className handled by NativeWind babel transform at runtime
       className={`${radius[variant]} items-center justify-center ${bg[variant]} ${padding[size]} ${(disabled || loading) ? 'opacity-50' : ''} ${className}`}

@@ -31,7 +31,7 @@ export default function SettingsScreen() {
       contentContainerStyle={{
         paddingTop: insets.top + spacing[5],
         paddingHorizontal: spacing[4],
-        paddingBottom: spacing[12],
+        paddingBottom: insets.bottom + 100,
       }}
     >
       {/* Screen title */}

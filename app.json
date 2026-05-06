@@ -25,7 +25,8 @@
     },
     "plugins": [
       "expo-router",
-      "expo-sqlite"
+      "expo-sqlite",
+      ["expo-image-picker", { "cameraPermission": "Allow $(PRODUCT_NAME) to take photos of documents." }]
     ],
     "experiments": {
       "typedRoutes": true

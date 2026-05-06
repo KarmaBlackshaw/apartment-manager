@@ -79,6 +79,10 @@ export interface AppSettings {
   internet_rate: number
   apartment_name: string
   owner_name: string
+  owner_phone: string
+  notif_rent_reminders: string
+  notif_contract_expiry: string
+  notif_vacancy_alerts: string
 }
 
 // Enriched types used in UI list views

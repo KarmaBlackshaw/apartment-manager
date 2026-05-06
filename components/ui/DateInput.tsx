@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { TouchableOpacity, View, Platform, Modal } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Ionicons from '@expo/vector-icons/Ionicons'
+import dayjs from 'dayjs'
 import { AppText } from './AppText'
 
 interface DateInputProps {
@@ -14,19 +15,18 @@ interface DateInputProps {
 }
 
 function toDate(yyyyMmDd: string): Date {
-  // Append time to avoid timezone offset shifting the day
-  return new Date(yyyyMmDd + 'T00:00:00')
+  return dayjs(yyyyMmDd).toDate()
 }
 
 function toYMD(d: Date): string {
-  return d.toISOString().split('T')[0]
+  return dayjs(d).format('YYYY-MM-DD')
 }
 
 export function DateInput({ label, value, onChange, error, minimumDate, maximumDate }: DateInputProps) {
   const [show, setShow] = useState(false)
   const date = value ? toDate(value) : new Date()
   const displayValue = value
-    ? toDate(value).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    ? dayjs(value).format('MMMM D, YYYY')
     : ''
 
   function handleChange(_: unknown, selected?: Date) {

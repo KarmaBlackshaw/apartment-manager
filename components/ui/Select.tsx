@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react'
-import { View, Modal, FlatList, TouchableOpacity, TextInput, SafeAreaView } from 'react-native'
+import React, { useRef, useState, useMemo } from 'react'
+import { View, TouchableOpacity } from 'react-native'
+import { BottomSheetModal, BottomSheetFlatList, BottomSheetTextInput, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { AppText } from './AppText'
 
@@ -27,7 +28,7 @@ export function Select({
   error,
   searchable = true,
 }: SelectProps) {
-  const [open, setOpen] = useState(false)
+  const bottomSheetRef = useRef<BottomSheetModal>(null)
   const [query, setQuery] = useState('')
 
   const selected = options.find((o) => o.value === value)
@@ -41,12 +42,16 @@ export function Select({
 
   function handleOpen() {
     setQuery('')
-    setOpen(true)
+    bottomSheetRef.current?.present()
+  }
+
+  function handleClose() {
+    bottomSheetRef.current?.dismiss()
   }
 
   function handleSelect(val: string) {
     onChange(val)
-    setOpen(false)
+    bottomSheetRef.current?.dismiss()
   }
 
   return (
@@ -65,70 +70,71 @@ export function Select({
       </TouchableOpacity>
       {error && <AppText variant="caption" color="danger" className="mt-1">{error}</AppText>}
 
-      <Modal
-        visible={open}
-        animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => setOpen(false)}
+      <BottomSheetModal
+        ref={bottomSheetRef}
+        snapPoints={['60%', '90%']}
+        enablePanDownToClose
+        onDismiss={() => setQuery('')}
+        backdropComponent={(props) => (
+          <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} pressBehavior="close" />
+        )}
+        backgroundStyle={{ backgroundColor: '#1a1a1a' }}
+        handleIndicatorStyle={{ backgroundColor: '#555555' }}
       >
-        {/* @ts-ignore */}
-        <SafeAreaView className="flex-1 bg-app">
-          <View className="flex-row items-center justify-between px-4 py-4 border-b border-[#2a2a2a]">
-            <AppText variant="subheading">{label ?? 'Select'}</AppText>
-            <TouchableOpacity onPress={() => setOpen(false)} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
-              <Ionicons name="close" size={24} color="#888888" />
-            </TouchableOpacity>
-          </View>
+        <View className="flex-row items-center justify-between px-4 py-4 border-b border-[#2a2a2a]">
+          <AppText variant="subheading">{label ?? 'Select'}</AppText>
+          <TouchableOpacity onPress={handleClose} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
+            <Ionicons name="close" size={24} color="#888888" />
+          </TouchableOpacity>
+        </View>
 
-          {searchable && (
-            <View className="px-4 pt-3 pb-2">
-              {/* @ts-ignore */}
-              <View className="flex-row items-center bg-surface border border-[#2a2a2a] rounded-xl px-4 py-3 gap-3">
-                <Ionicons name="search" size={18} color="#555555" />
-                <TextInput
-                  value={query}
-                  onChangeText={setQuery}
-                  placeholder="Search…"
-                  placeholderTextColor="#555555"
-                  autoFocus
-                  // @ts-ignore
-                  className="flex-1 text-base text-[#f1f1f1]"
-                />
-                {query.length > 0 && (
-                  <TouchableOpacity onPress={() => setQuery('')} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-                    <Ionicons name="close-circle" size={18} color="#555555" />
-                  </TouchableOpacity>
-                )}
-              </View>
-            </View>
-          )}
-
-          <FlatList
-            data={filtered}
-            keyExtractor={(o) => o.value}
-            contentContainerStyle={{ padding: 16, paddingBottom: 48 }}
-            renderItem={({ item }) => {
-              const isSelected = item.value === value
-              return (
-                <TouchableOpacity
-                  onPress={() => handleSelect(item.value)}
-                  activeOpacity={0.7}
-                  // @ts-ignore
-                  className={`flex-row items-center justify-between px-4 py-4 rounded-xl mb-2 ${isSelected ? 'bg-primary' : 'bg-elevated'}`}
-                >
-                  <AppText className={isSelected ? 'text-white font-semibold flex-1 mr-3' : 'flex-1 mr-3'} numberOfLines={2}>
-                    {item.label}
-                  </AppText>
-                  {isSelected && <Ionicons name="checkmark" size={20} color="#ffffff" />}
+        {searchable && (
+          <View className="px-4 pt-3 pb-2">
+            {/* @ts-ignore */}
+            <View className="flex-row items-center bg-surface border border-[#2a2a2a] rounded-xl px-4 py-3 gap-3">
+              <Ionicons name="search" size={18} color="#555555" />
+              <BottomSheetTextInput
+                value={query}
+                onChangeText={setQuery}
+                placeholder="Search…"
+                placeholderTextColor="#555555"
+                autoFocus
+                style={{ flex: 1, fontSize: 16, color: '#f1f1f1' }}
+              />
+              {query.length > 0 && (
+                <TouchableOpacity onPress={() => setQuery('')} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                  <Ionicons name="close-circle" size={18} color="#555555" />
                 </TouchableOpacity>
-              )
-            }}
-            ListEmptyComponent={
-              <AppText color="muted" className="text-center py-8">No options found</AppText>
-            }
-          />
-        </SafeAreaView>
-      </Modal>
+              )}
+            </View>
+          </View>
+        )}
+
+        <BottomSheetFlatList
+          data={filtered}
+          keyExtractor={(o) => o.value}
+          contentContainerStyle={{ padding: 16, paddingBottom: 48 }}
+          renderItem={({ item }) => {
+            const isSelected = item.value === value
+            return (
+              <TouchableOpacity
+                onPress={() => handleSelect(item.value)}
+                activeOpacity={0.7}
+                // @ts-ignore
+                className={`flex-row items-center justify-between px-4 py-4 rounded-xl mb-2 ${isSelected ? 'bg-primary' : 'bg-elevated'}`}
+              >
+                <AppText className={isSelected ? 'text-white font-semibold flex-1 mr-3' : 'flex-1 mr-3'} numberOfLines={2}>
+                  {item.label}
+                </AppText>
+                {isSelected && <Ionicons name="checkmark" size={20} color="#ffffff" />}
+              </TouchableOpacity>
+            )
+          }}
+          ListEmptyComponent={
+            <AppText color="muted" className="text-center py-8">No options found</AppText>
+          }
+        />
+      </BottomSheetModal>
     </View>
   )
 }

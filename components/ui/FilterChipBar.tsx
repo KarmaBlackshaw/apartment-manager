@@ -1,5 +1,6 @@
 import React from 'react'
 import { ScrollView, Text, StyleSheet, Pressable } from 'react-native'
+import * as Haptics from 'expo-haptics'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -46,7 +47,10 @@ function FilterChip({ option, isSelected, onPress }: ChipProps) {
       onPressOut={() => {
         scale.value = withTiming(1, { duration: 150 })
       }}
-      onPress={() => onPress(option.value)}
+      onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+        onPress(option.value)
+      }}
       accessibilityRole="button"
       accessibilityState={{ selected: isSelected }}
     >

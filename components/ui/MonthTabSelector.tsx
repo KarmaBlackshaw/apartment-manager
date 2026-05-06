@@ -1,5 +1,6 @@
 import React from 'react'
 import { ScrollView, Text, StyleSheet, Pressable } from 'react-native'
+import * as Haptics from 'expo-haptics'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -34,7 +35,10 @@ function MonthTab({
     <AnimatedPressable
       onPressIn={() => { scale.value = withTiming(0.97, { duration: 80 }) }}
       onPressOut={() => { scale.value = withTiming(1, { duration: 120 }) }}
-      onPress={onPress}
+      onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+        onPress()
+      }}
       style={[
         styles.tab,
         isSelected ? styles.tabSelected : styles.tabUnselected,

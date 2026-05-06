@@ -1,5 +1,6 @@
 import React from 'react'
 import { Text, View, StyleSheet, Pressable } from 'react-native'
+import * as Haptics from 'expo-haptics'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -37,7 +38,10 @@ function Segment({
     <AnimatedPressable
       onPressIn={() => { scale.value = withTiming(0.97, { duration: 80 }) }}
       onPressOut={() => { scale.value = withTiming(1, { duration: 120 }) }}
-      onPress={onPress}
+      onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+        onPress()
+      }}
       style={[
         styles.option,
         fullWidth && styles.optionFlex,
