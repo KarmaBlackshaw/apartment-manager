@@ -6,6 +6,22 @@ const expo = openDatabaseSync('apartment-manager.db', { enableChangeListener: tr
 export const db = drizzle(expo, { schema })
 
 export function initializeDatabase() {
+  // Detect old schema (pre-refactor had first_name/last_name instead of full_name).
+  // If found, wipe all tables so CREATE TABLE below runs fresh.
+  const tenantCols = expo.getAllSync('PRAGMA table_info(tenants)') as { name: string }[]
+  if (tenantCols.length > 0 && !tenantCols.some(c => c.name === 'full_name')) {
+    expo.execSync(`
+      PRAGMA foreign_keys = OFF;
+      DROP TABLE IF EXISTS bills;
+      DROP TABLE IF EXISTS contracts;
+      DROP TABLE IF EXISTS tenants;
+      DROP TABLE IF EXISTS units;
+      DROP TABLE IF EXISTS properties;
+      DROP TABLE IF EXISTS app_settings;
+      PRAGMA foreign_keys = ON;
+    `)
+  }
+
   expo.execSync(`
     PRAGMA journal_mode = WAL;
     PRAGMA foreign_keys = ON;

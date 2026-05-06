@@ -11,7 +11,6 @@ export default function PropertiesLayout() {
     <Stack screenOptions={darkHeader}>
       <Stack.Screen name="index" options={{ title: 'Properties' }} />
       <Stack.Screen name="new" options={{ title: 'Add Property', presentation: 'modal' }} />
-      <Stack.Screen name="[id]" options={{ title: 'Property' }} />
       <Stack.Screen name="[propertyId]" options={{ headerShown: false }} />
     </Stack>
   )

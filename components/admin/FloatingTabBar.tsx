@@ -9,11 +9,10 @@ import { useTenantSearch } from '../../context/TenantSearchContext'
 type IoniconName = React.ComponentProps<typeof Ionicons>['name']
 
 const ICONS: Record<string, { on: IoniconName; off: IoniconName }> = {
-  index:      { on: 'home',       off: 'home-outline' },
-  properties: { on: 'business',   off: 'business-outline' },
-  tenants:    { on: 'people',     off: 'people-outline' },
-  payments:   { on: 'cash',       off: 'cash-outline' },
-  reports:    { on: 'bar-chart',  off: 'bar-chart-outline' },
+  index:   { on: 'home',      off: 'home-outline' },
+  tenants: { on: 'people',    off: 'people-outline' },
+  billing: { on: 'card',      off: 'card-outline' },
+  reports: { on: 'bar-chart', off: 'bar-chart-outline' },
 }
 
 export function FloatingTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
@@ -59,7 +58,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: BottomTabBarP
               <Ionicons
                 name={focused ? icons.on : icons.off}
                 size={20}
-                color={focused ? '#3b82f6' : '#4a4a4a'}
+                color={focused ? '#3b82f6' : '#64748B'}
               />
               <Text style={[styles.label, focused && styles.labelActive]}>{label}</Text>
             </Pressable>
@@ -114,7 +113,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 9,
     fontWeight: '600',
-    color: '#4a4a4a',
+    color: '#64748B',
     letterSpacing: 0.3,
   },
   labelActive: {

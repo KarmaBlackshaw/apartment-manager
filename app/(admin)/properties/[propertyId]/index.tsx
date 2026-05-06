@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
-import { useProperty, useUpdateProperty, useDeleteProperty } from '../../../hooks/useProperties'
-import { useUnits } from '../../../hooks/useUnits'
-import { Input, Button, AppText, LoadingSpinner, Card } from '../../../components/ui'
-import { UnitCard } from '../../../components/admin/UnitCard'
+import { useTabBarScrollHandler } from '../../../../hooks/useTabBarScrollHandler'
+import { useProperty, useUpdateProperty, useDeleteProperty } from '../../../../hooks/useProperties'
+import { useUnits } from '../../../../hooks/useUnits'
+import { Input, Button, AppText, LoadingSpinner, Card } from '../../../../components/ui'
+import { UnitCard } from '../../../../components/admin/UnitCard'
 
 export default function PropertyDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>()
+  const { propertyId } = useLocalSearchParams<{ propertyId: string }>()
   const router = useRouter()
   const tabBarScroll = useTabBarScrollHandler()
-  const { data: property, isLoading } = useProperty(id)
-  const { data: units } = useUnits(id)
+  const { data: property, isLoading } = useProperty(propertyId)
+  const { data: units } = useUnits(propertyId)
   const { mutateAsync: update, isPending: updating } = useUpdateProperty()
   const { mutateAsync: remove, isPending: deleting } = useDeleteProperty()
 
@@ -43,7 +43,7 @@ export default function PropertyDetailScreen() {
     if (Object.keys(errs).length) { setErrors(errs); return }
 
     try {
-      await update({ id, input: { name: name.trim(), address: address.trim(), description: description.trim() || null } })
+      await update({ id: propertyId, input: { name: name.trim(), address: address.trim(), description: description.trim() || null } })
       router.back()
     } catch {
       Alert.alert('Error', 'Could not save changes. Please try again.')
@@ -55,7 +55,7 @@ export default function PropertyDetailScreen() {
       { text: 'Cancel', style: 'cancel' },
       { text: 'Delete', style: 'destructive', onPress: async () => {
         try {
-          await remove(id)
+          await remove(propertyId)
           router.back()
         } catch {
           Alert.alert('Error', 'Could not delete property. Please try again.')
@@ -75,10 +75,10 @@ export default function PropertyDetailScreen() {
 
         <View className="flex-row items-center justify-between mb-3 mt-4">
           <AppText variant="subheading">Units ({units?.length ?? 0})</AppText>
-          <Button label="Add Unit" size="sm" onPress={() => router.push(`/(admin)/properties/${id}/units/new`)} />
+          <Button label="Add Unit" size="sm" onPress={() => router.push(`/(admin)/properties/${propertyId}/units/new`)} />
         </View>
         {units?.map((unit) => (
-          <UnitCard key={unit.id} unit={unit} onPress={() => router.push(`/(admin)/properties/${id}/units/${unit.id}`)} />
+          <UnitCard key={unit.id} unit={unit} onPress={() => router.push(`/(admin)/properties/${propertyId}/units/${unit.id}`)} />
         ))}
 
         <Button label="Delete Property" variant="danger" onPress={handleDelete} loading={deleting} className="mt-8" />
