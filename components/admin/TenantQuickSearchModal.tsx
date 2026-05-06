@@ -28,11 +28,10 @@ const STATUS_CHIP: Record<string, { bg: string; text: string }> = {
 }
 
 function ResultCard({
-  tenant, bill, onRecordPayment, onView,
+  tenant, bill, onView,
 }: {
   tenant: TenantWithUnit
   bill?: BillWithTenant
-  onRecordPayment: () => void
   onView: () => void
 }) {
   const initial = tenant.full_name.charAt(0).toUpperCase()
@@ -45,7 +44,7 @@ function ResultCard({
   const chip = bill ? (STATUS_CHIP[bill.status] ?? STATUS_CHIP.pending) : null
 
   return (
-    <View style={styles.card}>
+    <Pressable style={styles.card} onPress={onView} accessibilityRole="button">
       <View style={styles.cardRow}>
         <View style={[styles.avatar, { backgroundColor: color }]}>
           <Text style={styles.avatarText}>{initial}</Text>
@@ -63,17 +62,7 @@ function ResultCard({
         )}
       </View>
       <Text style={[styles.balanceText, { color: balanceColor }]}>{balanceLabel}</Text>
-      <View style={styles.cardActions}>
-        {hasBalance && (
-          <Pressable onPress={onRecordPayment} style={styles.recordBtn} accessibilityRole="button">
-            <Text style={styles.recordBtnText}>Record Payment</Text>
-          </Pressable>
-        )}
-        <Pressable onPress={onView} style={styles.viewBtn} accessibilityRole="button">
-          <Text style={styles.viewBtnText}>View</Text>
-        </Pressable>
-      </View>
-    </View>
+    </Pressable>
   )
 }
 
@@ -109,16 +98,10 @@ export function TenantQuickSearchModal({ visible, onClose }: Props) {
 
   if (!visible) return null
 
-  function handleRecordPayment(tenant: TenantWithUnit) {
-    onClose()
-    setQuery('')
-    router.push({ pathname: '/(admin)/billing/new', params: { tenantId: tenant.id } } as any)
-  }
-
   function handleView(tenant: TenantWithUnit) {
+    router.push(`/(admin)/tenants/${tenant.id}` as any)
     onClose()
     setQuery('')
-    router.push(`/(admin)/tenants/${tenant.id}` as any)
   }
 
   return (
@@ -161,7 +144,6 @@ export function TenantQuickSearchModal({ visible, onClose }: Props) {
                 key={t.id}
                 tenant={t}
                 bill={latestUnpaidBill.get(t.id)}
-                onRecordPayment={() => handleRecordPayment(t)}
                 onView={() => handleView(t)}
               />
             ))}
@@ -242,25 +224,5 @@ const styles = StyleSheet.create({
   unitText: { color: '#888888', fontSize: 12, marginTop: 1 },
   chip: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
   chipText: { fontSize: 10, fontWeight: '700', letterSpacing: 0.5 },
-  balanceText: { fontSize: 13, fontWeight: '600', marginBottom: 10 },
-  cardActions: { flexDirection: 'row', gap: 8 },
-  recordBtn: {
-    flex: 1,
-    height: 36,
-    borderRadius: 999,
-    backgroundColor: '#0F766E',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  recordBtnText: { color: '#fff', fontSize: 13, fontWeight: '600' },
-  viewBtn: {
-    flex: 1,
-    height: 36,
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: '#2a2a2a',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  viewBtnText: { color: '#f1f1f1', fontSize: 13, fontWeight: '600' },
+  balanceText: { fontSize: 13, fontWeight: '600' },
 })
