@@ -3,7 +3,12 @@
     "allow": [
       "mcp__lean-ctx__ctx_tree",
       "mcp__lean-ctx__ctx_read",
-      "mcp__lean-ctx__ctx_shell"
+      "mcp__lean-ctx__ctx_shell",
+      "mcp__lean-ctx__ctx_search",
+      "Bash(./node_modules/.bin/tsc --noEmit)",
+      "Bash(python3)",
+      "Bash(npx tsc *)",
+      "Bash(echo \"EXIT=$?\")"
     ]
   }
 }

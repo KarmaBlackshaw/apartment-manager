@@ -9,7 +9,7 @@ interface ScreenViewProps {
   children: React.ReactNode
   /**
    * Which edges to apply safe-area padding.
-   * - Screens using AppHeader: edges={['bottom']} — top is handled by the native stack header
+   * - Screens using ScreenLayout: edges={['bottom']} — top is handled by ScreenHeader's own SafeAreaView
    * - Custom-header screens (onboarding, lock, modals): default ['top', 'bottom']
    */
   edges?: Edge[]

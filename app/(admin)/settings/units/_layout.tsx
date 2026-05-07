@@ -3,9 +3,9 @@ import { darkStackOptions } from '~/constants/navigation'
 
 export default function UnitsLayout() {
   return (
-    <Stack screenOptions={darkStackOptions}>
-      <Stack.Screen name="index" options={{ title: 'Units' }} />
-      <Stack.Screen name="new"   options={{ title: 'Add Unit', presentation: 'modal' }} />
+    <Stack screenOptions={{ ...darkStackOptions, headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="new"   options={{ presentation: 'modal' }} />
     </Stack>
   )
 }

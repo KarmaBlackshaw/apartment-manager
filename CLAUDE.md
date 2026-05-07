@@ -95,12 +95,12 @@ Always wrap screen content in `<ScreenView>` from `components/ui`. It handles `b
 ```tsx
 import { ScreenView } from '../components/ui'
 
-// Screen with AppHeader (top handled by native stack header):
+// Screen with ScreenLayout (custom in-body header — default pattern):
 <ScreenView edges={['bottom']}>
   ...
 </ScreenView>
 
-// Full-screen custom layout (no AppHeader — lock, onboarding, modals):
+// Full-screen custom layout (no ScreenLayout — lock, onboarding, modals):
 <ScreenView>   {/* defaults to edges={['top', 'bottom']} */}
   ...
 </ScreenView>
@@ -138,6 +138,20 @@ Never inline a string array as a query key. Each hook file exports a `XYZ_KEY` c
 ### Multi-table mutations belong in `lib/api/`, not screens
 
 When an action writes to ≥ 2 tables (e.g. Add Tenant: tenants → units → documents → bills), the orchestration goes in `lib/api/<domain>.ts`. The screen calls a single hook. Keeps screens declarative and the side-effect order auditable in one place.
+
+### Header ownership rule
+
+Each screen has exactly **one** header. Two patterns, never mixed:
+
+- **Pattern A — native stack header.** Parent `_layout.tsx` keeps `headerShown: true` and sets `title`. Screen does NOT use `ScreenLayout` / `ScreenHeader`.
+- **Pattern B — `ScreenLayout` (default for this project).** Screen wraps content in `<ScreenLayout title="…">`. The component self-suppresses the native header via `<Stack.Screen options={{ headerShown: false }} />`. Parent layout's `headerShown` value is irrelevant but should be `false` for clarity.
+
+**Forbidden combinations:**
+- `ScreenLayout` + parent `headerShown: true` (without an override) → renders two headers.
+- Inline `<Stack.Screen options={{ title }} />` inside a screen that also uses `ScreenLayout` → duplicates the title source. Pass `title` as a prop instead.
+- Mixing `AppHeader` (deleted) and `ScreenLayout` in one tree.
+
+When introducing a new screen group, default the parent `_layout.tsx` to `screenOptions={{ ...darkStackOptions, headerShown: false }}`.
 
 ### No bare `// TODO:` comments
 

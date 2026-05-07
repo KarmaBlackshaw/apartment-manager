@@ -5,7 +5,7 @@ export default function TenantsLayout() {
   return (
     <Stack screenOptions={{ ...darkStackOptions, headerShown: false }}>
       <Stack.Screen name="index" />
-      <Stack.Screen name="new"   options={{ headerShown: true, title: 'Add Tenant', presentation: 'modal' }} />
+      <Stack.Screen name="new"   options={{ presentation: 'modal' }} />
       <Stack.Screen name="[id]"  />
     </Stack>
   )

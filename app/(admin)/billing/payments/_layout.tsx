@@ -8,8 +8,8 @@ const darkHeader = {
 
 export default function BillingPaymentsLayout() {
   return (
-    <Stack screenOptions={darkHeader}>
-      <Stack.Screen name="[id]" options={{ title: 'Payment Detail' }} />
+    <Stack screenOptions={{ ...darkHeader, headerShown: false }}>
+      <Stack.Screen name="[id]" />
     </Stack>
   )
 }

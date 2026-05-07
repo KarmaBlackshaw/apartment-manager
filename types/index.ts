@@ -49,6 +49,8 @@ export interface UnitDetail extends Unit {
   balance: number
   openMaintenanceCount: number
   documentCategories: string[]
+  recentMaintenance: MaintenanceIssue[]
+  recentDocuments: Array<{ id: string; title: string; category: string; created_at: string }>
 }
 
 export interface PropertyWithStats {

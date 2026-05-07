@@ -1,5 +1,5 @@
 import React from 'react'
-import { useRouter } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import { ScreenHeader } from '~/components/ui/ScreenHeader'
 import { ScreenView } from '~/components/ui/ScreenView'
 interface ScreenLayoutProps {
@@ -17,6 +17,7 @@ export function ScreenLayout({ title, headerLeft = 'back', backHref, headerRight
   const onLeftPress = backHref ? () => router.navigate(backHref as never) : undefined
   return (
     <ScreenView edges={['bottom']}>
+      <Stack.Screen options={{ headerShown: false }} />
       <ScreenHeader title={title ?? ''} left={headerLeft} right={headerRight} onLeftPress={onLeftPress} />
       {children}
     </ScreenView>

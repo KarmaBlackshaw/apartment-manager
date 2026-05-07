@@ -1,7 +1,7 @@
 import { db } from '~/db'
-import { units, properties, tenants, bills, documents } from '~/db/schema'
+import { units, properties, tenants, bills, documents, maintenanceIssues } from '~/db/schema'
 import { eq, asc, count, and, inArray, desc } from 'drizzle-orm'
-import type { Unit, UnitStatus, UnitWithStatus, UnitDetail, BillingType } from '~/types'
+import type { Unit, UnitStatus, UnitWithStatus, UnitDetail, BillingType, MaintenanceIssue } from '~/types'
 import { nanoid } from 'nanoid/non-secure'
 
 export async function fetchUnits(propertyId: string): Promise<Unit[]> {
@@ -90,11 +90,25 @@ export async function fetchUnitDetail(unitId: string): Promise<UnitDetail | null
   }
 
   const docRows = await db
-    .select({ category: documents.category })
+    .select({ id: documents.id, title: documents.title, category: documents.category, created_at: documents.created_at })
     .from(documents)
     .where(and(eq(documents.ref_type, 'UNIT'), eq(documents.ref_id, unitId)))
+    .orderBy(desc(documents.created_at))
+    .limit(3)
 
   const documentCategories = [...new Set(docRows.map((d) => d.category))]
+
+  const maintenanceRows = await db
+    .select()
+    .from(maintenanceIssues)
+    .where(and(eq(maintenanceIssues.unit_id, unitId), inArray(maintenanceIssues.status, ['REPORTED', 'IN_PROGRESS'])))
+    .orderBy(desc(maintenanceIssues.reported_at))
+    .limit(2)
+
+  const openMaintenanceCount = await db
+    .select({ count: count() })
+    .from(maintenanceIssues)
+    .where(and(eq(maintenanceIssues.unit_id, unitId), inArray(maintenanceIssues.status, ['REPORTED', 'IN_PROGRESS'])))
 
   return {
     ...unit,
@@ -107,8 +121,10 @@ export async function fetchUnitDetail(unitId: string): Promise<UnitDetail | null
         }
       : null,
     balance,
-    openMaintenanceCount: 0,
+    openMaintenanceCount: openMaintenanceCount[0]?.count ?? 0,
     documentCategories,
+    recentMaintenance: maintenanceRows.map((r) => ({ ...r, charged_to_tenant: r.charged_to_tenant === 1 })) as MaintenanceIssue[],
+    recentDocuments: docRows as Array<{ id: string; title: string; category: string; created_at: string }>,
   }
 }
 

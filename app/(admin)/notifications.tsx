@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react'
-import { ScrollView, Text, View } from 'react-native'
-import { Stack, useRouter } from 'expo-router'
-import { Pressable } from 'react-native'
+import { ScrollView, View } from 'react-native'
+import { useRouter } from 'expo-router'
 import { useQuery } from '@tanstack/react-query'
 import { eq, and, lt, lte } from 'drizzle-orm'
 
@@ -193,23 +192,6 @@ export default function NotificationsScreen() {
 
   return (
     <ScreenView>
-      <Stack.Screen
-        options={{
-          title: 'Notifications',
-          headerRight: () => (
-            <Pressable
-              onPress={() => {/* stub: clear all */}}
-              accessibilityRole="button"
-              accessibilityLabel="Clear all notifications"
-            >
-              <Text className="text-primary text-[15px] font-medium">
-                Clear All
-              </Text>
-            </Pressable>
-          ),
-        }}
-      />
-
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         className="flex-1 bg-background"

@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native'
-import { Stack, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { nanoid } from 'nanoid/non-secure'
@@ -274,8 +274,6 @@ export default function OnboardingScreen() {
 
   return (
     <>
-      <Stack.Screen options={{ headerShown: false }} />
-
       <ScreenView>
       <KeyboardAvoidingView
         className="flex-1"

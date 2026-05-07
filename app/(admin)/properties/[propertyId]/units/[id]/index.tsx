@@ -1,28 +1,51 @@
 import React from 'react'
-import { View, ScrollView, Text, TouchableOpacity } from 'react-native'
+import { View, ScrollView, Pressable } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
+import Ionicons from '@expo/vector-icons/Ionicons'
 import dayjs from 'dayjs'
 import { useUnitDetail } from '~/hooks/useUnits'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { AppText } from '~/components/ui/AppText'
 import { StatusChip } from '~/components/ui/StatusChip'
 import { AvatarInitials } from '~/components/ui/AvatarInitials'
 import { BalanceCard } from '~/components/billing/BalanceCard'
 import { SectionHeader } from '~/components/ui/SectionHeader'
 import { AmountText } from '~/components/ui/AmountText'
-import { ScreenLayout } from '~/layouts/ScreenLayout'
-import { colors } from '~/constants/theme'
+import { InfoRow } from '~/components/ui/InfoRow'
+import { MaintenanceRow } from '~/components/maintenance/MaintenanceRow'
+import { DocumentRow } from '~/components/documents/DocumentRow'
+import { getBalanceBreakdown } from '~/lib/balance'
+import { formatPHP } from '~/lib/format'
+import { formatDate } from '~/lib/date'
 
-function unitPaymentChipVariant(balance: number, isOccupied: boolean) {
-  if (!isOccupied) return 'neutral' as const
-  if (balance <= 0) return 'success' as const
-  return 'danger' as const
+function getOccupancyChip(unitStatus: string): { variant: 'success' | 'neutral' | 'warning'; label: string } {
+  switch (unitStatus) {
+    case 'occupied':
+      return { variant: 'success', label: 'OCCUPIED' }
+    case 'available':
+      return { variant: 'neutral', label: 'VACANT' }
+    case 'maintenance':
+      return { variant: 'warning', label: 'MAINTENANCE' }
+    default:
+      return { variant: 'neutral', label: 'UNKNOWN' }
+  }
 }
 
-function unitStatusLabel(balance: number, isOccupied: boolean) {
-  if (!isOccupied) return 'VACANT'
-  if (balance <= 0) return 'PAID'
-  return 'OVERDUE'
+function toMaintenanceRowStatus(status: string): 'reported' | 'in-progress' | 'resolved' {
+  switch (status) {
+    case 'REPORTED':
+      return 'reported'
+    case 'IN_PROGRESS':
+      return 'in-progress'
+    case 'RESOLVED':
+      return 'resolved'
+    default:
+      return 'reported'
+  }
 }
+
+
 
 export default function UnitDetailScreen() {
   const { propertyId, id } = useLocalSearchParams<{ propertyId: string; id: string }>()
@@ -30,130 +53,143 @@ export default function UnitDetailScreen() {
   const { data: unit, isLoading } = useUnitDetail(id)
 
   if (isLoading) return <LoadingSpinner />
-  if (!unit) return (
-    <View className="flex-1 items-center justify-center p-8 bg-app">
-      <Text className="text-danger text-center">Unit not found.</Text>
-    </View>
-  )
+  if (!unit) {
+    return (
+      <View className="flex-1 items-center justify-center p-8 bg-background">
+        <AppText className="text-danger text-center">Unit not found.</AppText>
+      </View>
+    )
+  }
 
   const isOccupied = unit.status === 'occupied' && unit.tenant != null
+  const occupancyChip = getOccupancyChip(unit.status)
   const balance = unit.balance
-  const chipVariant = unitPaymentChipVariant(balance, isOccupied)
-  const chipLabel = unitStatusLabel(balance, isOccupied)
+
+  const billingDayLabel = unit.billing_day ? `Every ${dayjs().date(unit.billing_day).format('Do')}` : null
+  const statusLabel = isOccupied ? `Occupied · ${unit.tenant!.full_name}` : 'Vacant'
 
   return (
     <ScreenLayout
-      title={unit.unit_number}
-      headerRight={<StatusChip variant={chipVariant} label={chipLabel} />}
+      title={`Unit ${unit.unit_number}`}
       backHref={`/(admin)/properties/${propertyId}/units`}
+      headerRight={
+        <View className="flex-row items-center gap-2">
+          <Pressable
+            onPress={() => router.push(`/(admin)/properties/${propertyId}/units/${id}/edit` as never)}
+            className="p-2"
+            accessibilityLabel="Edit unit"
+          >
+            <Ionicons name="create-outline" size={24} color="#fff" />
+          </Pressable>
+          <StatusChip variant={occupancyChip.variant} label={occupancyChip.label} />
+        </View>
+      }
     >
-      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+      <ScrollView contentContainerClassName="px-4 pt-3 pb-[88px]">
         {/* Unit info card */}
-        <View
-          className="mx-4 mt-4 rounded-xl p-4"
-          style={{ backgroundColor: colors.surface }}
-        >
-          <Text className="text-base font-bold" style={{ color: colors.textPrimary }}>
-            {unit.unit_number}
-          </Text>
-          {unit.notes && (
-            <Text style={{ fontSize: 13, marginTop: 4, color: colors.textMuted }}>{unit.notes}</Text>
-          )}
+        <View className="rounded-xl bg-surface p-4">
+          <AppText variant="heading" className="mb-3">
+            Unit {unit.unit_number}
+          </AppText>
+          {unit.monthly_rate && <InfoRow label="Rent" value={`${formatPHP(unit.monthly_rate)} / mo`} />}
+          {billingDayLabel && <InfoRow label="Billing day" value={billingDayLabel} />}
+          <InfoRow label="Status" value={statusLabel} />
+          {unit.notes && <InfoRow label="Notes" value={unit.notes} />}
         </View>
 
-        {/* Current tenant */}
+        {/* Tenant summary (only if occupied) */}
         {isOccupied && unit.tenant && (
-          <TouchableOpacity
+          <Pressable
             onPress={() => router.push(`/(admin)/tenants/${unit.tenant!.id}`)}
-            className="mx-4 mt-3 rounded-xl p-4 flex-row items-center"
-            style={{ backgroundColor: colors.surface }}
-            activeOpacity={0.7}
+            className="mt-3 flex-row items-center rounded-xl bg-surface p-4"
+            accessibilityLabel={`View tenant ${unit.tenant.full_name}`}
           >
             <AvatarInitials name={unit.tenant.full_name} size="md" />
-            <View className="flex-1 ml-3">
-              <Text className="text-[15px] font-semibold" style={{ color: colors.textPrimary }}>
+            <View className="ml-3 flex-1">
+              <AppText variant="body" className="font-semibold">
                 {unit.tenant.full_name}
-              </Text>
-              <Text className="text-[13px] mt-[2px]" style={{ color: colors.textSecondary }}>
-                Move-in {dayjs(unit.tenant.move_in_date).format('MMM D, YYYY')} · {unit.tenant.billing_type === 'monthly' ? 'MTM' : 'Daily'}
-              </Text>
+              </AppText>
+              <AppText variant="caption" color="muted" className="mt-1">
+                Move-in {formatDate(unit.tenant.move_in_date)} ·{' '}
+                {unit.tenant.billing_type === 'monthly' ? 'Month-to-month' : 'Daily'}
+              </AppText>
             </View>
             <View className="items-end">
               <AmountText amount={balance} variant={balance > 0 ? 'owed' : 'zero'} />
-              <Text className="text-[11px] mt-[2px]" style={{ color: colors.textMuted }}>
+              <AppText variant="caption" color="muted" className="mt-1">
                 balance
-              </Text>
+              </AppText>
             </View>
-          </TouchableOpacity>
+          </Pressable>
         )}
 
-        {/* Balance card */}
+        {/* Balance card (only if occupied) */}
         {isOccupied && (
           <View className="mt-3">
             <BalanceCard
               amount={balance}
               variant={balance > 0 ? 'danger' : 'success'}
-              onRecordPayment={() => router.push('/(admin)/billing/new')}
+              breakdown={getBalanceBreakdown(unit)}
+              onRecordPayment={() =>
+                router.push({
+                  pathname: '/(admin)/billing/new',
+                  params: { tenantId: unit.tenant!.id, unitId: id },
+                })
+              }
             />
           </View>
         )}
 
         {/* Maintenance section */}
-        <View className="mt-4">
+        <View className="mt-3">
           <SectionHeader
             title="Maintenance"
             count={unit.openMaintenanceCount}
-            onViewAll={() =>
-              router.push(`/(admin)/maintenance?unitId=${id}` as never)
-            }
+            onViewAll={() => router.push(`/(admin)/maintenance?unitId=${id}` as never)}
           />
-          {unit.openMaintenanceCount === 0 && (
-            <View className="px-4 pb-2">
-              <Text className="text-[13px]" style={{ color: colors.textMuted }}>
-                No open maintenance issues
-              </Text>
-            </View>
+          {unit.recentMaintenance.length > 0 ? (
+            unit.recentMaintenance.map((issue) => (
+              <MaintenanceRow
+                key={issue.id}
+                title={issue.description}
+                category={issue.category}
+                date={issue.reported_at}
+                status={toMaintenanceRowStatus(issue.status)}
+                onPress={() => router.push(`/(admin)/maintenance/${issue.id}` as never)}
+              />
+            ))
+          ) : (
+            <AppText variant="caption" color="muted" className="px-4 py-2">
+              No open maintenance issues
+            </AppText>
           )}
         </View>
 
         {/* Documents section */}
-        <View className="mt-2">
+        <View className="mt-3">
           <SectionHeader
             title="Documents"
+            count={unit.recentDocuments.length}
             onViewAll={() =>
-              router.push(
-                `/(admin)/properties/${propertyId}/units/${id}/documents` as never,
-              )
+              router.push(`/(admin)/properties/${propertyId}/units/${id}/documents` as never)
             }
           />
-          {unit.documentCategories.length > 0 ? (
-            <View className="flex-row flex-wrap gap-2 px-4 pb-2">
-              {unit.documentCategories.map((cat) => (
-                <TouchableOpacity
-                  key={cat}
-                  onPress={() =>
-                    router.push(
-                      `/(admin)/properties/${propertyId}/units/${id}/documents` as never,
-                    )
-                  }
-                  className="px-3 py-[6px] rounded-full"
-                  style={{ backgroundColor: colors.elevated }}
-                >
-                  <Text
-                    className="text-[12px] capitalize"
-                    style={{ color: colors.textSecondary }}
-                  >
-                    {cat}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+          {unit.recentDocuments.length > 0 ? (
+            unit.recentDocuments.map((doc) => (
+              <DocumentRow
+                key={doc.id}
+                title={doc.title}
+                category={doc.category as 'contract' | 'photo' | 'permit' | 'gov-id' | 'other'}
+                date={doc.created_at}
+                onPress={() =>
+                  router.push(`/(admin)/properties/${propertyId}/units/${id}/documents` as never)
+                }
+              />
+            ))
           ) : (
-            <View className="px-4 pb-2">
-              <Text className="text-[13px]" style={{ color: colors.textMuted }}>
-                No documents
-              </Text>
-            </View>
+            <AppText variant="caption" color="muted" className="px-4 py-2">
+              No documents
+            </AppText>
           )}
         </View>
       </ScrollView>
