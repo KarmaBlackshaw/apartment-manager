@@ -5,19 +5,20 @@ interface SectionHeaderProps {
   title: string
   count?: number
   onViewAll?: () => void
+  actionLabel?: string
 }
 
-export function SectionHeader({ title, count, onViewAll }: SectionHeaderProps) {
+export function SectionHeader({ title, count, onViewAll, actionLabel = 'View all' }: SectionHeaderProps) {
   const displayTitle = count !== undefined ? `${title} (${count})` : title
 
   return (
-    <View className="flex-row items-center justify-between px-4 py-3">
-      <Text className="text-[13px] font-semibold text-text-secondary uppercase tracking-wide">
+    <View className="flex-row items-center justify-between px-4 py-2">
+      <Text className="text-[11px] font-semibold text-text-secondary">
         {displayTitle}
       </Text>
       {onViewAll && (
         <Pressable onPress={onViewAll} hitSlop={8} accessibilityRole="button">
-          <Text className="text-[13px] text-primary">View all</Text>
+          <Text className="text-[11px] font-medium text-primary">{actionLabel}</Text>
         </Pressable>
       )}
     </View>

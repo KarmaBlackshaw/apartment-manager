@@ -6,7 +6,6 @@ interface KPICardProps {
   value: string
   subtitle?: string
   accentColor: string
-  accentBg?: string
 }
 
 export function KPICard({
@@ -14,20 +13,21 @@ export function KPICard({
   value,
   subtitle,
   accentColor,
-  accentBg,
 }: KPICardProps) {
   return (
     <View
-      className="bg-surface rounded-md p-4 border-t-[3px]"
+      className="bg-surface rounded-[16px] border-t-2"
       style={{
+        paddingTop: 14,
+        paddingHorizontal: 14,
+        paddingBottom: 12,
         borderTopColor: accentColor,
-        ...(accentBg != null && { backgroundColor: accentBg }),
       }}
     >
-      <Text className="text-xs text-text-secondary mb-1">{label}</Text>
-      <Text className="text-xl font-bold text-text-primary">{value}</Text>
+      <Text className="text-[10px] font-medium text-text-muted mb-1">{label}</Text>
+      <Text className="text-[22px] font-bold text-text-primary">{value}</Text>
       {subtitle != null && (
-        <Text className="text-xs text-text-muted mt-0.5">{subtitle}</Text>
+        <Text className="text-[11px] font-normal text-text-muted mt-0.5">{subtitle}</Text>
       )}
     </View>
   )

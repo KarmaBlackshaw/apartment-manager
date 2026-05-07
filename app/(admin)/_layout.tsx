@@ -24,6 +24,7 @@ export default function AdminLayout() {
           <Tabs.Screen name="tenants"    options={{ title: 'Tenants' }} />
           <Tabs.Screen name="billing"    options={{ title: 'Billing' }} />
           <Tabs.Screen name="properties" options={{ title: 'Properties' }} />
+          {/* reports is non-tab: accessed via home screen "See all" button */}
           <Tabs.Screen name="reports"    options={{ href: null, title: 'Reports' }} />
           <Tabs.Screen name="payments"   options={{ href: null, title: 'Payments' }} />
           <Tabs.Screen name="settings"       options={{ href: null, title: 'Settings' }} />

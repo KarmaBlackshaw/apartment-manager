@@ -75,3 +75,10 @@ export { FloatingTabBar } from '../navigation/FloatingTabBar'
 // tenants/
 export { TenantCard } from '../tenants/TenantCard'
 export { TenantQuickSearchModal } from '../tenants/TenantQuickSearchModal'
+
+// home/
+export { QuickActionBar } from '../home/QuickActionBar'
+export { AttentionRow } from '../home/AttentionRow'
+export { VacantRow } from '../home/VacantRow'
+export { UnitCell } from '../home/UnitCell'
+export { ReportCard } from '../home/ReportCard'
