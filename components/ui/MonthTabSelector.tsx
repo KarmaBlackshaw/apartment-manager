@@ -63,11 +63,12 @@ export function MonthTabSelector({ months, selected, onChange }: MonthTabSelecto
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
+      style={{ height: 48 }}
       contentContainerStyle={{
         flexDirection: 'row',
+        alignItems: 'center',
         gap: 4,
         paddingHorizontal: 16,
-        paddingVertical: 8,
       }}
     >
       {months.map((month) => (

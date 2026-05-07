@@ -74,23 +74,6 @@ export default function PropertiesScreen() {
             onAction={handleAdd}
           />
         }
-        ListFooterComponent={
-          (properties?.length ?? 0) > 0 ? (
-            <TouchableOpacity
-              onPress={handleAdd}
-              className="rounded-xl items-center justify-center py-4 mt-1"
-              style={{
-                borderWidth: 1,
-                borderStyle: 'dashed',
-                borderColor: colors.border,
-              }}
-              accessibilityRole="button"
-              accessibilityLabel="Add property"
-            >
-              <Text style={{ color: colors.textMuted }} className="text-sm">+ Add property</Text>
-            </TouchableOpacity>
-          ) : null
-        }
       />
 
       <FAB onPress={handleAdd} bottomOffset={100} />
