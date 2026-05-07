@@ -7,7 +7,7 @@ import {
   fetchAnnualSummary,
   fetchMaintenanceCosts,
   fetchDepositSummary,
-} from '../lib/api/reports'
+} from '~/lib/api/reports'
 
 export const MONTHLY_COLLECTION_KEY = ['monthly_collection'] as const
 export const OUTSTANDING_BALANCES_KEY = ['outstanding_balances'] as const

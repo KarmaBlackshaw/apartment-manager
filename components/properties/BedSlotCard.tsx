@@ -5,7 +5,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated'
-import { colors } from '../../constants/theme'
+import { colors } from '~/constants/theme'
 
 type BedStatus = 'paid' | 'overdue' | 'vacant'
 

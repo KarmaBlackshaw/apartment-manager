@@ -1,8 +1,10 @@
 import React from 'react'
 import { TouchableOpacity, View } from 'react-native'
-import { Card, AppText, Badge, billStatusBadge, billingBadge } from '../ui'
-import { formatCurrency, formatDateRange } from '../../lib/billing'
-import type { BillWithTenant } from '../../types'
+import { Card } from '~/components/ui/Card'
+import { AppText } from '~/components/ui/AppText'
+import { Badge, billStatusBadge, billingBadge } from '~/components/ui/Badge'
+import { formatCurrency, formatDateRange } from '~/lib/billing'
+import type { BillWithTenant } from '~/types'
 
 interface BillCardProps {
   bill: BillWithTenant

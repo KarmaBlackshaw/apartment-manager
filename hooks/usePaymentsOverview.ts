@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchPaymentsOverview } from '../lib/api/paymentsOverview'
+import { fetchPaymentsOverview } from '~/lib/api/paymentsOverview'
 
 export const PAYMENTS_OVERVIEW_KEY = ['paymentsOverview'] as const
 

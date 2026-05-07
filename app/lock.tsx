@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
-import { useAuth } from '../context/AuthContext'
-import { ScreenView } from '../components/ui'
-
+import { useAuth } from '~/context/AuthContext'
+import { ScreenView } from '~/components/ui/ScreenView'
 export default function LockScreen() {
   const router = useRouter()
   const { authenticate, verifyPin, isAuthenticated, clearPin } = useAuth()

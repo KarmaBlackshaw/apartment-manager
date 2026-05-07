@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import Svg, { Rect, G } from 'react-native-svg'
-import { colors } from '../../constants/theme'
+import { colors } from '~/constants/theme'
 
 interface MonthBar {
   month: string

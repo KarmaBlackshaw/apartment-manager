@@ -2,8 +2,8 @@ import React from 'react'
 import { Pressable } from 'react-native'
 import { Stack, useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { darkStackOptions } from '../../constants/navigation'
-import { colors } from '../../constants/theme'
+import { darkStackOptions } from '~/constants/navigation'
+import { colors } from '~/constants/theme'
 
 interface AppHeaderProps {
   title: string

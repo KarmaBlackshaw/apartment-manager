@@ -3,8 +3,8 @@ import {
   fetchUtilityReading,
   upsertUtilityReading,
   type UpsertUtilityReadingInput,
-} from '../lib/api/utilityReadings'
-import type { UtilityType } from '../types'
+} from '~/lib/api/utilityReadings'
+import type { UtilityType } from '~/types'
 
 export const UTILITY_READINGS_KEY = ['utility_readings'] as const
 

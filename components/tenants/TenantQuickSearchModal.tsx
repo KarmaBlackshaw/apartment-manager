@@ -5,9 +5,9 @@ import {
 import { useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { useTenants } from '../../hooks/useTenants'
-import { useBills } from '../../hooks/useBills'
-import type { TenantWithUnit, BillWithTenant } from '../../types'
+import { useTenants } from '~/hooks/useTenants'
+import { useBills } from '~/hooks/useBills'
+import type { TenantWithUnit, BillWithTenant } from '~/types'
 
 interface Props {
   visible: boolean

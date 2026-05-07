@@ -1,9 +1,9 @@
-import { db } from '../../db'
-import { payments, bills, tenants, units } from '../../db/schema'
+import { db } from '~/db'
+import { payments, bills, tenants, units } from '~/db/schema'
 import { eq } from 'drizzle-orm'
 import { nanoid } from 'nanoid/non-secure'
 import dayjs from 'dayjs'
-import type { PaymentWithDetails } from '../../types'
+import type { PaymentWithDetails } from '~/types'
 
 export interface CreatePaymentInput {
   bill_id?: string

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { initializeDatabase } from '../db'
+import { initializeDatabase } from '~/db'
 
 interface DatabaseContextValue {
   ready: boolean

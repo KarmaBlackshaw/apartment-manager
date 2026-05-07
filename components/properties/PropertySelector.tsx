@@ -3,8 +3,8 @@ import { View, Text, Pressable } from 'react-native'
 import { BottomSheetModal, BottomSheetFlatList, BottomSheetBackdrop, BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import * as Haptics from 'expo-haptics'
-import { colors } from '../../constants/theme'
-import { useProperties } from '../../hooks/useProperties'
+import { colors } from '~/constants/theme'
+import { useProperties } from '~/hooks/useProperties'
 
 interface PropertySelectorProps {
   selectedId: string | undefined

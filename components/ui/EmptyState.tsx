@@ -1,7 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
-import { AppText } from './AppText'
-import { Button } from './Button'
+import { AppText } from '~/components/ui/AppText'
+import { Button } from '~/components/ui/Button'
 
 interface EmptyStateProps {
   title: string

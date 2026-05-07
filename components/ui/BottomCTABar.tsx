@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useHideTabBar } from '../../hooks/useHideTabBar'
+import { useHideTabBar } from '~/hooks/useHideTabBar'
 
 interface BottomCTABarProps {
   children: ReactNode

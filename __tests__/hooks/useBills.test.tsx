@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react-native'
-import { createWrapper } from '../helpers/queryWrapper'
-import { useBills } from '../../hooks/useBills'
+import { createWrapper } from '~/__tests__/helpers/queryWrapper'
+import { useBills } from '~/hooks/useBills'
 
 jest.mock('../../lib/api/bills', () => ({
   fetchBills: jest.fn().mockResolvedValue([

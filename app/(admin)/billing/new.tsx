@@ -2,18 +2,16 @@ import React, { useState } from 'react'
 import { View, Text, ScrollView, Pressable, KeyboardAvoidingView, Platform } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
-import {
-  BottomCTABar,
-  Button,
-  Input,
-  DateInput,
-  AmountText,
-} from '../../../components/ui'
-import { ScreenLayout } from '../../../layouts/ScreenLayout'
-import { useTenant } from '../../../hooks/useTenants'
-import { useUnit } from '../../../hooks/useUnits'
-import { useBill } from '../../../hooks/useBills'
-import { useCreatePayment } from '../../../hooks/usePayments'
+import { BottomCTABar } from '~/components/ui/BottomCTABar'
+import { Button } from '~/components/ui/Button'
+import { Input } from '~/components/ui/Input'
+import { DateInput } from '~/components/ui/DateInput'
+import { AmountText } from '~/components/ui/AmountText'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { useTenant } from '~/hooks/useTenants'
+import { useUnit } from '~/hooks/useUnits'
+import { useBill } from '~/hooks/useBills'
+import { useCreatePayment } from '~/hooks/usePayments'
 
 export default function RecordPaymentScreen() {
   const router = useRouter()

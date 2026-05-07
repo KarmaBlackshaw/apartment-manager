@@ -5,9 +5,9 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated'
-import { colors } from '../../constants/theme'
-import { StatusChip } from '../ui/StatusChip'
-import type { ChipVariant } from '../ui/StatusChip'
+import { colors } from '~/constants/theme'
+import { StatusChip } from '~/components/ui/StatusChip'
+import type { ChipVariant } from '~/components/ui/StatusChip'
 
 export type UnitStatus = 'paid' | 'overdue' | 'vacant' | 'partial'
 

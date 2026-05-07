@@ -1,11 +1,13 @@
 import React, { useState, useMemo } from 'react'
 import { View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
-import { useTabBarScrollHandler } from '../../../../hooks/useTabBarScrollHandler'
-import { useCreateUnit } from '../../../../hooks/useUnits'
-import { useProperties } from '../../../../hooks/useProperties'
-import { Input, Button, Select } from '../../../../components/ui'
-import { ScreenLayout } from '../../../../layouts/ScreenLayout'
+import { useTabBarScrollHandler } from '~/hooks/useTabBarScrollHandler'
+import { useCreateUnit } from '~/hooks/useUnits'
+import { useProperties } from '~/hooks/useProperties'
+import { Input } from '~/components/ui/Input'
+import { Button } from '~/components/ui/Button'
+import { Select } from '~/components/ui/Select'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
 
 export default function NewUnitScreen() {
   const router = useRouter()

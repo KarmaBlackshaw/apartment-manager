@@ -3,16 +3,14 @@ import { View, FlatList, Pressable, Alert } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import * as ImagePicker from 'expo-image-picker'
 import dayjs from 'dayjs'
-import { useTenant } from '../../../../hooks/useTenants'
-import { useDocuments } from '../../../../hooks/useDocuments'
-import {
-  FilterChipBar,
-  DocumentRow,
-  AppText,
-} from '../../../../components/ui'
-import type { DocCategory } from '../../../../components/ui'
-import { ScreenLayout } from '../../../../layouts/ScreenLayout'
-import { colors } from '../../../../constants/theme'
+import { useTenant } from '~/hooks/useTenants'
+import { useDocuments } from '~/hooks/useDocuments'
+import { FilterChipBar } from '~/components/ui/FilterChipBar'
+import { DocumentRow } from '~/components/documents/DocumentRow'
+import { AppText } from '~/components/ui/AppText'
+import type { DocCategory } from '~/components/documents/DocumentRow'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { colors } from '~/constants/theme'
 
 export default function DocumentsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()

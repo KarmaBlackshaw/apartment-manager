@@ -1,7 +1,9 @@
 import React from 'react'
 import { TouchableOpacity, View } from 'react-native'
-import { Card, AppText, Badge, unitStatusBadge } from '../ui'
-import type { Unit } from '../../types'
+import { Card } from '~/components/ui/Card'
+import { AppText } from '~/components/ui/AppText'
+import { Badge, unitStatusBadge } from '~/components/ui/Badge'
+import type { Unit } from '~/types'
 
 interface UnitCardProps {
   unit: Unit

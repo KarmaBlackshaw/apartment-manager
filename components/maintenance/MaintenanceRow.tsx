@@ -5,8 +5,8 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated'
-import { colors } from '../../constants/theme'
-import { StatusChip, ChipVariant } from '../ui/StatusChip'
+import { colors } from '~/constants/theme'
+import { StatusChip, ChipVariant } from '~/components/ui/StatusChip'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 

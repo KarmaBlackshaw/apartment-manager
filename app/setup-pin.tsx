@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '~/context/AuthContext'
 
 export default function SetupPinScreen() {
   const router = useRouter()

@@ -1,4 +1,4 @@
-import { colors } from '../constants/theme'
+import { colors } from '~/constants/theme'
 
 test('primary color is defined', () => {
   expect(colors.primary).toBe('#2563EB')

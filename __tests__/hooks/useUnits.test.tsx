@@ -1,8 +1,8 @@
 import { renderHook, waitFor } from '@testing-library/react-native'
 import { act } from '@testing-library/react-native'
-import { createWrapper } from '../helpers/queryWrapper'
-import { useUnits, useCreateUnit } from '../../hooks/useUnits'
-import { createUnit } from '../../lib/api/units'
+import { createWrapper } from '~/__tests__/helpers/queryWrapper'
+import { useUnits, useCreateUnit } from '~/hooks/useUnits'
+import { createUnit } from '~/lib/api/units'
 
 jest.mock('../../lib/api/units', () => ({
   fetchUnits: jest.fn().mockResolvedValue([

@@ -3,8 +3,8 @@ import {
   fetchUnits, fetchUnit, fetchUnitsWithStatus, fetchUnitDetail,
   createUnit, updateUnit, deleteUnit, fetchUnitCounts,
   fetchUnitStatusCounts, fetchVacantUnits,
-} from '../lib/api/units'
-import type { Unit } from '../types'
+} from '~/lib/api/units'
+import type { Unit } from '~/types'
 
 export const unitCountsKey = ['unit-counts'] as const
 

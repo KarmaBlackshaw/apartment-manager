@@ -1,7 +1,7 @@
-import { db } from '../../db'
-import { properties, units, contracts, payments } from '../../db/schema'
+import { db } from '~/db'
+import { properties, units, contracts, payments } from '~/db/schema'
 import { eq, and, lte, isNull, sql } from 'drizzle-orm'
-import type { Property, PropertyWithStats, PropertyStats } from '../../types'
+import type { Property, PropertyWithStats, PropertyStats } from '~/types'
 import { nanoid } from 'nanoid/non-secure'
 
 export async function fetchProperties(): Promise<Property[]> {

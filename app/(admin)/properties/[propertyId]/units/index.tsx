@@ -2,10 +2,13 @@ import React from 'react'
 import { View, FlatList, TouchableOpacity } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { useTabBarScrollHandler } from '../../../../../hooks/useTabBarScrollHandler'
-import { useUnits } from '../../../../../hooks/useUnits'
-import { LoadingSpinner, EmptyState, AppText, UnitCard } from '../../../../../components/ui'
-import { ScreenLayout } from '../../../../../layouts/ScreenLayout'
+import { useTabBarScrollHandler } from '~/hooks/useTabBarScrollHandler'
+import { useUnits } from '~/hooks/useUnits'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { EmptyState } from '~/components/ui/EmptyState'
+import { AppText } from '~/components/ui/AppText'
+import { UnitCard } from '~/components/properties/UnitCard'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
 
 export default function UnitsScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()

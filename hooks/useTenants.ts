@@ -5,8 +5,8 @@ import {
   createTenant,
   updateTenant,
   deactivateTenant,
-} from '../lib/api/tenants'
-import type { TenantFilters } from '../lib/api/tenants'
+} from '~/lib/api/tenants'
+import type { TenantFilters } from '~/lib/api/tenants'
 
 export const TENANTS_KEY = ['tenants'] as const
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Pressable, Text, View } from 'react-native'
-import { StatusChip } from '../../components/ui'
+import { StatusChip } from '~/components/ui/StatusChip'
 
 type UnitStatus = 'occupied-paid' | 'occupied-overdue' | 'vacant'
 

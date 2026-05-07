@@ -13,13 +13,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { nanoid } from 'nanoid/non-secure'
 
-import { ScreenView } from '../components/ui'
-import { ProgressStepIndicator } from '../components/ui/ProgressStepIndicator'
-import { BottomCTABar } from '../components/ui/BottomCTABar'
-import { Button } from '../components/ui/Button'
-import { db } from '../db'
-import { properties } from '../db/schema'
-import { updateSetting } from '../lib/api/settings'
+import { ScreenView } from '~/components/ui/ScreenView'
+import { ProgressStepIndicator } from '~/components/ui/ProgressStepIndicator'
+import { BottomCTABar } from '~/components/ui/BottomCTABar'
+import { Button } from '~/components/ui/Button'
+import { db } from '~/db'
+import { properties } from '~/db/schema'
+import { updateSetting } from '~/lib/api/settings'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

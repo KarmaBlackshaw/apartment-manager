@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
-import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
-import { useSettings, useUpdateSetting } from '../../../hooks/useSettings'
-import { Input, Button, LoadingSpinner, ScreenView } from '../../../components/ui'
-
+import { useTabBarScrollHandler } from '~/hooks/useTabBarScrollHandler'
+import { useSettings, useUpdateSetting } from '~/hooks/useSettings'
+import { Input } from '~/components/ui/Input'
+import { Button } from '~/components/ui/Button'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { ScreenView } from '~/components/ui/ScreenView'
 export default function GeneralSettingsScreen() {
   const tabBarScroll = useTabBarScrollHandler()
   const { data: settings, isLoading } = useSettings()

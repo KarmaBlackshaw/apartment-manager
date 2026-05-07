@@ -1,7 +1,9 @@
 import React from 'react'
 import { TouchableOpacity, View } from 'react-native'
-import { Card, AppText, Badge } from '../ui'
-import type { Property } from '../../types'
+import { Card } from '~/components/ui/Card'
+import { AppText } from '~/components/ui/AppText'
+import { Badge } from '~/components/ui/Badge'
+import type { Property } from '~/types'
 
 interface PropertyCardProps {
   property: Property

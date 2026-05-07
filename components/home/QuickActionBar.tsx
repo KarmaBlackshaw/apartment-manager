@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Pressable, Text } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useRouter } from 'expo-router'
-import { useTenantSearch } from '../../context/TenantSearchContext'
+import { useTenantSearch } from '~/context/TenantSearchContext'
 
 export const QuickActionBar: React.FC = () => {
   const router = useRouter()

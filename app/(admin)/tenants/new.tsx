@@ -3,23 +3,20 @@ import { View, ScrollView, KeyboardAvoidingView, Platform, Pressable } from 'rea
 import { useRouter } from 'expo-router'
 import { toast } from 'sonner-native'
 import dayjs from 'dayjs'
-import { useCreateTenant } from '../../../hooks/useTenants'
-import { useProperties } from '../../../hooks/useProperties'
-import { useUnits } from '../../../hooks/useUnits'
-import { useTabBarVisibility } from '../../../context/TabBarVisibilityContext'
-import {
-  Input,
-  Button,
-  AppText,
-  Select,
-  DateInput,
-  SegmentedControl,
-  ProgressStepIndicator,
-  BottomCTABar,
-  CameraCapture,
-  ScreenView,
-} from '../../../components/ui'
-
+import { useCreateTenant } from '~/hooks/useTenants'
+import { useProperties } from '~/hooks/useProperties'
+import { useUnits } from '~/hooks/useUnits'
+import { useTabBarVisibility } from '~/context/TabBarVisibilityContext'
+import { Input } from '~/components/ui/Input'
+import { Button } from '~/components/ui/Button'
+import { AppText } from '~/components/ui/AppText'
+import { Select } from '~/components/ui/Select'
+import { DateInput } from '~/components/ui/DateInput'
+import { SegmentedControl } from '~/components/ui/SegmentedControl'
+import { ProgressStepIndicator } from '~/components/ui/ProgressStepIndicator'
+import { BottomCTABar } from '~/components/ui/BottomCTABar'
+import { CameraCapture } from '~/components/ui/CameraCapture'
+import { ScreenView } from '~/components/ui/ScreenView'
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const STEP_TITLES: Record<number, string> = {

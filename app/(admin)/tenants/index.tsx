@@ -1,26 +1,23 @@
 import React, { useState, useMemo } from 'react'
-import { View, FlatList, TextInput, Pressable } from 'react-native'
+import { View, FlatList, TextInput } from 'react-native'
 import { Text } from 'react-native'
 import { useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import dayjs from 'dayjs'
-import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
-import { useTenants } from '../../../hooks/useTenants'
-import { useBills } from '../../../hooks/useBills'
-import {
-  FilterChipBar,
-  ListRow,
-  AvatarInitials,
-  StatusChip,
-  AmountText,
-  LoadingSpinner,
-  EmptyState,
-  FAB,
-} from '../../../components/ui'
-import { ScreenLayout } from '../../../layouts/ScreenLayout'
-import { colors } from '../../../constants/theme'
-import type { ChipVariant } from '../../../components/ui'
-
+import { useTabBarScrollHandler } from '~/hooks/useTabBarScrollHandler'
+import { useTenants } from '~/hooks/useTenants'
+import { useBills } from '~/hooks/useBills'
+import { FilterChipBar } from '~/components/ui/FilterChipBar'
+import { ListRow } from '~/components/ui/ListRow'
+import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { StatusChip } from '~/components/ui/StatusChip'
+import { AmountText } from '~/components/ui/AmountText'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { EmptyState } from '~/components/ui/EmptyState'
+import { FAB } from '~/components/ui/FAB'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { colors } from '~/constants/theme'
+import type { ChipVariant } from '~/components/ui/StatusChip'
 export default function TenantsScreen() {
   const router = useRouter()
   const tabBarScroll = useTabBarScrollHandler()
@@ -71,15 +68,7 @@ export default function TenantsScreen() {
   return (
     <ScreenLayout
       title="Tenants"
-      headerLeft={undefined}
-      headerRight={
-        <Pressable
-          onPress={() => router.push('/notifications')}
-          hitSlop={8}
-        >
-          <Ionicons name="notifications-outline" size={24} color={colors.textSecondary} />
-        </Pressable>
-      }
+      headerLeft={null}
     >
       {/* Search bar */}
       <View

@@ -3,10 +3,11 @@ import { View, ScrollView, Text, Pressable, Alert, Share } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import dayjs from 'dayjs'
-import { ReceiptDocument, LoadingSpinner } from '../../../components/ui'
-import { ScreenLayout } from '../../../layouts/ScreenLayout'
-import { useSettings } from '../../../hooks/useSettings'
-import { usePayment } from '../../../hooks/usePayments'
+import { ReceiptDocument } from '~/components/billing/ReceiptDocument'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { useSettings } from '~/hooks/useSettings'
+import { usePayment } from '~/hooks/usePayments'
 
 export default function ReceiptScreen() {
   const { paymentId } = useLocalSearchParams<{ paymentId: string }>()

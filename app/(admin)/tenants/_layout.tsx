@@ -1,12 +1,12 @@
 import { Stack } from 'expo-router'
-import { darkStackOptions } from '../../../constants/navigation'
+import { darkStackOptions } from '~/constants/navigation'
 
 export default function TenantsLayout() {
   return (
-    <Stack screenOptions={darkStackOptions}>
-      <Stack.Screen name="index" options={{ title: 'Tenants' }} />
-      <Stack.Screen name="new"   options={{ title: 'Add Tenant', presentation: 'modal' }} />
-      <Stack.Screen name="[id]"  options={{ headerShown: false }} />
+    <Stack screenOptions={{ ...darkStackOptions, headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="new"   options={{ headerShown: true, title: 'Add Tenant', presentation: 'modal' }} />
+      <Stack.Screen name="[id]"  />
     </Stack>
   )
 }

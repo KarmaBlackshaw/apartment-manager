@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
-import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
-import { useCreateProperty } from '../../../hooks/useProperties'
-import { Input, Button, AppText, ScreenView } from '../../../components/ui'
-
+import { useTabBarScrollHandler } from '~/hooks/useTabBarScrollHandler'
+import { useCreateProperty } from '~/hooks/useProperties'
+import { Input } from '~/components/ui/Input'
+import { Button } from '~/components/ui/Button'
+import { AppText } from '~/components/ui/AppText'
+import { ScreenView } from '~/components/ui/ScreenView'
 export default function NewPropertyScreen() {
   const router = useRouter()
   const tabBarScroll = useTabBarScrollHandler()

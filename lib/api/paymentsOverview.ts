@@ -1,5 +1,5 @@
-import { db } from '../../db'
-import { tenants, units, bills } from '../../db/schema'
+import { db } from '~/db'
+import { tenants, units, bills } from '~/db/schema'
 import { eq, like } from 'drizzle-orm'
 
 export type TenantMonthStatus = 'paid' | 'overdue' | 'unpaid' | 'no_bill'

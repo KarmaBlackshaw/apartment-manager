@@ -2,19 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { View, ScrollView, Text } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
-import {
-  FilterChipBar,
-  InfoRow,
-  AmountText,
-  BottomCTABar,
-  Button,
-  LoadingSpinner,
-  Input,
-} from '../../../components/ui'
-import { ScreenLayout } from '../../../layouts/ScreenLayout'
-import { useSettings } from '../../../hooks/useSettings'
-import { useUnit } from '../../../hooks/useUnits'
-import { useUtilityReading, useUpsertUtilityReading } from '../../../hooks/useUtilityReadings'
+import { FilterChipBar } from '~/components/ui/FilterChipBar'
+import { InfoRow } from '~/components/ui/InfoRow'
+import { AmountText } from '~/components/ui/AmountText'
+import { BottomCTABar } from '~/components/ui/BottomCTABar'
+import { Button } from '~/components/ui/Button'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { Input } from '~/components/ui/Input'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { useSettings } from '~/hooks/useSettings'
+import { useUnit } from '~/hooks/useUnits'
+import { useUtilityReading, useUpsertUtilityReading } from '~/hooks/useUtilityReadings'
 
 const UTILITY_OPTIONS = [
   { label: 'Electricity', value: 'electricity' },

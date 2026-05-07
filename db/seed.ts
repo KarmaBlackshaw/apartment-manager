@@ -1,5 +1,5 @@
-import { db } from './index'
-import { properties, units } from './schema'
+import { db } from '~/db/index'
+import { properties, units } from '~/db/schema'
 import { nanoid } from 'nanoid/non-secure'
 
 export async function seedDatabase() {

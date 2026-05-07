@@ -3,21 +3,19 @@ import { View, ScrollView } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import { useQuery } from '@tanstack/react-query'
-import { useTenant } from '../../../../hooks/useTenants'
-import { fetchBills } from '../../../../lib/api/bills'
-import {
-  StatusChip,
-  AvatarInitials,
-  AmountText,
-  BalanceCard,
-  SectionHeader,
-  InfoRow,
-  ListRow,
-  AppText,
-  LoadingSpinner,
-} from '../../../../components/ui'
-import { Button } from '../../../../components/ui'
-import { ScreenLayout } from '../../../../layouts/ScreenLayout'
+import { useTenant } from '~/hooks/useTenants'
+import { fetchBills } from '~/lib/api/bills'
+import { StatusChip } from '~/components/ui/StatusChip'
+import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { AmountText } from '~/components/ui/AmountText'
+import { BalanceCard } from '~/components/billing/BalanceCard'
+import { SectionHeader } from '~/components/ui/SectionHeader'
+import { InfoRow } from '~/components/ui/InfoRow'
+import { ListRow } from '~/components/ui/ListRow'
+import { AppText } from '~/components/ui/AppText'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { Button } from '~/components/ui/Button'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
 
 export default function TenantDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()

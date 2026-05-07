@@ -1,4 +1,4 @@
-import { colors } from './theme'
+import { colors } from '~/constants/theme'
 
 export const darkStackOptions = {
   headerStyle: { backgroundColor: colors.background },

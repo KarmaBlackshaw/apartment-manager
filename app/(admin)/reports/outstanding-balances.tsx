@@ -1,14 +1,14 @@
 import React from 'react'
 import { View, Text, FlatList, Pressable, Share } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { ScreenLayout } from '../../../layouts/ScreenLayout'
-import { ListRow } from '../../../components/ui/ListRow'
-import { AvatarInitials } from '../../../components/ui/AvatarInitials'
-import { AmountText } from '../../../components/ui/AmountText'
-import { EmptyState } from '../../../components/ui/EmptyState'
-import { LoadingSpinner } from '../../../components/ui/LoadingSpinner'
-import { buildCSV } from '../../../lib/csv'
-import { useOutstandingBalances } from '../../../hooks/useReports'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { ListRow } from '~/components/ui/ListRow'
+import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { AmountText } from '~/components/ui/AmountText'
+import { EmptyState } from '~/components/ui/EmptyState'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { buildCSV } from '~/lib/csv'
+import { useOutstandingBalances } from '~/hooks/useReports'
 
 export default function OutstandingBalancesScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId?: string }>()

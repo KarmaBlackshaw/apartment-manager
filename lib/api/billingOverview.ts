@@ -1,9 +1,9 @@
-import { db } from '../../db'
-import { tenants, units, bills } from '../../db/schema'
+import { db } from '~/db'
+import { tenants, units, bills } from '~/db/schema'
 import { eq, and, like } from 'drizzle-orm'
 import { nanoid } from 'nanoid/non-secure'
 import dayjs from 'dayjs'
-import type { BillingOverview, BillingOverviewEntry, BillPreview } from '../../types'
+import type { BillingOverview, BillingOverviewEntry, BillPreview } from '~/types'
 
 export async function fetchBillingOverview(
   month: string,

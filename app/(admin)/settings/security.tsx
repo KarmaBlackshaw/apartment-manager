@@ -1,10 +1,12 @@
 import React from 'react'
 import { ScrollView, View, Switch } from 'react-native'
 import { useRouter } from 'expo-router'
-import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
-import { useAuth } from '../../../context/AuthContext'
-import { Button, AppText, Card, ScreenView } from '../../../components/ui'
-
+import { useTabBarScrollHandler } from '~/hooks/useTabBarScrollHandler'
+import { useAuth } from '~/context/AuthContext'
+import { Button } from '~/components/ui/Button'
+import { AppText } from '~/components/ui/AppText'
+import { Card } from '~/components/ui/Card'
+import { ScreenView } from '~/components/ui/ScreenView'
 export default function SecuritySettingsScreen() {
   const router = useRouter()
   const tabBarScroll = useTabBarScrollHandler()

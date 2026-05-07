@@ -1,4 +1,4 @@
-import type { BillWithTenant, AppSettings } from '../types'
+import type { BillWithTenant, AppSettings } from '~/types'
 
 interface ReceiptData {
   bill: BillWithTenant

@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { useProperty, useUpdateProperty, useDeleteProperty } from '../../../../hooks/useProperties'
-import { Input, Button, AppText, LoadingSpinner } from '../../../../components/ui'
-import { ScreenLayout } from '../../../../layouts/ScreenLayout'
+import { useProperty, useUpdateProperty, useDeleteProperty } from '~/hooks/useProperties'
+import { Input } from '~/components/ui/Input'
+import { Button } from '~/components/ui/Button'
+import { AppText } from '~/components/ui/AppText'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
 
 export default function EditPropertyScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()

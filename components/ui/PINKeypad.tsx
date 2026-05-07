@@ -7,7 +7,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { colors } from '../../constants/theme'
+import { colors } from '~/constants/theme'
 
 interface PINKeypadProps {
   enteredLength: number

@@ -1,4 +1,4 @@
-import { properties, units, tenants, bills, contracts } from '../../db/schema'
+import { properties, units, tenants, bills, contracts } from '~/db/schema'
 
 test('properties table has required columns', () => {
   expect(properties.name).toBeDefined()

@@ -2,8 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   fetchProperties, fetchProperty, fetchPropertiesWithStats, fetchPropertyStats,
   createProperty, updateProperty, deleteProperty,
-} from '../lib/api/properties'
-import type { Property } from '../types'
+} from '~/lib/api/properties'
+import type { Property } from '~/types'
 
 export const PROPERTIES_KEY = ['properties'] as const
 

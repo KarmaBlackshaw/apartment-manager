@@ -6,7 +6,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import { Ionicons } from '@expo/vector-icons'
-import { colors } from '../../constants/theme'
+import { colors } from '~/constants/theme'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 

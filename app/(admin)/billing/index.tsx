@@ -1,24 +1,20 @@
 import React, { useState } from 'react'
-import { View, Text, FlatList, Pressable } from 'react-native'
+import { View, Text, FlatList } from 'react-native'
 import { useRouter } from 'expo-router'
-import Ionicons from '@expo/vector-icons/Ionicons'
 import dayjs from 'dayjs'
-import { colors } from '../../../constants/theme'
-import {
-  MonthTabSelector,
-  FilterChipBar,
-  ListRow,
-  StatusChip,
-  AmountText,
-  LoadingSpinner,
-  EmptyState,
-  FAB,
-  PropertySelector,
-} from '../../../components/ui'
-import { ScreenLayout } from '../../../layouts/ScreenLayout'
-import type { ChipVariant } from '../../../components/ui'
-import { useBillingOverview } from '../../../hooks/useBillingOverview'
-import type { BillingOverviewEntry } from '../../../types'
+import { MonthTabSelector } from '~/components/ui/MonthTabSelector'
+import { FilterChipBar } from '~/components/ui/FilterChipBar'
+import { ListRow } from '~/components/ui/ListRow'
+import { StatusChip } from '~/components/ui/StatusChip'
+import { AmountText } from '~/components/ui/AmountText'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { EmptyState } from '~/components/ui/EmptyState'
+import { FAB } from '~/components/ui/FAB'
+import { PropertySelector } from '~/components/properties/PropertySelector'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import type { ChipVariant } from '~/components/ui/StatusChip'
+import { useBillingOverview } from '~/hooks/useBillingOverview'
+import type { BillingOverviewEntry } from '~/types'
 
 // 8 months: 6 past + current + 1 future. Short label for tabs, full value for API.
 const monthEntries = Array.from({ length: 8 }, (_, i) => {
@@ -67,16 +63,7 @@ export default function BillingScreen() {
   return (
     <ScreenLayout
       title="Billing"
-      headerLeft={undefined}
-      headerRight={
-        <Pressable
-          onPress={() => router.push('/(admin)/notifications')}
-          hitSlop={8}
-          accessibilityRole="button"
-        >
-          <Ionicons name="notifications-outline" size={22} color={colors.textSecondary} />
-        </Pressable>
-      }
+      headerLeft={null}
     >
 
       <FlatList

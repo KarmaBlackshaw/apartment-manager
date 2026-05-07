@@ -4,8 +4,8 @@ import {
   fetchBillPreview,
   generateBillsForMonth,
   type GenerateBillsInput,
-} from '../lib/api/billingOverview'
-import { BILLS_KEY } from './useBills'
+} from '~/lib/api/billingOverview'
+import { BILLS_KEY } from '~/hooks/useBills'
 
 export const BILLING_OVERVIEW_KEY = ['billing_overview'] as const
 export const BILL_PREVIEW_KEY = ['bill_preview'] as const

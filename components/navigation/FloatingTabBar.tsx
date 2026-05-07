@@ -3,8 +3,8 @@ import { Animated, Pressable, Text, View } from 'react-native'
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { useTabBarVisibility } from '../../context/TabBarVisibilityContext'
-import { useTenantSearch } from '../../context/TenantSearchContext'
+import { useTabBarVisibility } from '~/context/TabBarVisibilityContext'
+import { useTenantSearch } from '~/context/TenantSearchContext'
 
 type IoniconName = React.ComponentProps<typeof Ionicons>['name']
 

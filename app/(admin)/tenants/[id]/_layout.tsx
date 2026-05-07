@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router'
-import { darkStackOptions } from '../../../../constants/navigation'
+import { darkStackOptions } from '~/constants/navigation'
 
 export default function TenantDetailLayout() {
   return (

@@ -1,7 +1,7 @@
-import { db } from '../../db'
-import { units, properties, tenants, bills, documents } from '../../db/schema'
+import { db } from '~/db'
+import { units, properties, tenants, bills, documents } from '~/db/schema'
 import { eq, asc, count, and, inArray, desc } from 'drizzle-orm'
-import type { Unit, UnitStatus, UnitWithStatus, UnitDetail, BillingType } from '../../types'
+import type { Unit, UnitStatus, UnitWithStatus, UnitDetail, BillingType } from '~/types'
 import { nanoid } from 'nanoid/non-secure'
 
 export async function fetchUnits(propertyId: string): Promise<Unit[]> {

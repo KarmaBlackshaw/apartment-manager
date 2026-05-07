@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { View, FlatList } from 'react-native'
 import { useRouter } from 'expo-router'
-import { ScreenLayout } from '../../../layouts/ScreenLayout'
-import { PropertySelector } from '../../../components/properties/PropertySelector'
-import { ReportMenuCard } from '../../../components/reports/ReportMenuCard'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { PropertySelector } from '~/components/properties/PropertySelector'
+import { ReportMenuCard } from '~/components/reports/ReportMenuCard'
 
 interface ReportItem {
   label: string

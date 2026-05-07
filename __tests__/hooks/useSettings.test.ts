@@ -1,6 +1,6 @@
 import { renderHook, waitFor, act } from '@testing-library/react-native'
-import { createWrapper } from '../helpers/queryWrapper'
-import { useSettings, useUpdateSetting } from '../../hooks/useSettings'
+import { createWrapper } from '~/__tests__/helpers/queryWrapper'
+import { useSettings, useUpdateSetting } from '~/hooks/useSettings'
 
 const mockFetchSettings = jest.fn()
 const mockUpdateSetting = jest.fn()

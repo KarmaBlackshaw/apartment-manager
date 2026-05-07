@@ -3,28 +3,26 @@ import { View, ScrollView, Pressable } from 'react-native'
 import { useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { useTabBarScrollHandler } from '../../hooks/useTabBarScrollHandler'
-import { useBills } from '../../hooks/useBills'
-import { useUnitStatusCounts, useVacantUnits } from '../../hooks/useUnits'
+import { useTabBarScrollHandler } from '~/hooks/useTabBarScrollHandler'
+import { useBills } from '~/hooks/useBills'
+import { useUnitStatusCounts, useVacantUnits } from '~/hooks/useUnits'
 import {
   useMonthlyCollection,
   useOutstandingBalances,
   useMaintenanceCosts,
   usePerUnitIncome,
   useAnnualSummary,
-} from '../../hooks/useReports'
-import {
-  KPICard,
-  SectionHeader,
-  QuickActionBar,
-  AttentionRow,
-  VacantRow,
-  UnitCell,
-  ReportCard,
-  CollectionProgressBar,
-} from '../../components/ui'
-import { ScreenLayout } from '../../layouts/ScreenLayout'
-import { formatPHP } from '../../lib/format'
+} from '~/hooks/useReports'
+import { KPICard } from '~/components/home/KPICard'
+import { SectionHeader } from '~/components/ui/SectionHeader'
+import { QuickActionBar } from '~/components/home/QuickActionBar'
+import { AttentionRow } from '~/components/home/AttentionRow'
+import { VacantRow } from '~/components/home/VacantRow'
+import { UnitCell } from '~/components/home/UnitCell'
+import { ReportCard } from '~/components/home/ReportCard'
+import { CollectionProgressBar } from '~/components/billing/CollectionProgressBar'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { formatPHP } from '~/lib/format'
 
 export default function HomeScreen() {
   const router = useRouter()
@@ -176,8 +174,7 @@ export default function HomeScreen() {
 
   return (
     <ScreenLayout
-      title="Home"
-      headerLeft={undefined}
+      headerLeft={null}
       headerRight={
         <View className="flex-row gap-1">
           <Pressable

@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import { colors } from '../../constants/theme'
+import { colors } from '~/constants/theme'
 
 type BannerVariant = 'warning' | 'danger' | 'info'
 

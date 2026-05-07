@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { db } from '../db'
-import { documents as documentsTable } from '../db/schema'
+import { db } from '~/db'
+import { documents as documentsTable } from '~/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { nanoid } from 'nanoid/non-secure'
 

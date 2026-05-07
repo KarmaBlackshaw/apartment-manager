@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react-native'
-import { Button } from '../../components/ui/Button'
+import { Button } from '~/components/ui/Button'
 
 test('calls onPress when tapped', () => {
   const fn = jest.fn()

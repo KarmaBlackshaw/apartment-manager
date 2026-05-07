@@ -2,7 +2,7 @@ import React, { useRef, useState, useMemo } from 'react'
 import { View, TouchableOpacity } from 'react-native'
 import { BottomSheetModal, BottomSheetFlatList, BottomSheetTextInput, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { AppText } from './AppText'
+import { AppText } from '~/components/ui/AppText'
 
 export interface SelectOption {
   label: string

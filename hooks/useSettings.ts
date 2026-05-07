@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { fetchSettings, updateSetting } from '../lib/api/settings'
+import { fetchSettings, updateSetting } from '~/lib/api/settings'
 
 export const SETTINGS_KEY = ['settings'] as const
 

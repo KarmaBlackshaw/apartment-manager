@@ -6,10 +6,10 @@ import {
 import { Swipeable } from 'react-native-gesture-handler'
 import { useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { ScreenView } from '../../../components/ui'
-import { usePaymentsOverview } from '../../../hooks/usePaymentsOverview'
-import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
-import type { TenantMonthEntry, TenantMonthStatus } from '../../../lib/api/paymentsOverview'
+import { ScreenView } from '~/components/ui/ScreenView'
+import { usePaymentsOverview } from '~/hooks/usePaymentsOverview'
+import { useTabBarScrollHandler } from '~/hooks/useTabBarScrollHandler'
+import type { TenantMonthEntry, TenantMonthStatus } from '~/lib/api/paymentsOverview'
 
 // ─── Month generation ─────────────────────────────────────────────────────────
 interface MonthItem { year: number; month: number; label: string; key: string }

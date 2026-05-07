@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, TextInput, TextInputProps } from 'react-native'
-import { AppText } from './AppText'
+import { AppText } from '~/components/ui/AppText'
 
 interface InputProps extends TextInputProps {
   label?: string

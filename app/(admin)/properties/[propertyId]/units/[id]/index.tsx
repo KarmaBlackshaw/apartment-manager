@@ -2,13 +2,15 @@ import React from 'react'
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
-import { useUnitDetail } from '../../../../../../hooks/useUnits'
-import {
-  LoadingSpinner, StatusChip, AvatarInitials,
-  BalanceCard, SectionHeader, AmountText,
-} from '../../../../../../components/ui'
-import { ScreenLayout } from '../../../../../../layouts/ScreenLayout'
-import { colors } from '../../../../../../constants/theme'
+import { useUnitDetail } from '~/hooks/useUnits'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { StatusChip } from '~/components/ui/StatusChip'
+import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { BalanceCard } from '~/components/billing/BalanceCard'
+import { SectionHeader } from '~/components/ui/SectionHeader'
+import { AmountText } from '~/components/ui/AmountText'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { colors } from '~/constants/theme'
 
 function unitPaymentChipVariant(balance: number, isOccupied: boolean) {
   if (!isOccupied) return 'neutral' as const

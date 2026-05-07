@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { colors } from '../../constants/theme'
+import { colors } from '~/constants/theme'
 
 type Edge = 'top' | 'bottom'
 

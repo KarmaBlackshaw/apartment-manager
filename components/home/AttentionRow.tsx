@@ -1,7 +1,7 @@
 import React from 'react'
 import { Pressable, Text, View } from 'react-native'
-import { StatusChip } from '../../components/ui'
-import { formatPHP } from '../../lib/format'
+import { StatusChip } from '~/components/ui/StatusChip'
+import { formatPHP } from '~/lib/format'
 
 export interface AttentionRowProps {
   tenantName: string

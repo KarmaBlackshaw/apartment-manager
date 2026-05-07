@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 import { Stack } from 'expo-router'
-import { darkStackOptions } from '../../../constants/navigation'
+import { darkStackOptions } from '~/constants/navigation'
 
 export default function SettingsLayout() {
   return (

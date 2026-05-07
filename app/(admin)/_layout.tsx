@@ -1,7 +1,8 @@
 import { Tabs } from 'expo-router'
-import { FloatingTabBar, TenantQuickSearchModal } from '../../components/ui'
-import { TabBarVisibilityProvider } from '../../context/TabBarVisibilityContext'
-import { TenantSearchProvider, useTenantSearch } from '../../context/TenantSearchContext'
+import { FloatingTabBar } from '~/components/navigation/FloatingTabBar'
+import { TenantQuickSearchModal } from '~/components/tenants/TenantQuickSearchModal'
+import { TabBarVisibilityProvider } from '~/context/TabBarVisibilityContext'
+import { TenantSearchProvider, useTenantSearch } from '~/context/TenantSearchContext'
 
 function GlobalTenantSearch() {
   const { isOpen, close } = useTenantSearch()

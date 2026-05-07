@@ -5,10 +5,12 @@ import { Pressable } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { eq, and, lt, lte } from 'drizzle-orm'
 
-import { db } from '../../db'
-import { bills, tenants, contracts, units } from '../../db/schema'
-import { FilterChipBar, NotificationRow, EmptyState, ScreenView } from '../../components/ui'
-
+import { db } from '~/db'
+import { bills, tenants, contracts, units } from '~/db/schema'
+import { FilterChipBar } from '~/components/ui/FilterChipBar'
+import { NotificationRow } from '~/components/notifications/NotificationRow'
+import { EmptyState } from '~/components/ui/EmptyState'
+import { ScreenView } from '~/components/ui/ScreenView'
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------

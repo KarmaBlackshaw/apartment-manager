@@ -2,18 +2,16 @@ import React from 'react'
 import { View, ScrollView, Text, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
-import {
-  AmountText,
-  SectionHeader,
-  InfoRow,
-  BottomCTABar,
-  Button,
-  LoadingSpinner,
-} from '../../../../components/ui'
-import { ScreenLayout } from '../../../../layouts/ScreenLayout'
-import { colors } from '../../../../constants/theme'
-import { formatCurrency } from '../../../../lib/billing'
-import { usePayment, useVoidPayment } from '../../../../hooks/usePayments'
+import { AmountText } from '~/components/ui/AmountText'
+import { SectionHeader } from '~/components/ui/SectionHeader'
+import { InfoRow } from '~/components/ui/InfoRow'
+import { BottomCTABar } from '~/components/ui/BottomCTABar'
+import { Button } from '~/components/ui/Button'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { colors } from '~/constants/theme'
+import { formatCurrency } from '~/lib/billing'
+import { usePayment, useVoidPayment } from '~/hooks/usePayments'
 
 export default function PaymentDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()

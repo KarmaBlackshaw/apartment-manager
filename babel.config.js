@@ -11,6 +11,10 @@ module.exports = function (api) {
       ...(isTest ? [] : ['nativewind/babel']),
     ],
     plugins: [
+      ['module-resolver', {
+        root: ['.'],
+        alias: { '~': '.' },
+      }],
       ...(isTest ? [] : ['react-native-reanimated/plugin']),
     ],
   }

@@ -1,4 +1,4 @@
-import { fetchPaymentsOverview } from '../../lib/api/paymentsOverview'
+import { fetchPaymentsOverview } from '~/lib/api/paymentsOverview'
 
 const mockTenants = [
   { id: 't1', full_name: 'Ana Reyes',  unit_id: 'u1', unit_number: '1A' },
@@ -23,7 +23,7 @@ jest.mock('../../db', () => ({
 jest.mock('drizzle-orm', () => ({ eq: jest.fn(), like: jest.fn(), and: jest.fn() }))
 jest.mock('../../db/schema', () => ({ tenants: {}, units: {}, bills: {} }))
 
-import { db } from '../../db'
+import { db } from '~/db'
 
 beforeEach(() => {
   jest.clearAllMocks()

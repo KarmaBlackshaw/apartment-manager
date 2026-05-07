@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import { AmountText } from '../ui/AmountText'
-import { colors } from '../../constants/theme'
-import type { PerUnitIncomeEntry, PerUnitIncomeStatus } from '../../types'
+import { AmountText } from '~/components/ui/AmountText'
+import { colors } from '~/constants/theme'
+import type { PerUnitIncomeEntry, PerUnitIncomeStatus } from '~/types'
 
 const BORDER_COLOR: Record<PerUnitIncomeStatus, string> = {
   success: colors.success,

@@ -7,7 +7,7 @@ import {
   markBillPaid,
   deleteBill,
   type BillFilters,
-} from '../lib/api/bills'
+} from '~/lib/api/bills'
 
 export const BILLS_KEY = ['bills'] as const
 

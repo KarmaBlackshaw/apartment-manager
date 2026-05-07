@@ -1,8 +1,8 @@
-import { db } from '../../db'
-import { utilityReadings } from '../../db/schema'
+import { db } from '~/db'
+import { utilityReadings } from '~/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { nanoid } from 'nanoid/non-secure'
-import type { UtilityReading, UtilityType } from '../../types'
+import type { UtilityReading, UtilityType } from '~/types'
 
 export async function fetchUtilityReading(
   unitId: string,

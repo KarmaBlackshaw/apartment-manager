@@ -2,19 +2,17 @@ import React, { useState, useMemo } from 'react'
 import { View, FlatList, Pressable } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
-import { useTenant } from '../../../../hooks/useTenants'
-import { useBills } from '../../../../hooks/useBills'
-import {
-  AvatarInitials,
-  AmountText,
-  FilterChipBar,
-  ListRow,
-  StatusChip,
-  AppText,
-  LoadingSpinner,
-} from '../../../../components/ui'
-import { ScreenLayout } from '../../../../layouts/ScreenLayout'
-import { colors } from '../../../../constants/theme'
+import { useTenant } from '~/hooks/useTenants'
+import { useBills } from '~/hooks/useBills'
+import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { AmountText } from '~/components/ui/AmountText'
+import { FilterChipBar } from '~/components/ui/FilterChipBar'
+import { ListRow } from '~/components/ui/ListRow'
+import { StatusChip } from '~/components/ui/StatusChip'
+import { AppText } from '~/components/ui/AppText'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { colors } from '~/constants/theme'
 
 export default function PaymentHistoryScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()

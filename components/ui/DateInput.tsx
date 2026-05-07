@@ -3,7 +3,7 @@ import { TouchableOpacity, View, Platform, Modal } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import dayjs from 'dayjs'
-import { AppText } from './AppText'
+import { AppText } from '~/components/ui/AppText'
 
 interface DateInputProps {
   label?: string

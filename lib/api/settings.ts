@@ -1,6 +1,6 @@
-import { db } from '../../db'
-import { appSettings } from '../../db/schema'
-import type { AppSettings } from '../../types'
+import { db } from '~/db'
+import { appSettings } from '~/db/schema'
+import type { AppSettings } from '~/types'
 
 const DEFAULTS = {
   water_rate: 35,

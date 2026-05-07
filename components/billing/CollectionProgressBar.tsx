@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import { colors } from '../../constants/theme'
-import { formatPHP } from '../../lib/format'
+import { colors } from '~/constants/theme'
+import { formatPHP } from '~/lib/format'
 
 interface CollectionProgressBarProps {
   paid: number

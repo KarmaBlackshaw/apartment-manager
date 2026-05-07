@@ -1,5 +1,5 @@
-import { db } from '../../db'
-import { tenants, units, bills, contracts, properties, maintenanceIssues } from '../../db/schema'
+import { db } from '~/db'
+import { tenants, units, bills, contracts, properties, maintenanceIssues } from '~/db/schema'
 import { eq, and, like, desc, asc, inArray } from 'drizzle-orm'
 import dayjs from 'dayjs'
 import type {
@@ -20,7 +20,7 @@ import type {
   MaintenanceCostByUnit,
   DepositSummaryReport,
   DepositSummaryEntry,
-} from '../../types'
+} from '~/types'
 
 // ─── Shared helpers ───────────────────────────────────────────────────────────
 

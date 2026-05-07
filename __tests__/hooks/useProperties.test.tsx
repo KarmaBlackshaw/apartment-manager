@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react-native'
-import { createWrapper } from '../helpers/queryWrapper'
-import { useProperties } from '../../hooks/useProperties'
+import { createWrapper } from '~/__tests__/helpers/queryWrapper'
+import { useProperties } from '~/hooks/useProperties'
 
 jest.mock('../../lib/api/properties', () => ({
   fetchProperties: jest.fn().mockResolvedValue([

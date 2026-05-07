@@ -1,7 +1,7 @@
 import { useCallback, useRef } from 'react'
 import { NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
-import { useTabBarVisibility } from '../context/TabBarVisibilityContext'
+import { useTabBarVisibility } from '~/context/TabBarVisibilityContext'
 
 export function useTabBarScrollHandler(threshold = 8) {
   const { setVisible } = useTabBarVisibility()

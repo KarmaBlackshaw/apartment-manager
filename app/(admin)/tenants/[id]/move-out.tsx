@@ -3,18 +3,16 @@ import { View, ScrollView, Alert, TextInput, Pressable } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { useTenant, useDeactivateTenant } from '../../../../hooks/useTenants'
-import { useBills } from '../../../../hooks/useBills'
-import {
-  WarningBanner,
-  SettlementRow,
-  BottomCTABar,
-  Button,
-  AppText,
-  LoadingSpinner,
-} from '../../../../components/ui'
-import { ScreenLayout } from '../../../../layouts/ScreenLayout'
-import { colors } from '../../../../constants/theme'
+import { useTenant, useDeactivateTenant } from '~/hooks/useTenants'
+import { useBills } from '~/hooks/useBills'
+import { WarningBanner } from '~/components/ui/WarningBanner'
+import { SettlementRow } from '~/components/billing/SettlementRow'
+import { BottomCTABar } from '~/components/ui/BottomCTABar'
+import { Button } from '~/components/ui/Button'
+import { AppText } from '~/components/ui/AppText'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { colors } from '~/constants/theme'
 
 export default function MoveOutScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()

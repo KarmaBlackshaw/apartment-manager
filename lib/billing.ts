@@ -1,4 +1,4 @@
-import type { BillStatus } from '../types'
+import type { BillStatus } from '~/types'
 
 export function calcDailyAmount(dailyRate: number, periodStart: string, periodEnd: string): number {
   const start = new Date(periodStart)

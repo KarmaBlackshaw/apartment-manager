@@ -1,7 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
-import { AppText } from './AppText'
-import type { BillingType, UnitStatus, BillStatus, TenantStatus } from '../../types'
+import { AppText } from '~/components/ui/AppText'
+import type { BillingType, UnitStatus, BillStatus, TenantStatus } from '~/types'
 
 export type BadgeVariant = 'success' | 'warning' | 'danger' | 'info' | 'neutral'
 

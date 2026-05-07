@@ -6,9 +6,10 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { Toaster } from 'sonner-native'
-import { DatabaseProvider, useDatabase } from '../context/DatabaseContext'
-import { AuthProvider, useAuth } from '../context/AuthContext'
-import { AppText, LoadingSpinner } from '../components/ui'
+import { DatabaseProvider, useDatabase } from '~/context/DatabaseContext'
+import { AuthProvider, useAuth } from '~/context/AuthContext'
+import { AppText } from '~/components/ui/AppText'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import '../global.css'
 
 const queryClient = new QueryClient()

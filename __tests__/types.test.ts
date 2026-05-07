@@ -1,4 +1,4 @@
-import type { Tenant, Bill } from '../types'
+import type { Tenant, Bill } from '~/types'
 
 test('BillingType narrows correctly', () => {
   const t: Tenant = {

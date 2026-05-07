@@ -1,7 +1,9 @@
 import React from 'react'
 import { TouchableOpacity, View } from 'react-native'
-import { Card, AppText, Badge, billingBadge, tenantStatusBadge } from '../ui'
-import type { TenantWithUnit } from '../../types'
+import { Card } from '~/components/ui/Card'
+import { AppText } from '~/components/ui/AppText'
+import { Badge, billingBadge, tenantStatusBadge } from '~/components/ui/Badge'
+import type { TenantWithUnit } from '~/types'
 
 interface TenantCardProps {
   tenant: TenantWithUnit

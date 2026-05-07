@@ -6,7 +6,7 @@ import {
   calcInternetCharge,
   formatCurrency,
   isOverdue,
-} from '../../lib/billing'
+} from '~/lib/billing'
 
 // --- calcDailyAmount ---
 test('calcDailyAmount: 5 days at 25/day = 125', () => {

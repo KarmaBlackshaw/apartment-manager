@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import { StatusChip } from '../ui/StatusChip'
+import { StatusChip } from '~/components/ui/StatusChip'
 
 interface PropertySummaryCardProps {
   occupancyPct: number

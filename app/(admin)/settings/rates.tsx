@@ -4,10 +4,12 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner-native'
-import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
-import { useSettings, useUpdateSetting } from '../../../hooks/useSettings'
-import { Input, Button, LoadingSpinner, ScreenView } from '../../../components/ui'
-
+import { useTabBarScrollHandler } from '~/hooks/useTabBarScrollHandler'
+import { useSettings, useUpdateSetting } from '~/hooks/useSettings'
+import { Input } from '~/components/ui/Input'
+import { Button } from '~/components/ui/Button'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { ScreenView } from '~/components/ui/ScreenView'
 const schema = z.object({
   waterRate: z
     .string()

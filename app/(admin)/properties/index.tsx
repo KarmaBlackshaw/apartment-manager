@@ -1,13 +1,13 @@
 import React from 'react'
-import { View, FlatList, TouchableOpacity, Text } from 'react-native'
+import { View, FlatList, Text } from 'react-native'
 import { useRouter } from 'expo-router'
-import Ionicons from '@expo/vector-icons/Ionicons'
-import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
-import { usePropertiesWithStats } from '../../../hooks/useProperties'
-import { LoadingSpinner, EmptyState, FAB } from '../../../components/ui'
-import { ScreenLayout } from '../../../layouts/ScreenLayout'
-import { PropertyOverviewCard } from '../../../components/properties/PropertyOverviewCard'
-import { colors } from '../../../constants/theme'
+import { useTabBarScrollHandler } from '~/hooks/useTabBarScrollHandler'
+import { usePropertiesWithStats } from '~/hooks/useProperties'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { EmptyState } from '~/components/ui/EmptyState'
+import { FAB } from '~/components/ui/FAB'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { PropertyOverviewCard } from '~/components/properties/PropertyOverviewCard'
 
 export default function PropertiesScreen() {
   const router = useRouter()
@@ -26,16 +26,7 @@ export default function PropertiesScreen() {
   return (
     <ScreenLayout
       title="Properties"
-      headerLeft={undefined}
-      headerRight={
-        <TouchableOpacity
-          onPress={() => {}}
-          style={{ marginRight: 8, padding: 4 }}
-          accessibilityLabel="Notifications"
-        >
-          <Ionicons name="notifications-outline" size={24} color={colors.textSecondary} />
-        </TouchableOpacity>
-      }
+      headerLeft={null}
     >
       <FlatList
         data={properties ?? []}

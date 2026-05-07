@@ -2,27 +2,25 @@ import React from 'react'
 import { View, Text, ScrollView, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
-import { colors } from '../../../constants/theme'
-import {
-  BottomCTABar,
-  Button,
-  LoadingSpinner,
-  SectionHeader,
-  InfoRow,
-  StatusChip,
-  AvatarInitials,
-} from '../../../components/ui'
-import { ScreenLayout } from '../../../layouts/ScreenLayout'
-import type { ChipVariant } from '../../../components/ui'
-import { useBill } from '../../../hooks/useBills'
-import { useTenant } from '../../../hooks/useTenants'
-import { useUnit } from '../../../hooks/useUnits'
-import { useSettings } from '../../../hooks/useSettings'
+import { colors } from '~/constants/theme'
+import { BottomCTABar } from '~/components/ui/BottomCTABar'
+import { Button } from '~/components/ui/Button'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { SectionHeader } from '~/components/ui/SectionHeader'
+import { InfoRow } from '~/components/ui/InfoRow'
+import { StatusChip } from '~/components/ui/StatusChip'
+import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import type { ChipVariant } from '~/components/ui/StatusChip'
+import { useBill } from '~/hooks/useBills'
+import { useTenant } from '~/hooks/useTenants'
+import { useUnit } from '~/hooks/useUnits'
+import { useSettings } from '~/hooks/useSettings'
 import {
   formatCurrency,
   calcElectricityCharge,
   calcWaterCharge,
-} from '../../../lib/billing'
+} from '~/lib/billing'
 
 // ---------------------------------------------------------------------------
 // Bill status → StatusChip variant

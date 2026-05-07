@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import { colors } from '../../constants/theme'
+import { colors } from '~/constants/theme'
 
 type SettlementVariant = 'deduction' | 'credit' | 'neutral' | 'total'
 

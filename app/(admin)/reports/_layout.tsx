@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router'
-import { darkStackOptions } from '../../../constants/navigation'
+import { darkStackOptions } from '~/constants/navigation'
 
 export default function ReportsLayout() {
-  return <Stack screenOptions={darkStackOptions} />
+  return <Stack screenOptions={{ ...darkStackOptions, headerShown: false }} />
 }

@@ -2,20 +2,18 @@ import React, { useState } from 'react'
 import { View, ScrollView, Text, Pressable, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import dayjs from 'dayjs'
-import {
-  MonthTabSelector,
-  SegmentedControl,
-  SectionHeader,
-  InfoRow,
-  WarningBanner,
-  BottomCTABar,
-  Button,
-  LoadingSpinner,
-} from '../../../components/ui'
-import { ScreenLayout } from '../../../layouts/ScreenLayout'
-import { colors } from '../../../constants/theme'
-import { formatCurrency } from '../../../lib/billing'
-import { useBillPreview, useGenerateBills } from '../../../hooks/useBillingOverview'
+import { MonthTabSelector } from '~/components/ui/MonthTabSelector'
+import { SegmentedControl } from '~/components/ui/SegmentedControl'
+import { SectionHeader } from '~/components/ui/SectionHeader'
+import { InfoRow } from '~/components/ui/InfoRow'
+import { WarningBanner } from '~/components/ui/WarningBanner'
+import { BottomCTABar } from '~/components/ui/BottomCTABar'
+import { Button } from '~/components/ui/Button'
+import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+import { colors } from '~/constants/theme'
+import { formatCurrency } from '~/lib/billing'
+import { useBillPreview, useGenerateBills } from '~/hooks/useBillingOverview'
 
 // Generate 3 months: current-1, current, current+1
 function buildMonthEntries() {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text } from 'react-native'
-import { colors } from '../../constants/theme'
+import { colors } from '~/constants/theme'
 
 export type AmountVariant = 'owed' | 'credit' | 'paid' | 'zero' | 'muted' | 'default'
 export type AmountSize = 'large' | 'medium' | 'small'

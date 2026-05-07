@@ -4,8 +4,8 @@ import {
   createPayment,
   voidPayment,
   type CreatePaymentInput,
-} from '../lib/api/payments'
-import { BILLS_KEY } from './useBills'
+} from '~/lib/api/payments'
+import { BILLS_KEY } from '~/hooks/useBills'
 
 export const PAYMENTS_KEY = ['payments'] as const
 

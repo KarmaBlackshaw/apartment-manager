@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react-native'
-import { createWrapper } from '../helpers/queryWrapper'
-import { useTenants } from '../../hooks/useTenants'
+import { createWrapper } from '~/__tests__/helpers/queryWrapper'
+import { useTenants } from '~/hooks/useTenants'
 
 jest.mock('../../lib/api/tenants', () => ({
   fetchTenants: jest.fn().mockResolvedValue([

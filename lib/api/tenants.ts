@@ -1,7 +1,7 @@
-import { db } from '../../db'
-import { tenants, units } from '../../db/schema'
+import { db } from '~/db'
+import { tenants, units } from '~/db/schema'
 import { eq, and, asc } from 'drizzle-orm'
-import type { Tenant, TenantWithUnit, BillingType, TenantStatus } from '../../types'
+import type { Tenant, TenantWithUnit, BillingType, TenantStatus } from '~/types'
 import { nanoid } from 'nanoid/non-secure'
 
 export interface TenantFilters {

@@ -7,7 +7,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import * as ImagePicker from 'expo-image-picker'
-import { colors } from '../../constants/theme'
+import { colors } from '~/constants/theme'
 
 interface CameraCaptureProps {
   label: string

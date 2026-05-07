@@ -1,6 +1,6 @@
 import React from 'react'
 import { Pressable, Text, View } from 'react-native'
-import { formatPHP } from '../../lib/format'
+import { formatPHP } from '~/lib/format'
 
 export interface VacantRowProps {
   unitName: string
