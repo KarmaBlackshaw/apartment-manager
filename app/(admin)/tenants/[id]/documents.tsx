@@ -42,7 +42,7 @@ export default function DocumentsScreen() {
   }
 
   return (
-    <ScreenLayout title={tenant ? `${tenant.full_name.split(' ').pop()} — Docs` : 'Documents'}>
+    <ScreenLayout title={tenant ? `${tenant.full_name.split(' ').pop()} — Docs` : 'Documents'} backHref={`/(admin)/tenants/${id}`}>
       <FilterChipBar
         options={[
           { label: `All (${documents.length})`, value: 'all' },

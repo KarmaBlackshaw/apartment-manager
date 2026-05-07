@@ -43,6 +43,7 @@ export default function UnitDetailScreen() {
     <ScreenLayout
       title={unit.unit_number}
       headerRight={<StatusChip variant={chipVariant} label={chipLabel} />}
+      backHref={`/(admin)/properties/${propertyId}/units`}
     >
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         {/* Unit info card */}

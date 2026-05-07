@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { View, Text, Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useRouter } from 'expo-router'
+import { useNavigation } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { colors } from '../../constants/theme'
 
@@ -14,13 +14,13 @@ interface ScreenHeaderProps {
 
 export function ScreenHeader({ title, left, right, onLeftPress }: ScreenHeaderProps) {
   const insets = useSafeAreaInsets()
-  const router = useRouter()
+  const navigation = useNavigation()
 
   const handleLeftPress = () => {
     if (onLeftPress) {
       onLeftPress()
     } else {
-      router.back()
+      navigation.goBack()
     }
   }
 
@@ -49,7 +49,7 @@ export function ScreenHeader({ title, left, right, onLeftPress }: ScreenHeaderPr
 
   return (
     <View
-      className="flex-row items-end pb-2 bg-surface border-b border-border"
+      className="flex-row items-end pb-2 bg-app"
       style={{ paddingTop: insets.top, height: 56 + insets.top }}
     >
       {renderLeft()}

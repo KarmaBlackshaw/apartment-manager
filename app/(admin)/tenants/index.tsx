@@ -158,7 +158,7 @@ export default function TenantsScreen() {
         ListEmptyComponent={<EmptyState title="No tenants" />}
       />
 
-      <FAB onPress={() => router.push('/tenants/new')} />
+      <FAB onPress={() => router.push('/tenants/new')} bottomOffset={100} />
     </ScreenLayout>
   )
 }

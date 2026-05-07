@@ -90,14 +90,14 @@ export default function MoveOutScreen() {
 
   if (isLoading) {
     return (
-      <ScreenLayout title="Move-Out">
+      <ScreenLayout title="Move-Out" backHref={`/(admin)/tenants/${id}`}>
         <LoadingSpinner />
       </ScreenLayout>
     )
   }
 
   return (
-    <ScreenLayout title="Move-Out" headerLeft={backButton}>
+    <ScreenLayout title="Move-Out" headerLeft={backButton} backHref={`/(admin)/tenants/${id}`}>
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         <View className="mt-3">
           <WarningBanner

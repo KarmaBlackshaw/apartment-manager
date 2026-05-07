@@ -61,7 +61,7 @@ export default function EditPropertyScreen() {
   }
 
   return (
-    <ScreenLayout title="Edit Property">
+    <ScreenLayout title="Edit Property" backHref={`/(admin)/properties/${propertyId}`}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
         <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 48 }}>
           <Input label="Property Name" value={name} onChangeText={setName} error={errors.name} />

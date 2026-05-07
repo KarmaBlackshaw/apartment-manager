@@ -39,7 +39,7 @@ export default function NewUnitScreen() {
   }
 
   return (
-    <ScreenLayout title="Add Unit">
+    <ScreenLayout title="Add Unit" backHref={`/(admin)/properties/${propertyId}/units`}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"

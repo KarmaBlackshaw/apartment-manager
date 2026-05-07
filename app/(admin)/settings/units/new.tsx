@@ -48,7 +48,7 @@ export default function NewUnitScreen() {
   }
 
   return (
-    <ScreenLayout title="New Unit">
+    <ScreenLayout title="New Unit" backHref="/(admin)/settings/units">
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
         <ScrollView contentContainerClassName="p-4 pb-32" keyboardShouldPersistTaps="handled" {...tabBarScroll}>
           <Select

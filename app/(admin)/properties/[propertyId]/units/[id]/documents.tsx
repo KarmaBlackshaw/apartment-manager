@@ -76,7 +76,7 @@ export default function UnitDocumentsScreen() {
   }
 
   return (
-    <ScreenLayout title={title}>
+    <ScreenLayout title={title} backHref={`/(admin)/properties/${propertyId}/units/${id}`}>
       <FilterChipBar
         options={filterOptions}
         selected={filter}

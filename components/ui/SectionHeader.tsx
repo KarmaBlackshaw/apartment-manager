@@ -12,7 +12,7 @@ export function SectionHeader({ title, count, onViewAll, actionLabel = 'View all
   const displayTitle = count !== undefined ? `${title} (${count})` : title
 
   return (
-    <View className="flex-row items-center justify-between px-4 py-2">
+    <View className="flex-row items-center justify-between py-1">
       <Text className="text-[11px] font-semibold text-text-secondary">
         {displayTitle}
       </Text>

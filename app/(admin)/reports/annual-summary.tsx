@@ -63,7 +63,7 @@ export default function AnnualSummaryScreen() {
   }
 
   return (
-    <ScreenLayout title="Annual Summary" headerRight={exportBtn}>
+    <ScreenLayout title="Annual Summary" headerRight={exportBtn} backHref="/(admin)/reports">
       {isLoading ? (
         <LoadingSpinner />
       ) : (

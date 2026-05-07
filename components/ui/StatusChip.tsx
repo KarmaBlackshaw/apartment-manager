@@ -7,7 +7,7 @@ export type ChipVariant = 'success' | 'warning' | 'danger' | 'info' | 'neutral' 
 interface StatusChipProps {
   variant: ChipVariant
   label: string
-  size?: 'sm' | 'md'
+  size?: 'xs' | 'sm' | 'md'
 }
 
 const bgColor: Record<ChipVariant, string> = {
@@ -29,14 +29,28 @@ const textColor: Record<ChipVariant, string> = {
 }
 
 export function StatusChip({ variant, label, size = 'sm' }: StatusChipProps) {
-  const isMd = size === 'md'
+  let containerClass: string
+  let textClass: string
+
+  if (size === 'xs') {
+    containerClass = 'px-[6px] py-[2px]'
+    textClass = 'text-[8px]'
+  } else if (size === 'md') {
+    containerClass = 'px-3 py-[6px]'
+    textClass = 'text-xs'
+  } else {
+    // 'sm' is default
+    containerClass = 'px-2 py-1'
+    textClass = 'text-[11px]'
+  }
+
   return (
     <View
-      className={`rounded-sm self-start ${isMd ? 'px-3 py-[6px]' : 'px-2 py-1'}`}
+      className={`rounded-sm self-start ${containerClass}`}
       style={{ backgroundColor: bgColor[variant] }}
     >
       <Text
-        className={`font-semibold uppercase tracking-wide ${isMd ? 'text-xs' : 'text-[11px]'}`}
+        className={`font-semibold uppercase tracking-wide ${textClass}`}
         style={{ color: textColor[variant] }}
       >
         {label}

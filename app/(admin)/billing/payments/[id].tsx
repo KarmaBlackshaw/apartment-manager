@@ -26,7 +26,7 @@ export default function PaymentDetailScreen() {
 
   if (!payment) {
     return (
-      <ScreenLayout title="Payment Detail">
+      <ScreenLayout title="Payment Detail" backHref="/(admin)/billing">
         <View className="flex-1 items-center justify-center p-8">
           <Text className="text-danger text-center text-base">Payment not found.</Text>
         </View>
@@ -62,7 +62,7 @@ export default function PaymentDetailScreen() {
   }
 
   return (
-    <ScreenLayout title="Payment Detail">
+    <ScreenLayout title="Payment Detail" backHref="/(admin)/billing">
 
       <ScrollView
         className="flex-1"

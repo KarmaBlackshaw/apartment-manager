@@ -53,7 +53,7 @@ export default function GenerateBillsScreen() {
   }
 
   return (
-    <ScreenLayout title="Generate Bills">
+    <ScreenLayout title="Generate Bills" backHref="/(admin)/billing">
 
       <ScrollView
         className="flex-1"

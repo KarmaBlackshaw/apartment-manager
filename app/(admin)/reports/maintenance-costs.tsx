@@ -84,7 +84,7 @@ export default function MaintenanceCostsScreen() {
   }
 
   return (
-    <ScreenLayout title="Maintenance Costs" headerRight={exportBtn}>
+    <ScreenLayout title="Maintenance Costs" headerRight={exportBtn} backHref="/(admin)/reports">
       <MonthTabSelector
         months={MONTHS.map(getMonthLabel)}
         selected={getMonthLabel(month)}

@@ -30,7 +30,7 @@ export default function UnitsScreen() {
   )
 
   return (
-    <ScreenLayout title="Units" headerRight={addButton}>
+    <ScreenLayout title="Units" headerRight={addButton} backHref={`/(admin)/properties/${propertyId}`}>
       <FlatList
         data={units}
         keyExtractor={(u) => u.id}

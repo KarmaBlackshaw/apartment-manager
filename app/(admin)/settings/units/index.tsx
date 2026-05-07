@@ -53,7 +53,7 @@ export default function AllUnitsScreen() {
   if (isLoading) return <LoadingSpinner />
 
   if (!properties?.length) return (
-    <ScreenLayout title="Units" headerRight={<AddUnitButton onPress={() => router.push('/(admin)/settings/units/new')} />}>
+    <ScreenLayout title="Units" headerRight={<AddUnitButton onPress={() => router.push('/(admin)/settings/units/new')} />} backHref="/(admin)/settings">
       <View className="flex-1 items-center justify-center p-8 bg-app">
         <Ionicons name="business-outline" size={48} color="#555555" />
         <AppText color="muted" className="text-center mt-4">Add a property first before managing units.</AppText>
@@ -62,7 +62,7 @@ export default function AllUnitsScreen() {
   )
 
   return (
-    <ScreenLayout title="Units" headerRight={<AddUnitButton onPress={() => router.push('/(admin)/settings/units/new')} />}>
+    <ScreenLayout title="Units" headerRight={<AddUnitButton onPress={() => router.push('/(admin)/settings/units/new')} />} backHref="/(admin)/settings">
       <ScrollView className="flex-1 bg-app" contentContainerStyle={{ padding: 16, paddingBottom: 128 }} {...tabBarScroll}>
         {properties.map((p) => (
           <PropertySection key={p.id} property={p} router={router} />

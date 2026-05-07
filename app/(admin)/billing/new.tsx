@@ -63,7 +63,7 @@ export default function RecordPaymentScreen() {
   }
 
   return (
-    <ScreenLayout title="Record Payment">
+    <ScreenLayout title="Record Payment" backHref="/(admin)/billing">
     <KeyboardAvoidingView
       className="flex-1"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

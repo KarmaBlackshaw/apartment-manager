@@ -44,6 +44,7 @@ export default function ReceiptScreen() {
   return (
     <ScreenLayout
       title="Receipt"
+      backHref="/(admin)/billing"
       headerRight={
         <Pressable onPress={router.back} hitSlop={8}>
           <Text className="text-primary text-base font-medium">Done</Text>

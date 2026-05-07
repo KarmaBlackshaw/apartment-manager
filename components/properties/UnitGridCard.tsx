@@ -54,7 +54,7 @@ export function UnitGridCard({ unitName, tenantName, status, onPress }: UnitGrid
         animatedStyle,
         { borderLeftColor: borderColorMap[status], borderLeftWidth: 3 },
       ]}
-      className="bg-surface rounded-[10px] p-3"
+      className="bg-surface rounded-xl p-3"
       onPressIn={() => {
         scale.value = withTiming(0.97, { duration: 100 })
       }}
@@ -69,7 +69,7 @@ export function UnitGridCard({ unitName, tenantName, status, onPress }: UnitGrid
         {tenantName ?? 'Vacant'}
       </Text>
       <View className="mt-[6px]">
-        <StatusChip variant={chipVariantMap[status]} label={chipLabelMap[status]} size="sm" />
+        <StatusChip variant={chipVariantMap[status]} label={chipLabelMap[status]} size="xs" />
       </View>
     </AnimatedPressable>
   )

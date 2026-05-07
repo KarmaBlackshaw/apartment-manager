@@ -12,7 +12,7 @@ interface FABProps {
   bottomOffset?: number
 }
 
-export function FAB({ onPress, icon = 'add', bottomOffset = 100 }: FABProps) {
+export function FAB({ onPress, icon = 'add', bottomOffset = 82 }: FABProps) {
   const insets = useSafeAreaInsets()
   const scale = useSharedValue(1)
 
@@ -25,7 +25,7 @@ export function FAB({ onPress, icon = 'add', bottomOffset = 100 }: FABProps) {
       onPress={onPress}
       onPressIn={() => { scale.value = withTiming(0.92, { duration: 120 }) }}
       onPressOut={() => { scale.value = withTiming(1, { duration: 150 }) }}
-      className="absolute right-5 w-[56px] h-[56px] rounded-full bg-primary items-center justify-center"
+      className="absolute right-5 w-11 h-11 rounded-full bg-primary items-center justify-center"
       style={[
         {
           bottom: insets.bottom + bottomOffset,
@@ -38,7 +38,7 @@ export function FAB({ onPress, icon = 'add', bottomOffset = 100 }: FABProps) {
         animatedStyle,
       ]}
     >
-      <Ionicons name={icon} size={28} color="#FFFFFF" />
+      <Ionicons name={icon} size={20} color="#FFFFFF" />
     </AnimatedPressable>
   )
 }

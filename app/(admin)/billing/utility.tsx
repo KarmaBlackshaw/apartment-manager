@@ -83,7 +83,7 @@ export default function UtilityReadingScreen() {
   if (unitLoading || readingLoading) return <LoadingSpinner />
 
   return (
-    <ScreenLayout title="Utility Reading">
+    <ScreenLayout title="Utility Reading" backHref="/(admin)/billing">
 
       {/* Context label */}
       <Text className="text-text-secondary text-[13px] text-center py-2">

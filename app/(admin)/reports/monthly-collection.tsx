@@ -58,7 +58,7 @@ export default function MonthlyCollectionScreen() {
   const pct = stats.totalBilled > 0 ? Math.round((stats.totalCollected / stats.totalBilled) * 100) : 0
 
   return (
-    <ScreenLayout title={title} headerRight={exportBtn}>
+    <ScreenLayout title={title} headerRight={exportBtn} backHref="/(admin)/reports">
       <MonthTabSelector
         months={MONTHS.map(getMonthLabel)}
         selected={getMonthLabel(month)}

@@ -27,7 +27,7 @@ export default function ReportsMenuScreen() {
   const [propertyId, setPropertyId] = useState<string | undefined>()
 
   return (
-    <ScreenLayout title="Reports">
+    <ScreenLayout title="Reports" headerLeft="back" backHref="/(admin)">
       <View className="px-4 py-2 flex-row items-center">
         <PropertySelector selectedId={propertyId} onChange={setPropertyId} />
       </View>

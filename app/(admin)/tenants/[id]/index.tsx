@@ -56,7 +56,7 @@ export default function TenantDetailScreen() {
   const statusLabel = tenant.status === 'active' ? 'ACTIVE' : 'INACTIVE'
 
   return (
-    <ScreenLayout title={tenant.full_name} headerRight={<StatusChip variant={statusVariant} label={statusLabel} />}>
+    <ScreenLayout title={tenant.full_name} headerRight={<StatusChip variant={statusVariant} label={statusLabel} />} backHref="/(admin)/tenants">
 
       <ScrollView contentContainerStyle={{ paddingBottom: 48 }}>
         {/* Profile card */}

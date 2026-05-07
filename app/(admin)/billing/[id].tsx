@@ -46,7 +46,7 @@ export default function BillDetailScreen() {
 
   if (isLoading) {
     return (
-      <ScreenLayout title="Bill">
+      <ScreenLayout title="Bill" backHref="/(admin)/billing">
         <LoadingSpinner />
       </ScreenLayout>
     )
@@ -54,7 +54,7 @@ export default function BillDetailScreen() {
 
   if (isError || !bill) {
     return (
-      <ScreenLayout title="Bill">
+      <ScreenLayout title="Bill" backHref="/(admin)/billing">
         <View className="flex-1 items-center justify-center p-8">
           <Text className="text-danger text-center text-[15px]">
             {isError ? 'Could not load bill.' : 'Bill not found.'}
@@ -107,7 +107,7 @@ export default function BillDetailScreen() {
   }
 
   return (
-    <ScreenLayout title={headerTitle}>
+    <ScreenLayout title={headerTitle} backHref="/(admin)/billing">
 
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         {/* 1. Tenant header card */}

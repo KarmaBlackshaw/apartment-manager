@@ -4,13 +4,10 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useProperty, usePropertyStats } from '../../../../hooks/useProperties'
 import { useUnitsWithStatus } from '../../../../hooks/useUnits'
-import { LoadingSpinner, UnitGridCard } from '../../../../components/ui'
+import { LoadingSpinner, UnitGridCard, FAB, SectionHeader } from '../../../../components/ui'
 import { ScreenLayout } from '../../../../layouts/ScreenLayout'
 import { colors } from '../../../../constants/theme'
-
-function formatPHP(amount: number) {
-  return `₱${amount.toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
-}
+import { PropertySummaryCard } from '../../../../components/properties/PropertySummaryCard'
 
 export default function PropertyDetailScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()
@@ -18,6 +15,7 @@ export default function PropertyDetailScreen() {
   const { data: property, isLoading, isError, error } = useProperty(propertyId)
   const { data: stats } = usePropertyStats(propertyId)
   const { data: units = [] } = useUnitsWithStatus(propertyId)
+  const overdueCount = units.filter(u => u.paymentStatus === 'overdue' || u.paymentStatus === 'partial').length
 
   if (isLoading) return <LoadingSpinner />
   if (isError || !property) return (
@@ -36,26 +34,17 @@ export default function PropertyDetailScreen() {
     : 0
 
   const headerRight = (
-    <View className="flex-row items-center gap-1">
-      <TouchableOpacity
-        onPress={() => router.push(`/(admin)/properties/${propertyId}/units/new` as never)}
-        style={{ padding: 4 }}
-        accessibilityLabel="Add unit"
-      >
-        <Ionicons name="add" size={26} color={colors.textSecondary} />
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => router.push(`/(admin)/properties/${propertyId}/edit` as never)}
-        style={{ marginRight: 8, padding: 4 }}
-        accessibilityLabel="Edit property"
-      >
-        <Ionicons name="create-outline" size={22} color={colors.textSecondary} />
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      onPress={() => router.push(`/(admin)/properties/${propertyId}/edit` as never)}
+      style={{ marginRight: 8, padding: 4 }}
+      accessibilityLabel="Edit property"
+    >
+      <Ionicons name="create-outline" size={22} color={colors.textSecondary} />
+    </TouchableOpacity>
   )
 
   return (
-    <ScreenLayout title={property.name} headerRight={headerRight}>
+    <ScreenLayout title={property.name} headerRight={headerRight} backHref="/(admin)/properties">
       <FlatList
         data={units}
         keyExtractor={(u) => u.id}
@@ -65,55 +54,21 @@ export default function PropertyDetailScreen() {
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         ListHeaderComponent={
           <>
-            <View
-              className="rounded-xl p-4 mt-3 mb-4"
-              style={{ backgroundColor: colors.surface }}
-            >
-              <View className="flex-row items-start justify-between">
-                <View>
-                  <Text
-                    className="text-4xl font-bold"
-                    style={{ color: colors.success }}
-                  >
-                    {occupancyPct}%
-                  </Text>
-                  <Text className="text-xs mt-[2px]" style={{ color: colors.textMuted }}>
-                    occupied
-                  </Text>
-                </View>
-                <View className="items-end flex-1 ml-4">
-                  {stats && (
-                    <Text className="text-sm" style={{ color: colors.textSecondary }}>
-                      {formatPHP(stats.collectedThisMonth)} / {formatPHP(stats.expectedMonthlyIncome)} collected
-                    </Text>
-                  )}
-                  <View
-                    className="w-full h-[6px] rounded-full mt-2 overflow-hidden"
-                    style={{ backgroundColor: colors.elevated }}
-                  >
-                    <View
-                      className="h-full rounded-full"
-                      style={{
-                        width: `${occupancyPct}%`,
-                        backgroundColor: colors.success,
-                      }}
-                    />
-                  </View>
-                  {stats && stats.expiringContracts > 0 && (
-                    <View className="flex-row gap-2 mt-2 flex-wrap justify-end">
-                      <View
-                        className="px-2 py-[3px] rounded-full"
-                        style={{ backgroundColor: colors.warningBg }}
-                      >
-                        <Text className="text-[11px] font-medium" style={{ color: colors.warningText }}>
-                          {stats.expiringContracts} expiring
-                        </Text>
-                      </View>
-                    </View>
-                  )}
-                </View>
-              </View>
+            <View className="pt-3 pb-0">
+              <PropertySummaryCard
+                occupancyPct={occupancyPct}
+                collectedThisMonth={stats?.collectedThisMonth ?? 0}
+                expectedMonthlyIncome={stats?.expectedMonthlyIncome ?? 0}
+                overdueCount={overdueCount}
+                expiringContracts={stats?.expiringContracts ?? 0}
+              />
             </View>
+            <SectionHeader
+              title="All units"
+              count={units.length}
+              actionLabel="Add unit"
+              onViewAll={() => router.push(`/(admin)/properties/${propertyId}/units/new` as never)}
+            />
           </>
         }
         renderItem={({ item }) => (
@@ -148,6 +103,7 @@ export default function PropertyDetailScreen() {
           </View>
         }
       />
+      <FAB onPress={() => router.push(`/(admin)/properties/${propertyId}/units/new` as never)} />
     </ScreenLayout>
   )
 }

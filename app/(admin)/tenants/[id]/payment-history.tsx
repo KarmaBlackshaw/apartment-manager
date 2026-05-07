@@ -43,14 +43,14 @@ export default function PaymentHistoryScreen() {
 
   if (isLoading) {
     return (
-      <ScreenLayout title="Payment History">
+      <ScreenLayout title="Payment History" backHref={`/(admin)/tenants/${id}`}>
         <LoadingSpinner />
       </ScreenLayout>
     )
   }
 
   return (
-    <ScreenLayout title="Payment History" headerRight={exportBtn}>
+    <ScreenLayout title="Payment History" headerRight={exportBtn} backHref={`/(admin)/tenants/${id}`}>
       <View className="bg-surface rounded-md mx-4 my-3 p-4">
         <View className="flex-row items-center gap-3">
           <AvatarInitials name={tenant?.full_name ?? ''} size="md" />
