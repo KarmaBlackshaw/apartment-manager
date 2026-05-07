@@ -305,7 +305,7 @@ export default function OnboardingScreen() {
           <ScrollView
             contentInsetAdjustmentBehavior="automatic"
             keyboardShouldPersistTaps="handled"
-            contentContainerStyle={{ padding: 20, gap: 16, paddingBottom: 32 }}
+            contentContainerClassName="p-5 gap-4 pb-[88px]"
           >
             {step === 0 && <StepProperty form={form} setForm={setForm} />}
             {step === 1 && <StepOwner form={form} setForm={setForm} />}

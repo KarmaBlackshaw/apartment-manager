@@ -55,7 +55,7 @@ export default function GenerateBillsScreen() {
 
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingBottom: 120 }}
+        contentContainerClassName="pb-[88px]"
         showsVerticalScrollIndicator={false}
       >
         {/* Month selector */}

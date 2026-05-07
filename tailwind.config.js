@@ -81,4 +81,11 @@ module.exports = {
       },
     },
   },
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.text-align-vertical-top': { textAlignVertical: 'top' },
+      })
+    },
+  ],
 }

@@ -213,10 +213,10 @@ export default function NewTenantScreen() {
   function renderStep2() {
     return (
       <>
-        <AppText variant="caption" color="muted" style={{ marginBottom: 16 }}>
+        <AppText variant="caption" color="muted" className="mb-4">
           Accepted: UMID · Driver's License · Passport · PhilHealth · Voter's ID
         </AppText>
-        <AppText variant="label" color="secondary" style={{ marginBottom: 8 }}>
+        <AppText variant="label" color="secondary" className="mb-2">
           Front of valid ID
         </AppText>
         <CameraCapture
@@ -224,8 +224,8 @@ export default function NewTenantScreen() {
           onCapture={setIdFrontUri}
           captured={idFrontUri}
         />
-        <View style={{ height: 16 }} />
-        <AppText variant="label" color="secondary" style={{ marginBottom: 8 }}>
+        <View className="h-4" />
+        <AppText variant="label" color="secondary" className="mb-2">
           Back of ID
         </AppText>
         <CameraCapture
@@ -307,7 +307,7 @@ export default function NewTenantScreen() {
           error={errors.selectedUnitId}
         />
         <DateInput label="Move-in Date *" value={moveInDate} onChange={setMoveInDate} />
-        <AppText variant="label" color="secondary" style={{ marginTop: 8, marginBottom: 8 }}>
+        <AppText variant="label" color="secondary" className="mt-2 mb-2">
           Contract Type
         </AppText>
         <SegmentedControl
@@ -395,13 +395,13 @@ export default function NewTenantScreen() {
           <AppText
             variant="caption"
             color="muted"
-            style={{ marginTop: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}
+            className="mt-2 uppercase tracking-[0.5px]"
           >
             Step {step} of 5 — {STEP_TITLES[step]}
           </AppText>
         </View>
 
-        <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 120 }}>{renderStep()}</ScrollView>
+        <ScrollView contentContainerClassName="p-4 pb-[88px]">{renderStep()}</ScrollView>
 
         <BottomCTABar>
           <Button

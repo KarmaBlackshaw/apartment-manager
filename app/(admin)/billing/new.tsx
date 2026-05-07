@@ -67,7 +67,7 @@ export default function RecordPaymentScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
 
-      <ScrollView contentContainerStyle={{ paddingBottom: 160 }}>
+      <ScrollView contentContainerClassName="pb-[88px]">
         {/* 1. Tenant / unit card (read-only) */}
         {(tenant || unit) && (
           <View className="bg-elevated rounded-md m-4 p-[14px]">
@@ -87,7 +87,7 @@ export default function RecordPaymentScreen() {
             keyboardType="numeric"
             placeholder="0.00"
             autoFocus
-            style={{ fontSize: 28 }}
+            className="text-[28px]"
           />
         </View>
 

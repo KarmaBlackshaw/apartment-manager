@@ -96,7 +96,7 @@ export default function MoveOutScreen() {
 
   return (
     <ScreenLayout title="Move-Out" headerLeft={backButton} backHref={`/(admin)/tenants/${id}`}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+      <ScrollView contentContainerClassName="pb-[88px]">
         <View className="mt-3">
           <WarningBanner
             message="Review settlement before confirming. This cannot be undone."
@@ -105,8 +105,7 @@ export default function MoveOutScreen() {
         </View>
 
         <AppText
-          className="text-[11px] font-semibold text-text-muted mx-4 mt-5 mb-2"
-          style={{ letterSpacing: 0.5, textTransform: 'uppercase' }}
+          className="text-[11px] font-semibold text-text-muted mx-4 mt-5 mb-2 tracking-[0.5px] uppercase"
         >
           SETTLEMENT BREAKDOWN
         </AppText>
@@ -170,20 +169,18 @@ export default function MoveOutScreen() {
           </View>
         ) : (
           <Pressable onPress={() => setAddingDamage(true)} className="px-4 py-4">
-            <AppText style={{ color: colors.textLink }}>+ Add damage deduction</AppText>
+            <AppText className="text-text-link">+ Add damage deduction</AppText>
           </Pressable>
         )}
 
         <AppText
-          className="text-[11px] font-semibold text-text-muted mx-4 mt-5 mb-2"
-          style={{ letterSpacing: 0.5, textTransform: 'uppercase' }}
+          className="text-[11px] font-semibold text-text-muted mx-4 mt-5 mb-2 tracking-[0.5px] uppercase"
         >
           MOVE-OUT NOTES
         </AppText>
         <View className="mx-4 bg-surface rounded-md">
           <TextInput
-            className="p-4 text-text-primary text-sm"
-            style={{ minHeight: 100, textAlignVertical: 'top' }}
+            className="p-4 text-text-primary text-sm min-h-[100px] text-align-vertical-top"
             multiline
             numberOfLines={4}
             placeholder="Any additional notes..."

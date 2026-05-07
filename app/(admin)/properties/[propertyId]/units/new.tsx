@@ -46,7 +46,7 @@ export default function NewUnitScreen() {
         className="flex-1"
       >
         <ScrollView
-          contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
+          contentContainerClassName="p-4 pb-[88px]"
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="interactive"
         >

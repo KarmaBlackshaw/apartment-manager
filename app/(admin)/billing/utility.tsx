@@ -97,7 +97,7 @@ export default function UtilityReadingScreen() {
 
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingBottom: 120 }}
+        contentContainerClassName="pb-[88px]"
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
@@ -140,8 +140,7 @@ export default function UtilityReadingScreen() {
         {/* Computed charge card */}
         <View className="bg-success-bg rounded-md mx-4 mt-3 p-4 items-center">
           <Text
-            className="text-text-muted text-xs uppercase mb-1"
-            style={{ letterSpacing: 0.5 }}
+            className="text-text-muted text-xs uppercase mb-1 tracking-[0.5px]"
           >
             COMPUTED CHARGE
           </Text>
