@@ -18,12 +18,12 @@ export function useUnits(propertyId: string) {
   })
 }
 
-export function useUnitsWithStatus(propertyId: string, floor?: number | null) {
+export function useUnitsWithStatus(propertyId: string) {
   return useQuery({
-    queryKey: ['units-with-status', propertyId, floor ?? 'all'],
+    queryKey: ['units-with-status', propertyId],
     queryFn: async () => {
       const all = await fetchUnitsWithStatus(propertyId)
-      return floor != null ? all.filter((u) => u.floor === floor) : all
+      return all
     },
     enabled: !!propertyId,
   })

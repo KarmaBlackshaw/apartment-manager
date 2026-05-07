@@ -15,7 +15,7 @@ export async function seedDatabase() {
   })
 
   await db.insert(units).values([
-    { id: nanoid(), property_id: propId, unit_number: '101', floor: 1, bedrooms: 2, bathrooms: 1, billing_type: 'monthly', monthly_rate: 500, daily_rate: null },
-    { id: nanoid(), property_id: propId, unit_number: '102', floor: 1, bedrooms: 1, bathrooms: 1, billing_type: 'daily', monthly_rate: null, daily_rate: 30 },
+    { id: nanoid(), property_id: propId, unit_number: '101', monthly_rate: 5000, billing_day: 1 },
+    { id: nanoid(), property_id: propId, unit_number: '102', monthly_rate: 4500, billing_day: 1 },
   ])
 }

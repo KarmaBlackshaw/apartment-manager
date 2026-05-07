@@ -1,7 +1,6 @@
 export type Role = 'admin' | 'tenant'
 export type BillingType = 'monthly' | 'daily'
 export type UnitStatus = 'available' | 'occupied' | 'maintenance'
-export type UnitType = 'studio' | '1br' | '2br' | 'bedspacer'
 export type BillStatus = 'pending' | 'paid' | 'overdue'
 export type TenantStatus = 'active' | 'inactive'
 export type PaymentStatus = 'paid' | 'overdue' | 'partial' | 'vacant'
@@ -27,17 +26,10 @@ export interface Unit {
   id: string
   property_id: string
   unit_number: string
-  floor: number | null
-  bedrooms: number
-  bathrooms: number
   monthly_rate: number | null
-  daily_rate: number | null
-  billing_type: BillingType
-  status: UnitStatus
-  unit_type: UnitType | null
-  amenities: string | null
-  size_sqm: number | null
   billing_day: number | null
+  notes: string | null
+  status: UnitStatus
   created_at: string
 }
 
@@ -57,21 +49,6 @@ export interface UnitDetail extends Unit {
   balance: number
   openMaintenanceCount: number
   documentCategories: string[]
-}
-
-export interface Bed {
-  id: string
-  unit_id: string
-  label: string
-  daily_rate: number
-  tenant_id: string | null
-  vacated_at: string | null
-  created_at: string
-}
-
-export interface BedWithStatus extends Bed {
-  tenantLastName: string | null
-  status: 'paid' | 'overdue' | 'vacant'
 }
 
 export interface PropertyWithStats {
@@ -147,7 +124,7 @@ export interface AppSettings {
 
 // Enriched types used in UI list views
 export interface TenantWithUnit extends Tenant {
-  unit: Pick<Unit, 'unit_number' | 'floor' | 'billing_type'> | null
+  unit: Pick<Unit, 'unit_number'> | null
 }
 
 export interface BillWithTenant extends Bill {

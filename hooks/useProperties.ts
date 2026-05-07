@@ -23,6 +23,7 @@ export function useProperty(id: string) {
     queryKey: [...PROPERTIES_KEY, id],
     queryFn: () => fetchProperty(id),
     enabled: !!id,
+    retry: 0,
   })
 }
 

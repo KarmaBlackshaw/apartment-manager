@@ -31,7 +31,10 @@ export function FloatingTabBar({ state, descriptors, navigation }: BottomTabBarP
     return () => visibility.removeListener(id)
   }, [visibility])
 
-  const visible = state.routes.filter((r) => !descriptors[r.key].options.tabBarButton)
+  const visible = state.routes.filter((r) => {
+    const opts = descriptors[r.key].options as any
+    return !opts.tabBarButton && opts.href !== null
+  })
   const activeKey = state.routes[state.index].key
 
   return (

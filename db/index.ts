@@ -6,10 +6,17 @@ const expo = openDatabaseSync('apartment-manager.db', { enableChangeListener: tr
 export const db = drizzle(expo, { schema })
 
 export function initializeDatabase() {
-  // Detect old schema (pre-refactor had first_name/last_name instead of full_name).
-  // If found, wipe all tables so CREATE TABLE below runs fresh.
+  // Detect old schema and wipe all tables so CREATE TABLE below runs fresh.
+  // Triggers:
+  //  - tenants table lacks full_name (pre-refactor first_name/last_name layout)
+  //  - units table still has the legacy `floor` column
+  //  - legacy `beds` table exists in sqlite_master
   const tenantCols = expo.getAllSync('PRAGMA table_info(tenants)') as { name: string }[]
-  if (tenantCols.length > 0 && !tenantCols.some(c => c.name === 'full_name')) {
+  const unitCols = expo.getAllSync('PRAGMA table_info(units)') as { name: string }[]
+  const hasBeds = (expo.getAllSync("SELECT name FROM sqlite_master WHERE type='table' AND name='beds'") as { name: string }[]).length > 0
+  const hasOldUnitsSchema = unitCols.length > 0 && unitCols.some(c => c.name === 'floor')
+  const hasOldTenantsSchema = tenantCols.length > 0 && !tenantCols.some(c => c.name === 'full_name')
+  if (hasOldTenantsSchema || hasOldUnitsSchema || hasBeds) {
     expo.execSync(`
       PRAGMA foreign_keys = OFF;
       DROP TABLE IF EXISTS bills;
@@ -18,6 +25,11 @@ export function initializeDatabase() {
       DROP TABLE IF EXISTS units;
       DROP TABLE IF EXISTS properties;
       DROP TABLE IF EXISTS app_settings;
+      DROP TABLE IF EXISTS documents;
+      DROP TABLE IF EXISTS payments;
+      DROP TABLE IF EXISTS utility_readings;
+      DROP TABLE IF EXISTS maintenance_issues;
+      DROP TABLE IF EXISTS beds;
       PRAGMA foreign_keys = ON;
     `)
   }
@@ -38,13 +50,11 @@ export function initializeDatabase() {
       id TEXT PRIMARY KEY,
       property_id TEXT NOT NULL REFERENCES properties(id),
       unit_number TEXT NOT NULL,
-      floor INTEGER,
-      bedrooms INTEGER NOT NULL DEFAULT 1,
-      bathrooms INTEGER NOT NULL DEFAULT 1,
       monthly_rate REAL,
-      daily_rate REAL,
-      billing_type TEXT NOT NULL CHECK (billing_type IN ('monthly', 'daily')),
+      billing_type TEXT NOT NULL CHECK (billing_type IN ('monthly', 'daily')) DEFAULT 'monthly',
       status TEXT NOT NULL DEFAULT 'available' CHECK (status IN ('available', 'occupied', 'maintenance')),
+      billing_day INTEGER DEFAULT 1,
+      notes TEXT,
       created_at TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP),
       UNIQUE(property_id, unit_number)
     );
@@ -122,16 +132,6 @@ export function initializeDatabase() {
       created_at TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP)
     );
 
-    CREATE TABLE IF NOT EXISTS beds (
-      id TEXT PRIMARY KEY,
-      unit_id TEXT NOT NULL REFERENCES units(id),
-      label TEXT NOT NULL,
-      daily_rate REAL NOT NULL DEFAULT 0,
-      tenant_id TEXT REFERENCES tenants(id),
-      vacated_at TEXT,
-      created_at TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP)
-    );
-
     CREATE TABLE IF NOT EXISTS utility_readings (
       id TEXT PRIMARY KEY,
       unit_id TEXT NOT NULL REFERENCES units(id),
@@ -172,10 +172,7 @@ export function initializeDatabase() {
     "ALTER TABLE bills ADD COLUMN electricity_previous REAL",
     "ALTER TABLE bills ADD COLUMN electricity_current REAL",
     "ALTER TABLE tenants ADD COLUMN include_internet INTEGER NOT NULL DEFAULT 0",
-    "ALTER TABLE units ADD COLUMN unit_type TEXT DEFAULT 'studio'",
-    "ALTER TABLE units ADD COLUMN amenities TEXT DEFAULT '[]'",
-    "ALTER TABLE units ADD COLUMN size_sqm REAL",
-    "ALTER TABLE units ADD COLUMN billing_day INTEGER DEFAULT 1",
+    "ALTER TABLE units ADD COLUMN notes TEXT",
   ]
   for (const stmt of alterStatements) {
     try { expo.execSync(stmt) } catch { /* column already exists */ }

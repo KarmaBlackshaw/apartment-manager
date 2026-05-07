@@ -42,8 +42,6 @@ function mapRowsToTenantWithUnit(rows: {
   due_day: number | null
   include_internet: number
   unit_number: string | null
-  unit_floor: number | null
-  unit_billing_type: string | null
 }[]): TenantWithUnit[] {
   return rows.map((r) => ({
     id: r.id,
@@ -65,8 +63,6 @@ function mapRowsToTenantWithUnit(rows: {
     unit: r.unit_number
       ? {
           unit_number: r.unit_number,
-          floor: r.unit_floor,
-          billing_type: r.unit_billing_type as BillingType,
         }
       : null,
   }))
@@ -90,8 +86,6 @@ const selectFields = {
   due_day: tenants.due_day,
   include_internet: tenants.include_internet,
   unit_number: units.unit_number,
-  unit_floor: units.floor,
-  unit_billing_type: units.billing_type,
 }
 
 export async function fetchTenants(filters?: TenantFilters): Promise<TenantWithUnit[]> {

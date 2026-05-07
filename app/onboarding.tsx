@@ -27,7 +27,6 @@ interface FormState {
   propertyName: string
   address: string
   city: string
-  floors: string
   totalUnits: string
   ownerName: string
   ownerPhone: string
@@ -128,13 +127,6 @@ function StepProperty({ form, setForm }: { form: FormState; setForm: React.Dispa
         value={form.city}
         onChangeText={(v) => setForm((f) => ({ ...f, city: v }))}
         placeholder="Quezon City"
-      />
-      <Field
-        label="Number of Floors"
-        value={form.floors}
-        onChangeText={(v) => setForm((f) => ({ ...f, floors: v }))}
-        placeholder="3"
-        keyboardType="number-pad"
       />
       <Field
         label="Total Units"
@@ -266,7 +258,6 @@ export default function OnboardingScreen() {
     propertyName: '',
     address: '',
     city: '',
-    floors: '',
     totalUnits: '',
     ownerName: '',
     ownerPhone: '',
@@ -291,7 +282,7 @@ export default function OnboardingScreen() {
         id: nanoid(),
         name: form.propertyName.trim() || 'My Property',
         address: addressFull || 'Not specified',
-        description: `${form.floors ? `${form.floors} floors` : ''}${form.floors && form.totalUnits ? ', ' : ''}${form.totalUnits ? `${form.totalUnits} units` : ''}`.trim() || null,
+        description: form.totalUnits.trim() ? `${form.totalUnits.trim()} units` : null,
       })
 
       await updateSetting('apartment_name', form.propertyName.trim() || 'My Property')

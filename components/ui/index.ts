@@ -1,4 +1,5 @@
 export { AppHeader } from './AppHeader'
+export { ScreenView } from './ScreenView'
 export { StatusChip } from './StatusChip'
 export type { ChipVariant } from './StatusChip'
 export { AvatarInitials } from './AvatarInitials'
@@ -49,9 +50,6 @@ export { PropertyCard } from '../properties/PropertyCard'
 export { PropertySelector } from '../properties/PropertySelector'
 export { UnitGridCard } from '../properties/UnitGridCard'
 export type { UnitStatus } from '../properties/UnitGridCard'
-export { FloorTabSelector } from '../properties/FloorTabSelector'
-export { AmenityChipSelector } from '../properties/AmenityChipSelector'
-export { BedSlotCard } from '../properties/BedSlotCard'
 export { UnitCard } from '../properties/UnitCard'
 
 // documents/

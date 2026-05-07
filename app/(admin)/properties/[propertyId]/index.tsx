@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react'
+import React from 'react'
 import { View, FlatList, Text, TouchableOpacity } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useProperty, usePropertyStats } from '../../../../hooks/useProperties'
 import { useUnitsWithStatus } from '../../../../hooks/useUnits'
 import {
-  AppHeader, LoadingSpinner, FloorTabSelector, UnitGridCard,
+  AppHeader, LoadingSpinner, UnitGridCard,
 } from '../../../../components/ui'
 import { colors } from '../../../../constants/theme'
 
@@ -16,21 +16,19 @@ function formatPHP(amount: number) {
 export default function PropertyDetailScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()
   const router = useRouter()
-  const { data: property, isLoading } = useProperty(propertyId)
+  const { data: property, isLoading, isError, error } = useProperty(propertyId)
   const { data: stats } = usePropertyStats(propertyId)
-  const [selectedFloor, setSelectedFloor] = useState<number | null>(null)
-  const { data: units = [] } = useUnitsWithStatus(propertyId, selectedFloor)
-  const { data: allUnits = [] } = useUnitsWithStatus(propertyId)
-
-  const floors = useMemo(() => {
-    const floorSet = new Set(allUnits.map((u) => u.floor).filter((f): f is number => f != null))
-    return Array.from(floorSet).sort((a, b) => a - b)
-  }, [allUnits])
+  const { data: units = [] } = useUnitsWithStatus(propertyId)
 
   if (isLoading) return <LoadingSpinner />
-  if (!property) return (
+  if (isError || !property) return (
     <View className="flex-1 items-center justify-center p-8 bg-app">
-      <Text className="text-danger text-center">Property not found.</Text>
+      <Text className="text-danger text-center mb-4">
+        {isError ? `Error: ${String(error)}` : 'Property not found.'}
+      </Text>
+      <TouchableOpacity onPress={() => router.back()} style={{ padding: 12 }}>
+        <Text style={{ color: colors.primary }}>← Go back</Text>
+      </TouchableOpacity>
     </View>
   )
 
@@ -121,17 +119,6 @@ export default function PropertyDetailScreen() {
                 </View>
               </View>
             </View>
-
-            {/* Floor tabs */}
-            {floors.length > 0 && (
-              <View className="mb-3 -mx-4">
-                <FloorTabSelector
-                  floors={floors}
-                  selected={selectedFloor ?? floors[0] ?? 1}
-                  onChange={(f) => setSelectedFloor(selectedFloor === f ? null : f)}
-                />
-              </View>
-            )}
           </>
         }
         renderItem={({ item }) => (
@@ -154,7 +141,7 @@ export default function PropertyDetailScreen() {
         ListEmptyComponent={
           <View className="items-center py-12">
             <Text className="text-sm" style={{ color: colors.textMuted }}>
-              No units{selectedFloor != null ? ` on floor ${selectedFloor}` : ''}
+              No units yet
             </Text>
             <TouchableOpacity
               onPress={() => router.push(`/(admin)/properties/${propertyId}/units/new`)}

@@ -5,8 +5,8 @@ test('properties table has required columns', () => {
   expect(properties.address).toBeDefined()
 })
 
-test('units table has billing_type column', () => {
-  expect(units.billing_type).toBeDefined()
+test('units table has status column', () => {
+  expect(units.status).toBeDefined()
 })
 
 test('bills table has status column', () => {

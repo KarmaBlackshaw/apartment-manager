@@ -29,6 +29,28 @@ Prefer small, focused components over large monolithic screens. If a screen file
 - Bottom tab bar: 4 tabs
 - Date formatting/manipulation: `dayjs` (not date-fns)
 
+## Safe Area
+
+Always wrap screen content in `<ScreenView>` from `components/ui`. It handles `bg-app`, `flex-1`, and safe-area insets automatically.
+
+```tsx
+import { ScreenView } from '../components/ui'
+
+// Screen with AppHeader (top handled by native stack header):
+<ScreenView edges={['bottom']}>
+  ...
+</ScreenView>
+
+// Full-screen custom layout (no AppHeader — lock, onboarding, modals):
+<ScreenView>   {/* defaults to edges={['top', 'bottom']} */}
+  ...
+</ScreenView>
+```
+
+For scrollable content inside `ScreenView`, still add `contentContainerStyle={{ paddingBottom: 120 }}` on FlatList/ScrollView to clear the floating tab bar — `ScreenView` only pads the gesture bar, not the tab bar.
+
+**Do NOT use `<SafeAreaView>` from `react-native`** — it ignores the dark theme. Never call `useSafeAreaInsets()` directly in screen files; use `ScreenView` instead.
+
 ## Conventions
 
 - TypeScript strict mode

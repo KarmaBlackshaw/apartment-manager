@@ -1,22 +1,13 @@
 import React from 'react'
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import Ionicons from '@expo/vector-icons/Ionicons'
 import dayjs from 'dayjs'
 import { useUnitDetail } from '../../../../../../hooks/useUnits'
 import {
   AppHeader, LoadingSpinner, StatusChip, AvatarInitials,
   BalanceCard, SectionHeader, AmountText,
 } from '../../../../../../components/ui'
-import { AmenityChipSelector } from '../../../../../../components/properties/AmenityChipSelector'
 import { colors } from '../../../../../../constants/theme'
-
-const UNIT_TYPE_LABELS: Record<string, string> = {
-  studio: 'Studio',
-  '1br': '1BR',
-  '2br': '2BR',
-  bedspacer: 'Bedspacer',
-}
 
 function unitPaymentChipVariant(balance: number, isOccupied: boolean) {
   if (!isOccupied) return 'neutral' as const
@@ -46,8 +37,6 @@ export default function UnitDetailScreen() {
   const balance = unit.balance
   const chipVariant = unitPaymentChipVariant(balance, isOccupied)
   const chipLabel = unitStatusLabel(balance, isOccupied)
-  const amenities: string[] = unit.amenities ? JSON.parse(unit.amenities) : []
-  const unitTypeLabel = unit.unit_type ? UNIT_TYPE_LABELS[unit.unit_type] ?? unit.unit_type : null
 
   return (
     <View className="flex-1 bg-app">
@@ -66,34 +55,11 @@ export default function UnitDetailScreen() {
           className="mx-4 mt-4 rounded-xl p-4"
           style={{ backgroundColor: colors.surface }}
         >
-          <View className="flex-row items-start justify-between">
-            <View className="flex-1">
-              <Text className="text-base font-bold" style={{ color: colors.textPrimary }}>
-                {unit.unit_number}{unit.floor != null ? ` — Floor ${unit.floor}` : ''}
-              </Text>
-              {unitTypeLabel && (
-                <Text className="text-sm mt-[2px]" style={{ color: colors.textSecondary }}>
-                  {unitTypeLabel}{unit.size_sqm != null ? ` · ${unit.size_sqm}sqm` : ''}
-                </Text>
-              )}
-            </View>
-            {/* Furnished / unit-type badge */}
-            {unitTypeLabel && (
-              <View
-                className="px-2 py-[3px] rounded-full ml-2"
-                style={{ backgroundColor: colors.elevated }}
-              >
-                <Text className="text-[11px] font-medium" style={{ color: colors.textSecondary }}>
-                  {unitTypeLabel}
-                </Text>
-              </View>
-            )}
-          </View>
-
-          {amenities.length > 0 && (
-            <View className="mt-3">
-              <AmenityChipSelector selected={amenities} readOnly />
-            </View>
+          <Text className="text-base font-bold" style={{ color: colors.textPrimary }}>
+            {unit.unit_number}
+          </Text>
+          {unit.notes && (
+            <Text style={{ fontSize: 13, marginTop: 4, color: colors.textMuted }}>{unit.notes}</Text>
           )}
         </View>
 
@@ -192,28 +158,6 @@ export default function UnitDetailScreen() {
             </View>
           )}
         </View>
-
-        {/* Bed map row (Bedspacer only) */}
-        {unit.unit_type === 'bedspacer' && (
-          <TouchableOpacity
-            onPress={() =>
-              router.push(
-                `/(admin)/properties/${propertyId}/units/${id}/bed-map` as never,
-              )
-            }
-            className="mx-4 mt-4 rounded-xl p-4 flex-row items-center justify-between"
-            style={{ backgroundColor: colors.surface }}
-            activeOpacity={0.75}
-          >
-            <View className="flex-row items-center gap-3">
-              <Ionicons name="grid-outline" size={20} color={colors.primary} />
-              <Text className="text-[15px] font-medium" style={{ color: colors.textPrimary }}>
-                View Bed Map
-              </Text>
-            </View>
-            <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
-          </TouchableOpacity>
-        )}
       </ScrollView>
     </View>
   )

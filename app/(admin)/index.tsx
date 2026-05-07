@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { ReportMenuCard } from '../../components/reports/ReportMenuCard'
 import { ScrollView, View, Text, Pressable } from 'react-native'
 import { useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
@@ -50,6 +51,15 @@ function QuickAction({ label, icon, color, onPress }: {
     </Pressable>
   )
 }
+
+const REPORT_CARDS = [
+  { label: 'Monthly Collection', icon: 'briefcase-outline',    iconBg: '#052E16', route: '/(admin)/reports/monthly-collection' },
+  { label: 'Outstanding',        icon: 'alert-circle-outline', iconBg: '#200C0C', route: '/(admin)/reports/outstanding-balances' },
+  { label: 'Occupancy',          icon: 'home-outline',         iconBg: '#0C1A3D', route: '/(admin)/reports/occupancy' },
+  { label: 'Per-unit Income',    icon: 'stats-chart-outline',  iconBg: '#1A1040', route: '/(admin)/reports/per-unit-income' },
+  { label: 'Annual Summary',     icon: 'calendar-outline',     iconBg: '#052E16', route: '/(admin)/reports/annual-summary' },
+  { label: 'Maintenance',        icon: 'construct-outline',    iconBg: '#2A1A00', route: '/(admin)/reports/maintenance-costs' },
+] as const
 
 // ─── Home Screen ──────────────────────────────────────────────────────────────
 export default function HomeScreen() {
@@ -275,6 +285,25 @@ export default function HomeScreen() {
             color="#8b5cf6"
             onPress={() => router.push('/(admin)/reports' as any)}
           />
+        </View>
+
+        {/* Reports */}
+        <View style={{ marginTop: 20 }}>
+          <SectionHeader title="Reports" onViewAll={() => router.push('/(admin)/reports' as any)} />
+          <View style={{ paddingHorizontal: spacing[4] }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
+              {REPORT_CARDS.map((card) => (
+                <View key={card.route} style={{ width: '47%' }}>
+                  <ReportMenuCard
+                    icon={card.icon}
+                    iconBg={card.iconBg}
+                    label={card.label}
+                    onPress={() => router.push(card.route as any)}
+                  />
+                </View>
+              ))}
+            </View>
+          </View>
         </View>
 
         {/* Collection section */}

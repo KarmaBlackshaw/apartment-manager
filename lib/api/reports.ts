@@ -268,7 +268,6 @@ export async function fetchPerUnitIncome(
     .select({
       id: units.id,
       unit_number: units.unit_number,
-      unit_type: units.unit_type,
       monthly_rate: units.monthly_rate,
       status: units.status,
       property_id: units.property_id,
@@ -326,7 +325,7 @@ export async function fetchPerUnitIncome(
     return {
       unit_id: u.id,
       unit_label: u.unit_number,
-      unit_type: u.unit_type ?? null,
+      unit_type: null,
       tenant_name: tenantName,
       status,
       collected,
