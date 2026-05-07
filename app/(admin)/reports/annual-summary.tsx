@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, ScrollView, Pressable, Share } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import dayjs from 'dayjs'
-import { ScreenHeader } from '../../../components/ui/ScreenHeader'
+import { AppHeader } from '../../../components/ui/AppHeader'
 import { FilterChipBar } from '../../../components/ui/FilterChipBar'
 import { SectionHeader } from '../../../components/ui/SectionHeader'
 import { InfoRow } from '../../../components/ui/InfoRow'
@@ -51,15 +51,6 @@ export default function AnnualSummaryScreen() {
     </Pressable>
   )
 
-  if (isLoading) {
-    return (
-      <View className="flex-1 bg-background">
-        <ScreenHeader title="Annual Summary" left="back" right={exportBtn} />
-        <LoadingSpinner />
-      </View>
-    )
-  }
-
   const report = data ?? {
     year,
     ytdIncome: 0,
@@ -73,76 +64,76 @@ export default function AnnualSummaryScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <ScreenHeader title="Annual Summary" left="back" right={exportBtn} />
-      <ScrollView contentContainerStyle={{ paddingBottom: 128 }}>
-        {/* Year selector */}
-        <FilterChipBar
-          options={YEAR_OPTIONS}
-          selected={String(year)}
-          onChange={(v) => setYear(Number(v))}
-        />
+      <AppHeader title="Annual Summary" right={exportBtn} />
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <ScrollView contentContainerStyle={{ paddingBottom: 128 }}>
+          <FilterChipBar
+            options={YEAR_OPTIONS}
+            selected={String(year)}
+            onChange={(v) => setYear(Number(v))}
+          />
 
-        {/* YTD income card */}
-        <View
-          className="mx-4 mt-1 rounded-xl p-5"
-          style={{ backgroundColor: colors.successBg }}
-        >
-          <Text
-            className="text-[11px] font-semibold uppercase tracking-wide"
-            style={{ color: colors.textMuted }}
+          <View
+            className="mx-4 mt-1 rounded-xl p-5"
+            style={{ backgroundColor: colors.successBg }}
           >
-            YTD INCOME (JAN–{currentMonthShort})
-          </Text>
-          <Text className="text-[32px] font-bold mt-1" style={{ color: colors.success }}>
-            {formatAmount(report.ytdIncome)}
-          </Text>
-          <Text className="text-xs mt-1" style={{ color: colors.textMuted }}>
-            Projected full year: {formatAmount(report.projectedFullYear)}
-          </Text>
-        </View>
+            <Text
+              className="text-[11px] font-semibold uppercase tracking-wide"
+              style={{ color: colors.textMuted }}
+            >
+              YTD INCOME (JAN–{currentMonthShort})
+            </Text>
+            <Text className="text-[32px] font-bold mt-1" style={{ color: colors.success }}>
+              {formatAmount(report.ytdIncome)}
+            </Text>
+            <Text className="text-xs mt-1" style={{ color: colors.textMuted }}>
+              Projected full year: {formatAmount(report.projectedFullYear)}
+            </Text>
+          </View>
 
-        {/* Monthly breakdown */}
-        <SectionHeader title="Monthly Breakdown" />
-        <View
-          className="mx-4 rounded-xl overflow-hidden"
-          style={{ backgroundColor: colors.surface }}
-        >
-          {report.monthly.map((m, idx) => (
+          <SectionHeader title="Monthly Breakdown" />
+          <View
+            className="mx-4 rounded-xl overflow-hidden"
+            style={{ backgroundColor: colors.surface }}
+          >
+            {report.monthly.map((m, idx) => (
+              <InfoRow
+                key={m.month}
+                label={m.month}
+                value={formatAmount(m.collected)}
+                valueColor={monthPerformanceColor(m.billed, m.collected)}
+                showDivider={idx < report.monthly.length - 1}
+              />
+            ))}
+          </View>
+
+          <SectionHeader title="Summary" />
+          <View
+            className="mx-4 rounded-xl overflow-hidden"
+            style={{ backgroundColor: colors.surface }}
+          >
+            <InfoRow label="Total billed" value={formatAmount(report.totalBilled)} />
             <InfoRow
-              key={m.month}
-              label={m.month}
-              value={formatAmount(m.collected)}
-              valueColor={monthPerformanceColor(m.billed, m.collected)}
-              showDivider={idx < report.monthly.length - 1}
+              label="Total collected"
+              value={formatAmount(report.totalCollected)}
+              valueColor={colors.success}
             />
-          ))}
-        </View>
-
-        {/* Summary section */}
-        <SectionHeader title="Summary" />
-        <View
-          className="mx-4 rounded-xl overflow-hidden"
-          style={{ backgroundColor: colors.surface }}
-        >
-          <InfoRow label="Total billed" value={formatAmount(report.totalBilled)} />
-          <InfoRow
-            label="Total collected"
-            value={formatAmount(report.totalCollected)}
-            valueColor={colors.success}
-          />
-          <InfoRow
-            label="Collection rate"
-            value={`${report.collectionRate}%`}
-            valueColor={colors.success}
-          />
-          <InfoRow
-            label="Maintenance spend"
-            value={formatAmount(report.maintenanceSpend)}
-            valueColor={colors.warning}
-            showDivider={false}
-          />
-        </View>
-      </ScrollView>
+            <InfoRow
+              label="Collection rate"
+              value={`${report.collectionRate}%`}
+              valueColor={colors.success}
+            />
+            <InfoRow
+              label="Maintenance spend"
+              value={formatAmount(report.maintenanceSpend)}
+              valueColor={colors.warning}
+              showDivider={false}
+            />
+          </View>
+        </ScrollView>
+      )}
     </View>
   )
 }

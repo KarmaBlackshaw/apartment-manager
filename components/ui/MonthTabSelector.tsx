@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, Text, Pressable } from 'react-native'
+import { View, ScrollView, Text, Pressable } from 'react-native'
 import * as Haptics from 'expo-haptics'
 import Animated, {
   useSharedValue,
@@ -60,25 +60,27 @@ function MonthTab({
 
 export function MonthTabSelector({ months, selected, onChange }: MonthTabSelectorProps) {
   return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      style={{ height: 48 }}
-      contentContainerStyle={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 4,
-        paddingHorizontal: 16,
-      }}
-    >
-      {months.map((month) => (
-        <MonthTab
-          key={month}
-          month={month}
-          isSelected={month === selected}
-          onPress={() => onChange(month)}
-        />
-      ))}
-    </ScrollView>
+    <View style={{ height: 52 }}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={{ flex: 1 }}
+        contentContainerStyle={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 4,
+          paddingHorizontal: 16,
+        }}
+      >
+        {months.map((month) => (
+          <MonthTab
+            key={month}
+            month={month}
+            isSelected={month === selected}
+            onPress={() => onChange(month)}
+          />
+        ))}
+      </ScrollView>
+    </View>
   )
 }

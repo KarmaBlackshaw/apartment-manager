@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, FlatList } from 'react-native'
 import { useRouter } from 'expo-router'
-import { ScreenHeader } from '../../../components/ui/ScreenHeader'
+import { AppHeader } from '../../../components/ui/AppHeader'
 import { PropertySelector } from '../../../components/properties/PropertySelector'
 import { ReportMenuCard } from '../../../components/reports/ReportMenuCard'
 
@@ -28,7 +28,7 @@ export default function ReportsMenuScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <ScreenHeader title="Reports" />
+      <AppHeader title="Reports" />
       <View className="px-4 py-2 flex-row items-center">
         <PropertySelector selectedId={propertyId} onChange={setPropertyId} />
       </View>

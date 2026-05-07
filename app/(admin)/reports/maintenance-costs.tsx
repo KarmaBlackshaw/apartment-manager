@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, FlatList, Pressable, Share } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import dayjs from 'dayjs'
-import { ScreenHeader } from '../../../components/ui/ScreenHeader'
+import { AppHeader } from '../../../components/ui/AppHeader'
 import { MonthTabSelector } from '../../../components/ui/MonthTabSelector'
 import { SectionHeader } from '../../../components/ui/SectionHeader'
 import { InfoRow } from '../../../components/ui/InfoRow'
@@ -74,15 +74,6 @@ export default function MaintenanceCostsScreen() {
     </Pressable>
   )
 
-  if (isLoading) {
-    return (
-      <View className="flex-1 bg-background">
-        <ScreenHeader title="Maintenance Costs" left="back" right={exportBtn} />
-        <LoadingSpinner />
-      </View>
-    )
-  }
-
   const report = data ?? {
     thisMonthCost: 0,
     ytdCost: 0,
@@ -94,7 +85,7 @@ export default function MaintenanceCostsScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <ScreenHeader title="Maintenance Costs" left="back" right={exportBtn} />
+      <AppHeader title="Maintenance Costs" right={exportBtn} />
       <MonthTabSelector
         months={MONTHS.map(getMonthLabel)}
         selected={getMonthLabel(month)}
@@ -103,49 +94,50 @@ export default function MaintenanceCostsScreen() {
           if (found) setMonth(found)
         }}
       />
-      <FlatList
-        data={report.byUnit}
-        keyExtractor={(u) => u.unit_id}
-        ListHeaderComponent={
-          <View>
-            {/* KPI mini cards */}
-            <View className="flex-row gap-3 mx-4 mt-3 mb-1">
-              <View className="flex-1 rounded-xl p-4" style={{ backgroundColor: colors.surface }}>
-                <Text className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: colors.textMuted }}>
-                  This month
-                </Text>
-                <Text className="text-[22px] font-bold mt-1" style={{ color: colors.warning }}>
-                  {formatPHP(report.thisMonthCost)}
-                </Text>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <FlatList
+          data={report.byUnit}
+          keyExtractor={(u) => u.unit_id}
+          ListHeaderComponent={
+            <View>
+              <View className="flex-row gap-3 mx-4 mt-3 mb-1">
+                <View className="flex-1 rounded-xl p-4" style={{ backgroundColor: colors.surface }}>
+                  <Text className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: colors.textMuted }}>
+                    This month
+                  </Text>
+                  <Text className="text-[22px] font-bold mt-1" style={{ color: colors.warning }}>
+                    {formatPHP(report.thisMonthCost)}
+                  </Text>
+                </View>
+                <View className="flex-1 rounded-xl p-4" style={{ backgroundColor: colors.surface }}>
+                  <Text className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: colors.textMuted }}>
+                    YTD total
+                  </Text>
+                  <Text className="text-[22px] font-bold mt-1" style={{ color: colors.neutral }}>
+                    {formatPHP(report.ytdCost)}
+                  </Text>
+                </View>
               </View>
-              <View className="flex-1 rounded-xl p-4" style={{ backgroundColor: colors.surface }}>
-                <Text className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: colors.textMuted }}>
-                  YTD total
-                </Text>
-                <Text className="text-[22px] font-bold mt-1" style={{ color: colors.neutral }}>
-                  {formatPHP(report.ytdCost)}
-                </Text>
+
+              <SectionHeader title="Issues This Month" />
+              <View className="mx-4 rounded-xl overflow-hidden" style={{ backgroundColor: colors.surface }}>
+                <InfoRow label="Open"              value={String(report.openCount)}              valueColor={colors.danger}  />
+                <InfoRow label="Resolved"          value={String(report.resolvedCount)}          valueColor={colors.success} />
+                <InfoRow label="Charged to tenant" value={String(report.chargedToTenantCount)}   valueColor={colors.neutral} showDivider={false} />
               </View>
-            </View>
 
-            {/* Issues this month */}
-            <SectionHeader title="Issues This Month" />
-            <View className="mx-4 rounded-xl overflow-hidden" style={{ backgroundColor: colors.surface }}>
-              <InfoRow label="Open"              value={String(report.openCount)}              valueColor={colors.danger}  />
-              <InfoRow label="Resolved"          value={String(report.resolvedCount)}          valueColor={colors.success} />
-              <InfoRow label="Charged to tenant" value={String(report.chargedToTenantCount)}   valueColor={colors.neutral} showDivider={false} />
+              <SectionHeader title="Cost by Unit" count={report.byUnit.length} />
             </View>
-
-            {/* Cost by unit header */}
-            <SectionHeader title="Cost by Unit" count={report.byUnit.length} />
-          </View>
-        }
-        ListEmptyComponent={
-          <EmptyState title="No issues" description="No maintenance issues recorded this month." />
-        }
-        renderItem={({ item }) => <UnitCostRow item={item} />}
-        contentContainerStyle={{ paddingBottom: 128 }}
-      />
+          }
+          ListEmptyComponent={
+            <EmptyState title="No issues" description="No maintenance issues recorded this month." />
+          }
+          renderItem={({ item }) => <UnitCostRow item={item} />}
+          contentContainerStyle={{ paddingBottom: 128 }}
+        />
+      )}
     </View>
   )
 }
