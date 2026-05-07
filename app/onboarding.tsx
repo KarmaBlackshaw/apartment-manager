@@ -15,7 +15,6 @@ import { nanoid } from 'nanoid/non-secure'
 
 import { ScreenView } from '~/components/ui/ScreenView'
 import { ProgressStepIndicator } from '~/components/ui/ProgressStepIndicator'
-import { BottomCTABar } from '~/components/ui/BottomCTABar'
 import { Button } from '~/components/ui/Button'
 import { db } from '~/db'
 import { properties } from '~/db/schema'
@@ -299,7 +298,7 @@ export default function OnboardingScreen() {
             <ProgressStepIndicator steps={TOTAL_STEPS} current={step + 1} />
           </View>
 
-          {/* Scrollable step content */}
+          {/* Scrollable step content + inline CTAs */}
           <ScrollView
             contentInsetAdjustmentBehavior="automatic"
             keyboardShouldPersistTaps="handled"
@@ -309,17 +308,24 @@ export default function OnboardingScreen() {
             {step === 1 && <StepOwner form={form} setForm={setForm} />}
             {step === 2 && <StepBilling form={form} setForm={setForm} />}
             {step === 3 && <StepDone />}
-          </ScrollView>
 
-          {/* Bottom CTA */}
-          <BottomCTABar>
             {step < TOTAL_STEPS - 1 ? (
-              <View className="gap-[10px]">
-                <Button label="Next" variant="primary" onPress={goNext} />
+              <>
+                <Button
+                  label="Next"
+                  variant="primary"
+                  onPress={goNext}
+                  className="mt-4"
+                />
                 {step > 0 ? (
-                  <Button label="Back" variant="ghost" onPress={goBack} />
+                  <Button
+                    label="Back"
+                    variant="ghost"
+                    onPress={goBack}
+                    className="mt-2"
+                  />
                 ) : null}
-              </View>
+              </>
             ) : (
               <Button
                 label={saving ? 'Saving…' : 'Get Started'}
@@ -327,9 +333,10 @@ export default function OnboardingScreen() {
                 onPress={handleComplete}
                 disabled={saving}
                 loading={saving}
+                className="mt-4"
               />
             )}
-          </BottomCTABar>
+          </ScrollView>
         </View>
       </KeyboardAvoidingView>
       </ScreenView>

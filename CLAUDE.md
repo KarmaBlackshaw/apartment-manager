@@ -166,6 +166,33 @@ Bare `// TODO:` rots into permanent ambiguity. Either link it, version-gate it, 
 
 ## Engineering Discipline
 
+### Inline CTA rule
+
+Primary submit/save/confirm actions render **inline** at the end of the form's
+`ScrollView`, with `mt-4` above the button. The button is the last child of the
+ScrollView. No `BottomCTABar`, no chromed footer.
+
+Floating pill nav stays visible. ScrollView uses `contentContainerClassName="px-4 pt-3 pb-[88px]"`
+to clear the pill.
+
+**Two-action footer (e.g. Save + Cancel):** primary `Button` then secondary
+`Pressable` text below with `mt-3`. Both inside the ScrollView.
+
+**Two primary actions (e.g. Record Payment + Add Charge):** stack vertically with
+`mt-2` between. Both inside the ScrollView.
+
+**Destructive action (Delete):** placed in a "Danger zone" group below the primary
+Save, separated by `border-t border-border` and `mt-8 pt-4`. Inside the ScrollView.
+
+**Wizards:** `WizardShell` renders the Next/Skip controls inline at the end of each
+step's content. No docked footer.
+
+**Forbidden:**
+- `BottomCTABar` — deleted from the codebase. Do not reintroduce.
+- Header-right submit buttons (iOS-style "Save" in the top-right) — design uses
+  inline body buttons exclusively.
+- Side-by-side primaries.
+
 ### Always run `npx tsc --noEmit` before declaring a task done
 
 Every implementation task ends with a clean type-check. Cheap (~3s), catches silent breakage from type drift across edited files. If the run flags errors, fix them — do not declare the task complete with red type errors, even if the screen "looks fine" in Expo.

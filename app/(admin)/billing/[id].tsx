@@ -3,7 +3,6 @@ import { View, Text, ScrollView, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import { colors } from '~/constants/theme'
-import { BottomCTABar } from '~/components/ui/BottomCTABar'
 import { Button } from '~/components/ui/Button'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { SectionHeader } from '~/components/ui/SectionHeader'
@@ -107,7 +106,7 @@ export default function BillDetailScreen() {
   return (
     <ScreenLayout title={headerTitle} backHref="/(admin)/billing">
 
-      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+      <ScrollView contentContainerClassName="pb-[88px]">
         {/* 1. Tenant header card */}
         <View className="bg-surface rounded-md mx-4 mt-4 p-4 flex-row items-center gap-3">
           <AvatarInitials name={tenant?.full_name ?? '?'} size="md" />
@@ -186,43 +185,43 @@ export default function BillDetailScreen() {
             showDivider={false}
           />
         </View>
-      </ScrollView>
 
-      {/* Bottom CTA */}
-      <BottomCTABar>
-        <Button
-          label="Record Payment"
-          variant="primary"
-          onPress={() =>
-            router.push(
-              `/(admin)/billing/new?tenantId=${bill.tenant_id}&billId=${bill.id}`,
-            )
-          }
-        />
-        <View className="flex-row gap-2 mt-2">
+        <View className="px-4">
           <Button
-            label="Waive Late Fee"
-            variant="secondary"
-            className="flex-1"
+            label="Record Payment"
+            variant="primary"
             onPress={() =>
-              Alert.alert(
-                'Waive Late Fee',
-                'Remove the late fee from this bill?',
-                [
-                  { text: 'Cancel', style: 'cancel' },
-                  { text: 'Waive', onPress: handleWaiveLateFee },
-                ],
+              router.push(
+                `/(admin)/billing/new?tenantId=${bill.tenant_id}&billId=${bill.id}`,
               )
             }
+            className="mt-4"
           />
-          <Button
-            label="Add Charge"
-            variant="secondary"
-            className="flex-1"
-            onPress={() => Alert.alert('Add Charge', 'Feature coming soon')}
-          />
+          <View className="flex-row gap-2 mt-2">
+            <Button
+              label="Waive Late Fee"
+              variant="secondary"
+              className="flex-1"
+              onPress={() =>
+                Alert.alert(
+                  'Waive Late Fee',
+                  'Remove the late fee from this bill?',
+                  [
+                    { text: 'Cancel', style: 'cancel' },
+                    { text: 'Waive', onPress: handleWaiveLateFee },
+                  ],
+                )
+              }
+            />
+            <Button
+              label="Add Charge"
+              variant="secondary"
+              className="flex-1"
+              onPress={() => Alert.alert('Add Charge', 'Feature coming soon')}
+            />
+          </View>
         </View>
-      </BottomCTABar>
+      </ScrollView>
     </ScreenLayout>
   )
 }

@@ -7,7 +7,6 @@ import { SegmentedControl } from '~/components/ui/SegmentedControl'
 import { SectionHeader } from '~/components/ui/SectionHeader'
 import { InfoRow } from '~/components/ui/InfoRow'
 import { WarningBanner } from '~/components/ui/WarningBanner'
-import { BottomCTABar } from '~/components/ui/BottomCTABar'
 import { Button } from '~/components/ui/Button'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
@@ -120,20 +119,25 @@ export default function GenerateBillsScreen() {
             variant="info"
           />
         </View>
-      </ScrollView>
 
-      <BottomCTABar>
-        <Button
-          label={`Generate ${preview?.toGenerate ?? 0} Bills for ${dayjs(selectedMonth).format('MMMM YYYY')}`}
-          variant="primary"
-          onPress={handleGenerate}
-          loading={isGenerating}
-          disabled={(preview?.toGenerate ?? 0) === 0}
-        />
-        <Pressable onPress={router.back} className="items-center pt-3">
-          <Text className="text-text-secondary text-sm">Cancel</Text>
-        </Pressable>
-      </BottomCTABar>
+        <View className="px-4">
+          <Button
+            label={`Generate ${preview?.toGenerate ?? 0} Bills for ${dayjs(selectedMonth).format('MMMM YYYY')}`}
+            variant="primary"
+            onPress={handleGenerate}
+            loading={isGenerating}
+            disabled={(preview?.toGenerate ?? 0) === 0}
+            className="mt-4"
+          />
+          <Pressable
+            onPress={router.back}
+            className="items-center mt-3"
+            accessibilityRole="button"
+          >
+            <Text className="text-text-secondary text-sm">Cancel</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
     </ScreenLayout>
   )
 }

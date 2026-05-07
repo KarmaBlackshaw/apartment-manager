@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { View, Text, ScrollView, Pressable, KeyboardAvoidingView, Platform } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
-import { BottomCTABar } from '~/components/ui/BottomCTABar'
 import { Button } from '~/components/ui/Button'
 import { Input } from '~/components/ui/Input'
 import { DateInput } from '~/components/ui/DateInput'
@@ -129,24 +128,25 @@ export default function RecordPaymentScreen() {
             <AmountText amount={balanceAfter} variant={balanceAfterVariant()} size="small" />
           </View>
         </View>
-      </ScrollView>
 
-      {/* CTA Bar */}
-      <BottomCTABar>
-        <Button
-          label="Save & Generate Receipt"
-          variant="primary"
-          onPress={() => handleSave(true)}
-          loading={isPending}
-        />
-        <Pressable
-          onPress={() => handleSave(false)}
-          className="items-center pt-3"
-          disabled={isPending}
-        >
-          <Text className="text-text-secondary text-sm">Save without receipt</Text>
-        </Pressable>
-      </BottomCTABar>
+        <View className="px-4">
+          <Button
+            label="Save & Generate Receipt"
+            variant="primary"
+            onPress={() => handleSave(true)}
+            loading={isPending}
+            className="mt-4"
+          />
+          <Pressable
+            onPress={() => handleSave(false)}
+            className="items-center mt-3"
+            disabled={isPending}
+            accessibilityRole="button"
+          >
+            <Text className="text-text-secondary text-sm">Save without receipt</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
     </KeyboardAvoidingView>
     </ScreenLayout>
   )

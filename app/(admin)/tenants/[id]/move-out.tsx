@@ -7,7 +7,6 @@ import { useTenant, useDeactivateTenant } from '~/hooks/useTenants'
 import { useBills } from '~/hooks/useBills'
 import { WarningBanner } from '~/components/ui/WarningBanner'
 import { SettlementRow } from '~/components/billing/SettlementRow'
-import { BottomCTABar } from '~/components/ui/BottomCTABar'
 import { Button } from '~/components/ui/Button'
 import { AppText } from '~/components/ui/AppText'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
@@ -189,14 +188,23 @@ export default function MoveOutScreen() {
             onChangeText={setNotes}
           />
         </View>
-      </ScrollView>
 
-      <BottomCTABar>
-        <Button label="Confirm Move-Out" onPress={handleConfirm} loading={deactivating} />
-        <Pressable onPress={() => router.back()} className="items-center mt-3">
-          <AppText color="secondary">Cancel</AppText>
-        </Pressable>
-      </BottomCTABar>
+        <View className="px-4">
+          <Button
+            label="Confirm Move-Out"
+            onPress={handleConfirm}
+            loading={deactivating}
+            className="mt-4"
+          />
+          <Pressable
+            onPress={() => router.back()}
+            className="items-center mt-3"
+            accessibilityRole="button"
+          >
+            <AppText color="secondary">Cancel</AppText>
+          </Pressable>
+        </View>
+      </ScrollView>
     </ScreenLayout>
   )
 }

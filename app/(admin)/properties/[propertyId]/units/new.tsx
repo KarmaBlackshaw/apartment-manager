@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useCreateUnit } from '~/hooks/useUnits'
-import { useHideTabBar } from '~/hooks/useHideTabBar'
 import { Input } from '~/components/ui/Input'
 import { Button } from '~/components/ui/Button'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
@@ -11,7 +10,6 @@ export default function NewUnitScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()
   const router = useRouter()
   const { mutateAsync, isPending } = useCreateUnit(propertyId)
-  useHideTabBar()
 
   const [unitNumber, setUnitNumber] = useState('')
   const [monthlyRent, setMonthlyRent] = useState('')

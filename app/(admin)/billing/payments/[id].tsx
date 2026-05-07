@@ -5,7 +5,6 @@ import dayjs from 'dayjs'
 import { AmountText } from '~/components/ui/AmountText'
 import { SectionHeader } from '~/components/ui/SectionHeader'
 import { InfoRow } from '~/components/ui/InfoRow'
-import { BottomCTABar } from '~/components/ui/BottomCTABar'
 import { Button } from '~/components/ui/Button'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
@@ -64,7 +63,7 @@ export default function PaymentDetailScreen() {
 
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingBottom: 120 }}
+        contentContainerClassName="pb-[88px]"
         showsVerticalScrollIndicator={false}
       >
         {/* Amount header card */}
@@ -100,21 +99,22 @@ export default function PaymentDetailScreen() {
             showDivider={false}
           />
         </View>
-      </ScrollView>
 
-      <BottomCTABar>
-        <Button
-          label="View Receipt"
-          variant="primary"
-          onPress={() => router.push(`/(admin)/billing/receipt?paymentId=${payment.id}`)}
-        />
-        <Button
-          label="Void Payment"
-          variant="secondary"
-          className="mt-2"
-          onPress={handleVoid}
-        />
-      </BottomCTABar>
+        <View className="px-4">
+          <Button
+            label="View Receipt"
+            variant="primary"
+            onPress={() => router.push(`/(admin)/billing/receipt?paymentId=${payment.id}`)}
+            className="mt-4"
+          />
+          <Button
+            label="Void Payment"
+            variant="secondary"
+            className="mt-2"
+            onPress={handleVoid}
+          />
+        </View>
+      </ScrollView>
     </ScreenLayout>
   )
 }

@@ -5,7 +5,6 @@ import dayjs from 'dayjs'
 import { FilterChipBar } from '~/components/ui/FilterChipBar'
 import { InfoRow } from '~/components/ui/InfoRow'
 import { AmountText } from '~/components/ui/AmountText'
-import { BottomCTABar } from '~/components/ui/BottomCTABar'
 import { Button } from '~/components/ui/Button'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { Input } from '~/components/ui/Input'
@@ -149,16 +148,17 @@ export default function UtilityReadingScreen() {
             {usage.toFixed(1)} {unitLabel} × ₱{parsedRate.toFixed(2)}/unit
           </Text>
         </View>
-      </ScrollView>
 
-      <BottomCTABar>
-        <Button
-          label={`Add to ${dayjs(month).format('MMMM YYYY')} Bill`}
-          variant="primary"
-          onPress={handleSave}
-          loading={isPending}
-        />
-      </BottomCTABar>
+        <View className="px-4">
+          <Button
+            label={`Add to ${dayjs(month).format('MMMM YYYY')} Bill`}
+            variant="primary"
+            onPress={handleSave}
+            loading={isPending}
+            className="mt-4"
+          />
+        </View>
+      </ScrollView>
     </ScreenLayout>
   )
 }

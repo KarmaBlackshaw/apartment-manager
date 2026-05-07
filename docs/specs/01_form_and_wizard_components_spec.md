@@ -74,7 +74,7 @@ A 5-step wizard becomes:
 | 7 | `FormSegmentedControl` | Form binder | Controller wrapper for `SegmentedControl` (with value/label mapping) | ~35 | NEW |
 | 8 | `FormToggleRow` | Form binder | Labeled row + `Toggle`, RHF-bound | ~35 | NEW |
 | 9 | `FormCameraCapture` | Form binder | Controller wrapper for `CameraCapture` | ~25 | NEW |
-| 10 | `WizardShell` | Layout | Multi-step state machine + CTA dock + back + discard | ~120 | NEW |
+| 10 | `WizardShell` | Layout | Multi-step state machine + inline CTA + back + discard | ~120 | NEW |
 | 11 | `WizardStep` | Layout | Declarative step container (validates own fields) | ~30 | NEW |
 | 12 | `useDiscardGuard` | Hook | Confirm-on-back when form is dirty | ~40 | NEW |
 | 13 | `lib/emergency-contact.ts` | Domain helper | Serialize/parse emergency contact JSON | ~20 | NEW |
@@ -393,7 +393,9 @@ Wires `captured` from `field.value`, calls `field.onChange(uri)` on capture. Tri
 
 **File:** `components/form/WizardShell.tsx`
 
-The big one. Takes a list of step definitions and manages: state machine, validation, back behavior, discard guard, progress indicator, CTA dock, and tab-bar hiding.
+The big one. Takes a list of step definitions and manages: state machine, validation, back behavior, discard guard, progress indicator, and inline Next/Skip CTAs at the end of step content.
+
+> **Spec rev (per `06_inline_cta_pattern_spec.md`).** `WizardShell` no longer renders `BottomCTABar`. The CTA flows inline at the end of the step's `ScrollView`. The floating pill nav stays visible during wizards — `useHideTabBar` is not called.
 
 ```tsx
 interface WizardStepDef<TForm extends FieldValues> {
@@ -420,16 +422,16 @@ interface WizardShellProps<TForm extends FieldValues> {
 
 **Behavior:**
 1. Renders `ScreenLayout` with title computed from current step. `headerLeft` is custom — see (3).
-2. Renders `<View>` containing:
-   - `SectionLabel` "Step N of M — {title}"
+2. Renders `KeyboardAvoidingView` + `ScrollView` whose `contentContainerClassName` is `px-4 pt-3 pb-[88px]`. Inside, in order:
    - `ProgressStepIndicator` `steps={steps.length} current={currentIdx+1}`
-   - `step.render()` inside `KeyboardAvoidingView` + `ScrollView`
-   - `BottomCTABar` with `Button` (label = if last step, `submitLabel`, else `Next — {nextStep.shortTitle}`)
-   - If `step.optional`, "Skip (not recommended)" `Pressable` below CTA.
+   - `SectionLabel` "Step N of M — {title}"
+   - `step.render()`
+   - **Inline CTA** — `Button` (label = if last step, `submitLabel`, else `Next — {nextStep.shortTitle}`). `mt-4` above.
+   - If `step.optional`, "Skip (not recommended)" `Pressable` below the Button with `mt-3`.
 3. **Back behavior:** intercepts header back AND Android hardware back via `useNavigation().addListener('beforeRemove', ...)`. If `currentIdx > 0`, prevent default and `setCurrentIdx(currentIdx - 1)`. If on step 0 AND form is dirty, show `Alert` with `discardConfirm` copy. If on step 0 AND clean, allow back.
 4. **Next handler:** runs `form.trigger(step.fields)`. If passes, advances. If on last step, calls `form.handleSubmit(onSubmit)()`.
 5. **Skip handler (optional steps only):** advances without validation; clears any `errors` for the step's fields.
-6. **Tab bar:** `BottomCTABar` already calls `useHideTabBar()` — no extra work.
+6. **Tab bar:** stays visible. The shell does not call `useHideTabBar`. `pb-[88px]` clears the floating pill nav.
 7. **Auto-focus:** when step changes, focuses the first field-bound input via a registered ref system (or skip — accept that the user must tap; engineer's call). **Recommendation: skip auto-focus in v1**; add later if requested.
 
 **Usage example (Add Tenant):**
@@ -619,7 +621,7 @@ Strict sequential. Each phase must compile before the next starts.
 ### Phase 4 — Wizard scaffold
 | # | File | Depends on |
 |---|---|---|
-| 4.1 | `components/form/WizardShell.tsx` | all of phase 1+2+3, existing `ProgressStepIndicator`, `BottomCTABar`, `ScreenLayout`, `Button` |
+| 4.1 | `components/form/WizardShell.tsx` | all of phase 1+2+3, existing `ProgressStepIndicator`, `ScreenLayout`, `Button` |
 
 ### Phase 5 — First consumer: Add Tenant rebuild
 See companion spec `02_add_tenant_wizard_spec.md` (rev 2 — engineer should reread; consumer code is now ~⅓ of the original size).
@@ -654,7 +656,7 @@ Each migration is a self-contained PR. Forms can stay as-is until touched. **No 
 | `FormToggleRow` | Tapping anywhere on the row flips value (not just the toggle thumb). |
 | `FormCameraCapture` | Captured URI flows back to form state; clearing field clears the image. |
 | `useDiscardGuard` | Dirty form blocks back nav; confirm "Discard" allows back; clean form passes through. |
-| `WizardShell` | Per-step validation; back step navigation; final step submit; discard guard on step 0; tab bar hidden. |
+| `WizardShell` | Per-step validation; back step navigation; final step submit; discard guard on step 0; pill nav stays visible; CTA scrolls inline at end of step. |
 
 ### 5.2 Test surface (recommended, not required for v1)
 
@@ -725,7 +727,6 @@ components/
     SegmentedControl.tsx                (existing)
     CameraCapture.tsx                   (existing)
     ProgressStepIndicator.tsx           (existing)
-    BottomCTABar.tsx                    (existing)
     Button.tsx                          (existing)
   form/                                 ← NEW DIRECTORY
     FormField.tsx                       ← NEW
