@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, FlatList, Pressable, Share } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
-import { AppHeader } from '../../../components/ui/AppHeader'
+import { AppHeader, ScreenView } from '../../../components/ui'
 import { ListRow } from '../../../components/ui/ListRow'
 import { AvatarInitials } from '../../../components/ui/AvatarInitials'
 import { StatusChip } from '../../../components/ui/StatusChip'
@@ -34,7 +34,7 @@ export default function DepositSummaryScreen() {
   const report = data ?? { entries: [], totalHeld: 0, tenantCount: 0 }
 
   return (
-    <View className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader title="Deposit Summary" right={exportBtn} />
       {isLoading ? (
         <LoadingSpinner />
@@ -76,6 +76,6 @@ export default function DepositSummaryScreen() {
           contentContainerStyle={{ paddingBottom: 128 }}
         />
       )}
-    </View>
+    </ScreenView>
   )
 }

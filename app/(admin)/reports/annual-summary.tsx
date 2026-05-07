@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, ScrollView, Pressable, Share } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import dayjs from 'dayjs'
-import { AppHeader } from '../../../components/ui/AppHeader'
+import { AppHeader, ScreenView } from '../../../components/ui'
 import { FilterChipBar } from '../../../components/ui/FilterChipBar'
 import { SectionHeader } from '../../../components/ui/SectionHeader'
 import { InfoRow } from '../../../components/ui/InfoRow'
@@ -63,7 +63,7 @@ export default function AnnualSummaryScreen() {
   }
 
   return (
-    <View className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader title="Annual Summary" right={exportBtn} />
       {isLoading ? (
         <LoadingSpinner />
@@ -134,6 +134,6 @@ export default function AnnualSummaryScreen() {
           </View>
         </ScrollView>
       )}
-    </View>
+    </ScreenView>
   )
 }

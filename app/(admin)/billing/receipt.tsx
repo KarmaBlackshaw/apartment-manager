@@ -3,7 +3,7 @@ import { View, ScrollView, Text, Pressable, Alert, Share } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import dayjs from 'dayjs'
-import { AppHeader, ReceiptDocument, LoadingSpinner } from '../../../components/ui'
+import { AppHeader, ReceiptDocument, LoadingSpinner, ScreenView } from '../../../components/ui'
 import { useSettings } from '../../../hooks/useSettings'
 import { usePayment } from '../../../hooks/usePayments'
 
@@ -18,12 +18,12 @@ export default function ReceiptScreen() {
 
   if (!payment) {
     return (
-      <View className="flex-1 bg-background">
+      <ScreenView edges={['bottom']}>
         <AppHeader title="Receipt" />
         <View className="flex-1 items-center justify-center p-8">
           <Text className="text-danger text-center text-base">Payment not found.</Text>
         </View>
-      </View>
+      </ScreenView>
     )
   }
 
@@ -42,7 +42,7 @@ export default function ReceiptScreen() {
   }
 
   return (
-    <View className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader
         title="Receipt"
         right={
@@ -95,6 +95,6 @@ export default function ReceiptScreen() {
           <Text className="text-text-primary font-semibold text-[15px]">Done</Text>
         </Pressable>
       </View>
-    </View>
+    </ScreenView>
   )
 }

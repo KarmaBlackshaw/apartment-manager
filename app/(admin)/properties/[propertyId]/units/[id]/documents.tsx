@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker'
 import dayjs from 'dayjs'
 import { useDocuments } from '../../../../../../hooks/useDocuments'
 import { useUnit } from '../../../../../../hooks/useUnits'
-import { AppHeader, FilterChipBar, LoadingSpinner } from '../../../../../../components/ui'
+import { AppHeader, FilterChipBar, LoadingSpinner, ScreenView } from '../../../../../../components/ui'
 import { DocumentRow } from '../../../../../../components/documents/DocumentRow'
 import type { DocCategory } from '../../../../../../components/documents/DocumentRow'
 import { colors } from '../../../../../../constants/theme'
@@ -75,7 +75,7 @@ export default function UnitDocumentsScreen() {
   }
 
   return (
-    <View className="flex-1 bg-app">
+    <ScreenView edges={['bottom']}>
       <AppHeader title={title} />
 
       <FilterChipBar
@@ -120,6 +120,6 @@ export default function UnitDocumentsScreen() {
           </TouchableOpacity>
         }
       />
-    </View>
+    </ScreenView>
   )
 }

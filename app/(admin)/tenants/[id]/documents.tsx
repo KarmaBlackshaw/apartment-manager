@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react'
 import { View, FlatList, Pressable, Alert } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { useLocalSearchParams } from 'expo-router'
 import * as ImagePicker from 'expo-image-picker'
 import dayjs from 'dayjs'
@@ -11,6 +10,7 @@ import {
   FilterChipBar,
   DocumentRow,
   AppText,
+  ScreenView,
 } from '../../../../components/ui'
 import type { DocCategory } from '../../../../components/ui'
 import { colors } from '../../../../constants/theme'
@@ -43,7 +43,7 @@ export default function DocumentsScreen() {
   }
 
   return (
-    <SafeAreaView edges={['bottom']} className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader
         title={tenant ? `${tenant.full_name.split(' ').pop()} — Docs` : 'Documents'}
       />
@@ -86,6 +86,6 @@ export default function DocumentsScreen() {
           </View>
         }
       />
-    </SafeAreaView>
+    </ScreenView>
   )
 }

@@ -3,7 +3,7 @@ import { View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-n
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useCreateUnit } from '../../../../../hooks/useUnits'
 import { useHideTabBar } from '../../../../../hooks/useHideTabBar'
-import { Input, Button, AppHeader } from '../../../../../components/ui'
+import { Input, Button, AppHeader, ScreenView } from '../../../../../components/ui'
 
 export default function NewUnitScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()
@@ -38,9 +38,10 @@ export default function NewUnitScreen() {
   }
 
   return (
+    <ScreenView edges={['bottom']}>
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1 bg-app"
+      className="flex-1"
     >
       <AppHeader title="Add Unit" />
       <ScrollView
@@ -89,5 +90,6 @@ export default function NewUnitScreen() {
         />
       </ScrollView>
     </KeyboardAvoidingView>
+    </ScreenView>
   )
 }

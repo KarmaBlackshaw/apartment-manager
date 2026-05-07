@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import { useUnitDetail } from '../../../../../../hooks/useUnits'
 import {
   AppHeader, LoadingSpinner, StatusChip, AvatarInitials,
-  BalanceCard, SectionHeader, AmountText,
+  BalanceCard, SectionHeader, AmountText, ScreenView,
 } from '../../../../../../components/ui'
 import { colors } from '../../../../../../constants/theme'
 
@@ -39,7 +39,7 @@ export default function UnitDetailScreen() {
   const chipLabel = unitStatusLabel(balance, isOccupied)
 
   return (
-    <View className="flex-1 bg-app">
+    <ScreenView edges={['bottom']}>
       <AppHeader
         title={unit.unit_number}
         right={
@@ -159,6 +159,6 @@ export default function UnitDetailScreen() {
           )}
         </View>
       </ScrollView>
-    </View>
+    </ScreenView>
   )
 }

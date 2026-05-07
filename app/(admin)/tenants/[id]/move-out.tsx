@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react'
 import { View, ScrollView, Alert, TextInput, Pressable } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import Ionicons from '@expo/vector-icons/Ionicons'
@@ -14,6 +13,7 @@ import {
   Button,
   AppText,
   LoadingSpinner,
+  ScreenView,
 } from '../../../../components/ui'
 import { colors } from '../../../../constants/theme'
 
@@ -80,14 +80,14 @@ export default function MoveOutScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView className="flex-1 bg-background">
+      <ScreenView>
         <LoadingSpinner />
-      </SafeAreaView>
+      </ScreenView>
     )
   }
 
   return (
-    <SafeAreaView edges={['bottom']} className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader
         title="Move-Out"
         left={
@@ -211,6 +211,6 @@ export default function MoveOutScreen() {
           <AppText color="secondary">Cancel</AppText>
         </Pressable>
       </BottomCTABar>
-    </SafeAreaView>
+    </ScreenView>
   )
 }

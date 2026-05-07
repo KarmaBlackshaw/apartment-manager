@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { AvatarInitials, SectionHeader, SettingsRow } from '../../../components/ui'
+import { AvatarInitials, ScreenView, SectionHeader, SettingsRow } from '../../../components/ui'
 import { useSettings, useUpdateSetting } from '../../../hooks/useSettings'
 import { colors, radius, spacing } from '../../../constants/theme'
 
@@ -26,10 +26,11 @@ export default function SettingsScreen() {
   const vacancyAlerts  = (settings?.notif_vacancy_alerts  ?? '1') === '1'
 
   return (
+    <ScreenView>
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={{
-        paddingTop: insets.top + spacing[5],
+        paddingTop: spacing[5],
         paddingHorizontal: spacing[4],
         paddingBottom: insets.bottom + 100,
       }}
@@ -181,5 +182,6 @@ export default function SettingsScreen() {
         />
       </View>
     </ScrollView>
+    </ScreenView>
   )
 }

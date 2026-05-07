@@ -5,8 +5,8 @@ import {
 } from 'react-native'
 import { Swipeable } from 'react-native-gesture-handler'
 import { useRouter } from 'expo-router'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { ScreenView } from '../../../components/ui'
 import { usePaymentsOverview } from '../../../hooks/usePaymentsOverview'
 import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
 import type { TenantMonthEntry, TenantMonthStatus } from '../../../lib/api/paymentsOverview'
@@ -124,7 +124,6 @@ function PaymentRow({
 // ─── Main screen ──────────────────────────────────────────────────────────────
 export default function PaymentsOverviewScreen() {
   const router = useRouter()
-  const insets = useSafeAreaInsets()
   const tabBarScroll = useTabBarScrollHandler()
 
   const { months, todayIndex } = useMemo(buildMonths, [])
@@ -161,7 +160,7 @@ export default function PaymentsOverviewScreen() {
   }, [router])
 
   return (
-    <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
+    <ScreenView>
       {/* Header */}
       <View className="flex-row items-center justify-between px-4 py-3">
         <Text
@@ -265,6 +264,6 @@ export default function PaymentsOverviewScreen() {
           <View style={{ height: 100 }} />
         </ScrollView>
       )}
-    </View>
+    </ScreenView>
   )
 }

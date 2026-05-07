@@ -14,6 +14,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { nanoid } from 'nanoid/non-secure'
 
 import { colors, radius, spacing } from '../constants/theme'
+import { ScreenView } from '../components/ui'
 import { ProgressStepIndicator } from '../components/ui/ProgressStepIndicator'
 import { BottomCTABar } from '../components/ui/BottomCTABar'
 import { Button } from '../components/ui/Button'
@@ -303,8 +304,9 @@ export default function OnboardingScreen() {
     <>
       <Stack.Screen options={{ headerShown: false }} />
 
+      <ScreenView>
       <KeyboardAvoidingView
-        style={{ flex: 1, backgroundColor: colors.background }}
+        className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <View style={{ flex: 1 }}>
@@ -360,6 +362,7 @@ export default function OnboardingScreen() {
           </BottomCTABar>
         </View>
       </KeyboardAvoidingView>
+      </ScreenView>
     </>
   )
 }

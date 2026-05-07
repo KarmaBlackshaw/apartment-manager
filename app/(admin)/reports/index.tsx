@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, FlatList } from 'react-native'
 import { useRouter } from 'expo-router'
-import { AppHeader } from '../../../components/ui/AppHeader'
+import { AppHeader, ScreenView } from '../../../components/ui'
 import { PropertySelector } from '../../../components/properties/PropertySelector'
 import { ReportMenuCard } from '../../../components/reports/ReportMenuCard'
 
@@ -27,7 +27,7 @@ export default function ReportsMenuScreen() {
   const [propertyId, setPropertyId] = useState<string | undefined>()
 
   return (
-    <View className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader title="Reports" />
       <View className="px-4 py-2 flex-row items-center">
         <PropertySelector selectedId={propertyId} onChange={setPropertyId} />
@@ -54,6 +54,6 @@ export default function ReportsMenuScreen() {
           </View>
         )}
       />
-    </View>
+    </ScreenView>
   )
 }

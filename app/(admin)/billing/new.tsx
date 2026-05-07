@@ -9,6 +9,7 @@ import {
   Input,
   DateInput,
   AmountText,
+  ScreenView,
 } from '../../../components/ui'
 import { useTenant } from '../../../hooks/useTenants'
 import { useUnit } from '../../../hooks/useUnits'
@@ -63,8 +64,9 @@ export default function RecordPaymentScreen() {
   }
 
   return (
+    <ScreenView edges={['bottom']}>
     <KeyboardAvoidingView
-      className="flex-1 bg-background"
+      className="flex-1"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <AppHeader title="Record Payment" />
@@ -150,5 +152,6 @@ export default function RecordPaymentScreen() {
         </Pressable>
       </BottomCTABar>
     </KeyboardAvoidingView>
+    </ScreenView>
   )
 }

@@ -12,6 +12,7 @@ import {
   BottomCTABar,
   Button,
   LoadingSpinner,
+  ScreenView,
 } from '../../../components/ui'
 import { colors } from '../../../constants/theme'
 import { formatCurrency } from '../../../lib/billing'
@@ -53,7 +54,7 @@ export default function GenerateBillsScreen() {
   }
 
   return (
-    <View className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader title="Generate Bills" />
 
       <ScrollView
@@ -137,6 +138,6 @@ export default function GenerateBillsScreen() {
           <Text className="text-text-secondary text-sm">Cancel</Text>
         </Pressable>
       </BottomCTABar>
-    </View>
+    </ScreenView>
   )
 }

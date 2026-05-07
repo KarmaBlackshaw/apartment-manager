@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAuth } from '../context/AuthContext'
+import { ScreenView } from '../components/ui'
 
 export default function LockScreen() {
   const router = useRouter()
   const { authenticate, verifyPin, isAuthenticated, clearPin } = useAuth()
-  const insets = useSafeAreaInsets()
   const [pin, setPin] = useState('')
   const [showPin, setShowPin] = useState(false)
   const [error, setError] = useState('')
@@ -69,7 +68,7 @@ export default function LockScreen() {
   const dots = Array.from({ length: 6 }, (_, i) => i < pin.length)
 
   return (
-    <View className="flex-1 bg-app items-center justify-center px-8" style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}>
+    <ScreenView className="items-center justify-center px-8">
       <Text className="text-[#f1f1f1] text-2xl font-bold mb-2">Enter PIN</Text>
       <Text className="text-[#888888] text-sm mb-10">Apartment Manager</Text>
 
@@ -111,6 +110,6 @@ export default function LockScreen() {
       <TouchableOpacity onPress={handleForgot} className="mt-10">
         <Text className="text-[#888888] text-sm">Forgot PIN?</Text>
       </TouchableOpacity>
-    </View>
+    </ScreenView>
   )
 }

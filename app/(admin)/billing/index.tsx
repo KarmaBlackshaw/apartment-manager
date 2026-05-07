@@ -15,6 +15,7 @@ import {
   EmptyState,
   FAB,
   PropertySelector,
+  ScreenView,
 } from '../../../components/ui'
 import type { ChipVariant } from '../../../components/ui'
 import { useBillingOverview } from '../../../hooks/useBillingOverview'
@@ -65,7 +66,7 @@ export default function BillingScreen() {
       : entries.filter((e) => e.month_status === filterValue)
 
   return (
-    <View className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader
         title="Billing"
         right={
@@ -193,6 +194,6 @@ export default function BillingScreen() {
       />
 
       <FAB onPress={() => router.push('/(admin)/billing/generate')} icon="add" bottomOffset={100} />
-    </View>
+    </ScreenView>
   )
 }

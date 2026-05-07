@@ -12,6 +12,7 @@ import {
   InfoRow,
   StatusChip,
   AvatarInitials,
+  ScreenView,
 } from '../../../components/ui'
 import type { ChipVariant } from '../../../components/ui'
 import { useBill } from '../../../hooks/useBills'
@@ -46,23 +47,23 @@ export default function BillDetailScreen() {
 
   if (isLoading) {
     return (
-      <View className="flex-1 bg-background">
+      <ScreenView edges={['bottom']}>
         <AppHeader title="Bill" />
         <LoadingSpinner />
-      </View>
+      </ScreenView>
     )
   }
 
   if (isError || !bill) {
     return (
-      <View className="flex-1 bg-background">
+      <ScreenView edges={['bottom']}>
         <AppHeader title="Bill" />
         <View className="flex-1 items-center justify-center p-8">
           <Text className="text-danger text-center text-[15px]">
             {isError ? 'Could not load bill.' : 'Bill not found.'}
           </Text>
         </View>
-      </View>
+      </ScreenView>
     )
   }
 
@@ -109,7 +110,7 @@ export default function BillDetailScreen() {
   }
 
   return (
-    <View className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader title={headerTitle} />
 
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
@@ -228,6 +229,6 @@ export default function BillDetailScreen() {
           />
         </View>
       </BottomCTABar>
-    </View>
+    </ScreenView>
   )
 }

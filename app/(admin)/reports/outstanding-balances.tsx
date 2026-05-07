@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, FlatList, Pressable, Share } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { AppHeader } from '../../../components/ui/AppHeader'
+import { AppHeader, ScreenView } from '../../../components/ui'
 import { ListRow } from '../../../components/ui/ListRow'
 import { AvatarInitials } from '../../../components/ui/AvatarInitials'
 import { AmountText } from '../../../components/ui/AmountText'
@@ -34,7 +34,7 @@ export default function OutstandingBalancesScreen() {
   const report = data ?? { entries: [], totalOutstanding: 0, tenantCount: 0 }
 
   return (
-    <View className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader title="Outstanding" right={exportBtn} />
       {isLoading ? (
         <LoadingSpinner />
@@ -80,6 +80,6 @@ export default function OutstandingBalancesScreen() {
           contentContainerStyle={{ paddingBottom: 128 }}
         />
       )}
-    </View>
+    </ScreenView>
   )
 }

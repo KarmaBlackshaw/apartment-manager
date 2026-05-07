@@ -5,7 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../../../hooks/useTabBarScrollHandler'
 import { useProperties } from '../../../../hooks/useProperties'
 import { useUnits } from '../../../../hooks/useUnits'
-import { AppText, LoadingSpinner, UnitCard, AppHeader } from '../../../../components/ui'
+import { AppText, LoadingSpinner, UnitCard, AppHeader, ScreenView } from '../../../../components/ui'
 import type { Property } from '../../../../types'
 
 function PropertySection({ property, router }: { property: Property; router: ReturnType<typeof useRouter> }) {
@@ -52,23 +52,23 @@ export default function AllUnitsScreen() {
   if (isLoading) return <LoadingSpinner />
 
   if (!properties?.length) return (
-    <>
+    <ScreenView edges={['bottom']}>
       <AppHeader title="Units" right={<AddUnitButton onPress={() => router.push('/(admin)/settings/units/new')} />} />
       <View className="flex-1 items-center justify-center p-8 bg-app">
         <Ionicons name="business-outline" size={48} color="#555555" />
         <AppText color="muted" className="text-center mt-4">Add a property first before managing units.</AppText>
       </View>
-    </>
+    </ScreenView>
   )
 
   return (
-    <>
+    <ScreenView edges={['bottom']}>
       <AppHeader title="Units" right={<AddUnitButton onPress={() => router.push('/(admin)/settings/units/new')} />} />
       <ScrollView className="flex-1 bg-app" contentContainerStyle={{ padding: 16, paddingBottom: 128 }} {...tabBarScroll}>
       {properties.map((p) => (
         <PropertySection key={p.id} property={p} router={router} />
       ))}
     </ScrollView>
-    </>
+    </ScreenView>
   )
 }

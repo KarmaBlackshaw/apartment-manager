@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useProperty, useUpdateProperty, useDeleteProperty } from '../../../../hooks/useProperties'
-import { Input, Button, AppText, LoadingSpinner, AppHeader } from '../../../../components/ui'
+import { Input, Button, AppText, LoadingSpinner, AppHeader, ScreenView } from '../../../../components/ui'
 
 export default function EditPropertyScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()
@@ -60,7 +60,8 @@ export default function EditPropertyScreen() {
   }
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1 bg-app">
+    <ScreenView edges={['bottom']}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
       <AppHeader title="Edit Property" />
       <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 48 }}>
         <Input label="Property Name" value={name} onChangeText={setName} error={errors.name} />
@@ -70,5 +71,6 @@ export default function EditPropertyScreen() {
         <Button label="Delete Property" variant="danger" onPress={handleDelete} loading={deleting} />
       </ScrollView>
     </KeyboardAvoidingView>
+    </ScreenView>
   )
 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, FlatList, Pressable, Share } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import dayjs from 'dayjs'
-import { AppHeader } from '../../../components/ui/AppHeader'
+import { AppHeader, ScreenView } from '../../../components/ui'
 import { MonthTabSelector } from '../../../components/ui/MonthTabSelector'
 import { SectionHeader } from '../../../components/ui/SectionHeader'
 import { InfoRow } from '../../../components/ui/InfoRow'
@@ -84,7 +84,7 @@ export default function MaintenanceCostsScreen() {
   }
 
   return (
-    <View className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader title="Maintenance Costs" right={exportBtn} />
       <MonthTabSelector
         months={MONTHS.map(getMonthLabel)}
@@ -138,6 +138,6 @@ export default function MaintenanceCostsScreen() {
           contentContainerStyle={{ paddingBottom: 128 }}
         />
       )}
-    </View>
+    </ScreenView>
   )
 }

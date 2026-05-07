@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { View, ScrollView, KeyboardAvoidingView, Platform, Pressable } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 import { toast } from 'sonner-native'
 import dayjs from 'dayjs'
@@ -18,6 +17,7 @@ import {
   ProgressStepIndicator,
   BottomCTABar,
   CameraCapture,
+  ScreenView,
 } from '../../../components/ui'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -388,11 +388,11 @@ export default function NewTenantScreen() {
   // ─── Render ───────────────────────────────────────────────────────────────
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1 bg-background"
-    >
-      <SafeAreaView edges={['top']} className="bg-surface">
+    <ScreenView edges={['bottom']}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
+      >
         <View className="px-4 pt-3 pb-2 bg-surface">
           <ProgressStepIndicator steps={5} current={step} />
           <AppText
@@ -403,24 +403,24 @@ export default function NewTenantScreen() {
             Step {step} of 5 — {STEP_TITLES[step]}
           </AppText>
         </View>
-      </SafeAreaView>
 
-      <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 120 }}>{renderStep()}</ScrollView>
+        <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 120 }}>{renderStep()}</ScrollView>
 
-      <BottomCTABar>
-        <Button
-          label={step === 5 ? 'Save Tenant' : `Next — ${STEP_TITLES[step + 1]}`}
-          onPress={() => handleNext()}
-          loading={isPending}
-        />
-        {step > 1 && (
-          <Pressable onPress={handleBack} className="items-center mt-3">
-            <AppText color="primary">
-              Back
-            </AppText>
-          </Pressable>
-        )}
-      </BottomCTABar>
-    </KeyboardAvoidingView>
+        <BottomCTABar>
+          <Button
+            label={step === 5 ? 'Save Tenant' : `Next — ${STEP_TITLES[step + 1]}`}
+            onPress={() => handleNext()}
+            loading={isPending}
+          />
+          {step > 1 && (
+            <Pressable onPress={handleBack} className="items-center mt-3">
+              <AppText color="primary">
+                Back
+              </AppText>
+            </Pressable>
+          )}
+        </BottomCTABar>
+      </KeyboardAvoidingView>
+    </ScreenView>
   )
 }

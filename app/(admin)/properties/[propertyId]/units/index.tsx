@@ -4,7 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../../../../hooks/useTabBarScrollHandler'
 import { useUnits } from '../../../../../hooks/useUnits'
-import { LoadingSpinner, EmptyState, AppText, UnitCard, AppHeader } from '../../../../../components/ui'
+import { LoadingSpinner, EmptyState, AppText, UnitCard, AppHeader, ScreenView } from '../../../../../components/ui'
 
 export default function UnitsScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()
@@ -20,7 +20,7 @@ export default function UnitsScreen() {
   )
 
   return (
-    <View className="flex-1 bg-app">
+    <ScreenView edges={['bottom']}>
       <AppHeader
         title="Units"
         right={
@@ -49,6 +49,6 @@ export default function UnitsScreen() {
           />
         }
       />
-    </View>
+    </ScreenView>
   )
 }

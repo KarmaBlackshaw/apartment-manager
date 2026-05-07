@@ -10,6 +10,7 @@ import {
   BottomCTABar,
   Button,
   LoadingSpinner,
+  ScreenView,
 } from '../../../../components/ui'
 import { colors } from '../../../../constants/theme'
 import { formatCurrency } from '../../../../lib/billing'
@@ -26,12 +27,12 @@ export default function PaymentDetailScreen() {
 
   if (!payment) {
     return (
-      <View className="flex-1 bg-background">
+      <ScreenView edges={['bottom']}>
         <AppHeader title="Payment Detail" />
         <View className="flex-1 items-center justify-center p-8">
           <Text className="text-danger text-center text-base">Payment not found.</Text>
         </View>
-      </View>
+      </ScreenView>
     )
   }
 
@@ -63,7 +64,7 @@ export default function PaymentDetailScreen() {
   }
 
   return (
-    <View className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader title="Payment Detail" />
 
       <ScrollView
@@ -119,6 +120,6 @@ export default function PaymentDetailScreen() {
           onPress={handleVoid}
         />
       </BottomCTABar>
-    </View>
+    </ScreenView>
   )
 }

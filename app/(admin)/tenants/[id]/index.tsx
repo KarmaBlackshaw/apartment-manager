@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
 import { View, ScrollView } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import { useQuery } from '@tanstack/react-query'
@@ -17,6 +16,7 @@ import {
   ListRow,
   AppText,
   LoadingSpinner,
+  ScreenView,
 } from '../../../../components/ui'
 import { Button } from '../../../../components/ui'
 
@@ -58,7 +58,7 @@ export default function TenantDetailScreen() {
   const statusLabel = tenant.status === 'active' ? 'ACTIVE' : 'INACTIVE'
 
   return (
-    <SafeAreaView edges={['bottom']} className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader
         title={tenant.full_name}
         right={<StatusChip variant={statusVariant} label={statusLabel} />}
@@ -172,6 +172,6 @@ export default function TenantDetailScreen() {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenView>
   )
 }

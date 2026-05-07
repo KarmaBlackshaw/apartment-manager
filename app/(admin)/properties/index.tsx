@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
 import { usePropertiesWithStats } from '../../../hooks/useProperties'
-import { AppHeader, LoadingSpinner, EmptyState, FAB } from '../../../components/ui'
+import { AppHeader, LoadingSpinner, EmptyState, FAB, ScreenView } from '../../../components/ui'
 import { PropertyOverviewCard } from '../../../components/properties/PropertyOverviewCard'
 import { colors } from '../../../constants/theme'
 
@@ -23,7 +23,7 @@ export default function PropertiesScreen() {
   const handleAdd = () => router.push('/(admin)/properties/new')
 
   return (
-    <View className="flex-1 bg-app">
+    <ScreenView edges={['bottom']}>
       <AppHeader
         title="Properties"
         right={
@@ -77,6 +77,6 @@ export default function PropertiesScreen() {
       />
 
       <FAB onPress={handleAdd} bottomOffset={100} />
-    </View>
+    </ScreenView>
   )
 }

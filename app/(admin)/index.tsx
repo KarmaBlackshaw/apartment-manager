@@ -14,6 +14,7 @@ import {
   SectionHeader,
   CollectionProgressBar,
   SwipeablePaymentRow,
+  ScreenView,
 } from '../../components/ui'
 import { colors, radius, spacing } from '../../constants/theme'
 
@@ -136,7 +137,7 @@ export default function HomeScreen() {
   }
 
   return (
-    <>
+    <ScreenView edges={['bottom']}>
       <AppHeader
         title="Home"
         right={
@@ -502,6 +503,6 @@ export default function HomeScreen() {
           </View>
         )}
       </ScrollView>
-    </>
+    </ScreenView>
   )
 }

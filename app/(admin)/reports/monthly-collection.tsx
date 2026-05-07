@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, FlatList, Pressable, Share } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import dayjs from 'dayjs'
-import { AppHeader } from '../../../components/ui/AppHeader'
+import { AppHeader, ScreenView } from '../../../components/ui'
 import { MonthTabSelector } from '../../../components/ui/MonthTabSelector'
 import { CollectionProgressBar } from '../../../components/billing/CollectionProgressBar'
 import { ListRow } from '../../../components/ui/ListRow'
@@ -59,7 +59,7 @@ export default function MonthlyCollectionScreen() {
   const pct = stats.totalBilled > 0 ? Math.round((stats.totalCollected / stats.totalBilled) * 100) : 0
 
   return (
-    <View className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader title={title} right={exportBtn} />
       <MonthTabSelector
         months={MONTHS.map(getMonthLabel)}
@@ -121,6 +121,6 @@ export default function MonthlyCollectionScreen() {
           contentContainerStyle={{ paddingBottom: 128 }}
         />
       )}
-    </View>
+    </ScreenView>
   )
 }

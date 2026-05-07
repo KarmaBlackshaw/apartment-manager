@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { colors } from '../../constants/theme'
 
 type Edge = 'top' | 'bottom'
 
@@ -25,9 +26,10 @@ export function ScreenView({
   const insets = useSafeAreaInsets()
   return (
     <View
-      className={`flex-1 bg-app${className ? ` ${className}` : ''}`}
+      className={`flex-1${className ? ` ${className}` : ''}`}
       style={[
         {
+          backgroundColor: colors.background,
           paddingTop: edges.includes('top') ? insets.top : undefined,
           paddingBottom: edges.includes('bottom') ? insets.bottom : undefined,
         },

@@ -3,7 +3,7 @@ import { ScrollView, View, Switch } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
 import { useAuth } from '../../../context/AuthContext'
-import { Button, AppText, Card } from '../../../components/ui'
+import { Button, AppText, Card, ScreenView } from '../../../components/ui'
 
 export default function SecuritySettingsScreen() {
   const router = useRouter()
@@ -11,22 +11,24 @@ export default function SecuritySettingsScreen() {
   const { isBiometricsEnabled, setBiometricsEnabled } = useAuth()
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#0d0d0d' }} contentContainerClassName="p-4 pb-32" {...tabBarScroll}>
-      <Card className="mb-3">
-        <View className="flex-row justify-between items-center">
-          <View className="flex-1 mr-4">
-            <AppText className="font-semibold">Biometric Login</AppText>
-            <AppText color="secondary" variant="caption">Use Face ID or Touch ID to unlock</AppText>
+    <ScreenView>
+      <ScrollView className="flex-1" contentContainerClassName="p-4 pb-32" {...tabBarScroll}>
+        <Card className="mb-3">
+          <View className="flex-row justify-between items-center">
+            <View className="flex-1 mr-4">
+              <AppText className="font-semibold">Biometric Login</AppText>
+              <AppText color="secondary" variant="caption">Use Face ID or Touch ID to unlock</AppText>
+            </View>
+            <Switch
+              value={isBiometricsEnabled}
+              onValueChange={setBiometricsEnabled}
+              trackColor={{ true: '#3b82f6', false: '#2a2a2a' }}
+              thumbColor="#f1f1f1"
+            />
           </View>
-          <Switch
-            value={isBiometricsEnabled}
-            onValueChange={setBiometricsEnabled}
-            trackColor={{ true: '#3b82f6', false: '#2a2a2a' }}
-            thumbColor="#f1f1f1"
-          />
-        </View>
-      </Card>
-      <Button label="Change PIN" variant="secondary" onPress={() => router.push('/setup-pin')} />
-    </ScrollView>
+        </Card>
+        <Button label="Change PIN" variant="secondary" onPress={() => router.push('/setup-pin')} />
+      </ScrollView>
+    </ScreenView>
   )
 }

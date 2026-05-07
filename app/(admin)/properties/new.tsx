@@ -3,7 +3,7 @@ import { View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-n
 import { useRouter } from 'expo-router'
 import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
 import { useCreateProperty } from '../../../hooks/useProperties'
-import { Input, Button, AppText } from '../../../components/ui'
+import { Input, Button, AppText, ScreenView } from '../../../components/ui'
 
 export default function NewPropertyScreen() {
   const router = useRouter()
@@ -30,7 +30,8 @@ export default function NewPropertyScreen() {
   }
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1 bg-app">
+    <ScreenView edges={['bottom']}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
       <ScrollView contentContainerClassName="p-4 pb-32" {...tabBarScroll}>
         <AppText variant="subheading" className="mb-4">Property Details</AppText>
         <Input label="Property Name" value={name} onChangeText={setName} error={errors.name} placeholder="e.g. Sunset Apartments" />
@@ -39,5 +40,6 @@ export default function NewPropertyScreen() {
         <Button label="Create Property" onPress={handleSubmit} loading={isPending} className="mt-4" />
       </ScrollView>
     </KeyboardAvoidingView>
+    </ScreenView>
   )
 }

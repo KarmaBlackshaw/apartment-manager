@@ -5,7 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { useProperty, usePropertyStats } from '../../../../hooks/useProperties'
 import { useUnitsWithStatus } from '../../../../hooks/useUnits'
 import {
-  AppHeader, LoadingSpinner, UnitGridCard,
+  AppHeader, LoadingSpinner, UnitGridCard, ScreenView,
 } from '../../../../components/ui'
 import { colors } from '../../../../constants/theme'
 
@@ -37,7 +37,7 @@ export default function PropertyDetailScreen() {
     : 0
 
   return (
-    <View className="flex-1 bg-app">
+    <ScreenView edges={['bottom']}>
       <AppHeader
         title={property.name}
         right={
@@ -153,6 +153,6 @@ export default function PropertyDetailScreen() {
           </View>
         }
       />
-    </View>
+    </ScreenView>
   )
 }

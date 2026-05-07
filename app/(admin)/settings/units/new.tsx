@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router'
 import { useTabBarScrollHandler } from '../../../../hooks/useTabBarScrollHandler'
 import { useCreateUnit } from '../../../../hooks/useUnits'
 import { useProperties } from '../../../../hooks/useProperties'
-import { Input, Button, Select, AppHeader } from '../../../../components/ui'
+import { Input, Button, Select, AppHeader, ScreenView } from '../../../../components/ui'
 
 export default function NewUnitScreen() {
   const router = useRouter()
@@ -47,7 +47,8 @@ export default function NewUnitScreen() {
   }
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1 bg-app">
+    <ScreenView edges={['bottom']}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
       <AppHeader title="New Unit" />
       <ScrollView contentContainerClassName="p-4 pb-32" keyboardShouldPersistTaps="handled" {...tabBarScroll}>
         <Select
@@ -65,5 +66,6 @@ export default function NewUnitScreen() {
         <Button label="Create Unit" onPress={handleSubmit} loading={isPending} className="mt-4" />
       </ScrollView>
     </KeyboardAvoidingView>
+    </ScreenView>
   )
 }

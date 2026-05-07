@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
 import { useSettings, useUpdateSetting } from '../../../hooks/useSettings'
-import { Input, Button, LoadingSpinner } from '../../../components/ui'
+import { Input, Button, LoadingSpinner, ScreenView } from '../../../components/ui'
 
 export default function GeneralSettingsScreen() {
   const tabBarScroll = useTabBarScrollHandler()
@@ -31,12 +31,14 @@ export default function GeneralSettingsScreen() {
   if (isLoading) return <LoadingSpinner />
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1, backgroundColor: '#0d0d0d' }}>
-      <ScrollView contentContainerClassName="p-4 pb-32" {...tabBarScroll}>
-        <Input label="Apartment Name" value={apartmentName} onChangeText={setApartmentName} placeholder="My Apartment" />
-        <Input label="Owner Name" value={ownerName} onChangeText={setOwnerName} placeholder="Juan dela Cruz" />
-        <Button label="Save" onPress={handleSave} loading={isPending} className="mt-4" />
-      </ScrollView>
-    </KeyboardAvoidingView>
+    <ScreenView>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
+        <ScrollView contentContainerClassName="p-4 pb-32" {...tabBarScroll}>
+          <Input label="Apartment Name" value={apartmentName} onChangeText={setApartmentName} placeholder="My Apartment" />
+          <Input label="Owner Name" value={ownerName} onChangeText={setOwnerName} placeholder="Juan dela Cruz" />
+          <Button label="Save" onPress={handleSave} loading={isPending} className="mt-4" />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </ScreenView>
   )
 }

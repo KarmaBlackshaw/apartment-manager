@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { toast } from 'sonner-native'
 import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
 import { useSettings, useUpdateSetting } from '../../../hooks/useSettings'
-import { Input, Button, LoadingSpinner } from '../../../components/ui'
+import { Input, Button, LoadingSpinner, ScreenView } from '../../../components/ui'
 
 const schema = z.object({
   waterRate: z
@@ -87,60 +87,62 @@ export default function RatesSettingsScreen() {
   if (isLoading) return <LoadingSpinner />
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1, backgroundColor: '#0d0d0d' }}
-    >
-      <ScrollView contentContainerClassName="p-4 pb-32" {...tabBarScroll}>
-        <Controller
-          control={control}
-          name="waterRate"
-          render={({ field }) => (
-            <Input
-              label="Water Rate (PHP / cu.m)"
-              value={field.value}
-              onChangeText={field.onChange}
-              keyboardType="decimal-pad"
-              error={errors.waterRate?.message}
-            />
-          )}
-        />
+    <ScreenView>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
+      >
+        <ScrollView contentContainerClassName="p-4 pb-32" {...tabBarScroll}>
+          <Controller
+            control={control}
+            name="waterRate"
+            render={({ field }) => (
+              <Input
+                label="Water Rate (PHP / cu.m)"
+                value={field.value}
+                onChangeText={field.onChange}
+                keyboardType="decimal-pad"
+                error={errors.waterRate?.message}
+              />
+            )}
+          />
 
-        <Controller
-          control={control}
-          name="elecRate"
-          render={({ field }) => (
-            <Input
-              label="Electricity Rate (PHP / kWh)"
-              value={field.value}
-              onChangeText={field.onChange}
-              keyboardType="decimal-pad"
-              error={errors.elecRate?.message}
-            />
-          )}
-        />
+          <Controller
+            control={control}
+            name="elecRate"
+            render={({ field }) => (
+              <Input
+                label="Electricity Rate (PHP / kWh)"
+                value={field.value}
+                onChangeText={field.onChange}
+                keyboardType="decimal-pad"
+                error={errors.elecRate?.message}
+              />
+            )}
+          />
 
-        <Controller
-          control={control}
-          name="internetRate"
-          render={({ field }) => (
-            <Input
-              label="Internet Rate (PHP / mo)"
-              value={field.value}
-              onChangeText={field.onChange}
-              keyboardType="decimal-pad"
-              error={errors.internetRate?.message}
-            />
-          )}
-        />
+          <Controller
+            control={control}
+            name="internetRate"
+            render={({ field }) => (
+              <Input
+                label="Internet Rate (PHP / mo)"
+                value={field.value}
+                onChangeText={field.onChange}
+                keyboardType="decimal-pad"
+                error={errors.internetRate?.message}
+              />
+            )}
+          />
 
-        <Button
-          label="Save Rates"
-          onPress={handleSubmit(onSubmit)}
-          loading={isPending}
-          className="mt-4"
-        />
-      </ScrollView>
-    </KeyboardAvoidingView>
+          <Button
+            label="Save Rates"
+            onPress={handleSubmit(onSubmit)}
+            loading={isPending}
+            className="mt-4"
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </ScreenView>
   )
 }

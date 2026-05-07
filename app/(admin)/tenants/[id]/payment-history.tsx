@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react'
 import { View, FlatList, Pressable } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import { useTenant } from '../../../../hooks/useTenants'
@@ -14,6 +13,7 @@ import {
   StatusChip,
   AppText,
   LoadingSpinner,
+  ScreenView,
 } from '../../../../components/ui'
 import { colors } from '../../../../constants/theme'
 
@@ -39,14 +39,14 @@ export default function PaymentHistoryScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView className="flex-1 bg-background">
+      <ScreenView>
         <LoadingSpinner />
-      </SafeAreaView>
+      </ScreenView>
     )
   }
 
   return (
-    <SafeAreaView edges={['bottom']} className="flex-1 bg-background">
+    <ScreenView edges={['bottom']}>
       <AppHeader
         title="Payment History"
         right={
@@ -124,6 +124,6 @@ export default function PaymentHistoryScreen() {
           </View>
         }
       />
-    </SafeAreaView>
+    </ScreenView>
   )
 }

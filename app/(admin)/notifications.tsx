@@ -8,7 +8,7 @@ import { eq, and, lt, lte } from 'drizzle-orm'
 import { db } from '../../db'
 import { bills, tenants, contracts, units } from '../../db/schema'
 import { colors, spacing } from '../../constants/theme'
-import { FilterChipBar, NotificationRow, EmptyState } from '../../components/ui'
+import { FilterChipBar, NotificationRow, EmptyState, ScreenView } from '../../components/ui'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -191,7 +191,7 @@ export default function NotificationsScreen() {
   }
 
   return (
-    <>
+    <ScreenView>
       <Stack.Screen
         options={{
           title: 'Notifications',
@@ -245,6 +245,6 @@ export default function NotificationsScreen() {
           </View>
         )}
       </ScrollView>
-    </>
+    </ScreenView>
   )
 }

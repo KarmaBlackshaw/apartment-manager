@@ -17,6 +17,7 @@ import {
   EmptyState,
   FAB,
   AppHeader,
+  ScreenView,
 } from '../../../components/ui'
 import { colors } from '../../../constants/theme'
 import type { ChipVariant } from '../../../components/ui'
@@ -69,7 +70,7 @@ export default function TenantsScreen() {
   if (isLoading) return <LoadingSpinner />
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
+    <ScreenView edges={['bottom']}>
       <AppHeader
         title="Tenants"
         right={
@@ -159,6 +160,6 @@ export default function TenantsScreen() {
       />
 
       <FAB onPress={() => router.push('/tenants/new')} />
-    </View>
+    </ScreenView>
   )
 }
