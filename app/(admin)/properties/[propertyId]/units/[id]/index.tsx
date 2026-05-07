@@ -4,9 +4,10 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import { useUnitDetail } from '../../../../../../hooks/useUnits'
 import {
-  AppHeader, LoadingSpinner, StatusChip, AvatarInitials,
-  BalanceCard, SectionHeader, AmountText, ScreenView,
+  LoadingSpinner, StatusChip, AvatarInitials,
+  BalanceCard, SectionHeader, AmountText,
 } from '../../../../../../components/ui'
+import { ScreenLayout } from '../../../../../../layouts/ScreenLayout'
 import { colors } from '../../../../../../constants/theme'
 
 function unitPaymentChipVariant(balance: number, isOccupied: boolean) {
@@ -39,16 +40,10 @@ export default function UnitDetailScreen() {
   const chipLabel = unitStatusLabel(balance, isOccupied)
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader
-        title={unit.unit_number}
-        right={
-          <View style={{ marginRight: 8 }}>
-            <StatusChip variant={chipVariant} label={chipLabel} />
-          </View>
-        }
-      />
-
+    <ScreenLayout
+      title={unit.unit_number}
+      headerRight={<StatusChip variant={chipVariant} label={chipLabel} />}
+    >
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         {/* Unit info card */}
         <View
@@ -159,6 +154,6 @@ export default function UnitDetailScreen() {
           )}
         </View>
       </ScrollView>
-    </ScreenView>
+    </ScreenLayout>
   )
 }

@@ -3,7 +3,6 @@ import { View, ScrollView, Text } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import {
-  AppHeader,
   FilterChipBar,
   InfoRow,
   AmountText,
@@ -11,8 +10,8 @@ import {
   Button,
   LoadingSpinner,
   Input,
-  ScreenView,
 } from '../../../components/ui'
+import { ScreenLayout } from '../../../layouts/ScreenLayout'
 import { useSettings } from '../../../hooks/useSettings'
 import { useUnit } from '../../../hooks/useUnits'
 import { useUtilityReading, useUpsertUtilityReading } from '../../../hooks/useUtilityReadings'
@@ -84,8 +83,7 @@ export default function UtilityReadingScreen() {
   if (unitLoading || readingLoading) return <LoadingSpinner />
 
   return (
-    <View className="flex-1 bg-background">
-      <AppHeader title="Utility Reading" />
+    <ScreenLayout title="Utility Reading">
 
       {/* Context label */}
       <Text className="text-text-secondary text-[13px] text-center py-2">
@@ -164,6 +162,6 @@ export default function UtilityReadingScreen() {
           loading={isPending}
         />
       </BottomCTABar>
-    </View>
+    </ScreenLayout>
   )
 }

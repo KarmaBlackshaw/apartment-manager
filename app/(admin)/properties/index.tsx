@@ -4,7 +4,8 @@ import { useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../../hooks/useTabBarScrollHandler'
 import { usePropertiesWithStats } from '../../../hooks/useProperties'
-import { AppHeader, LoadingSpinner, EmptyState, FAB, ScreenView } from '../../../components/ui'
+import { LoadingSpinner, EmptyState, FAB } from '../../../components/ui'
+import { ScreenLayout } from '../../../layouts/ScreenLayout'
 import { PropertyOverviewCard } from '../../../components/properties/PropertyOverviewCard'
 import { colors } from '../../../constants/theme'
 
@@ -23,20 +24,19 @@ export default function PropertiesScreen() {
   const handleAdd = () => router.push('/(admin)/properties/new')
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader
-        title="Properties"
-        right={
-          <TouchableOpacity
-            onPress={() => {}}
-            style={{ marginRight: 8, padding: 4 }}
-            accessibilityLabel="Notifications"
-          >
-            <Ionicons name="notifications-outline" size={24} color={colors.textSecondary} />
-          </TouchableOpacity>
-        }
-      />
-
+    <ScreenLayout
+      title="Properties"
+      headerLeft={undefined}
+      headerRight={
+        <TouchableOpacity
+          onPress={() => {}}
+          style={{ marginRight: 8, padding: 4 }}
+          accessibilityLabel="Notifications"
+        >
+          <Ionicons name="notifications-outline" size={24} color={colors.textSecondary} />
+        </TouchableOpacity>
+      }
+    >
       <FlatList
         data={properties ?? []}
         keyExtractor={(p) => p.id}
@@ -77,6 +77,6 @@ export default function PropertiesScreen() {
       />
 
       <FAB onPress={handleAdd} bottomOffset={100} />
-    </ScreenView>
+    </ScreenLayout>
   )
 }

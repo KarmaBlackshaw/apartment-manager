@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, FlatList, Pressable, Share } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import dayjs from 'dayjs'
-import { AppHeader, ScreenView } from '../../../components/ui'
+import { ScreenLayout } from '../../../layouts/ScreenLayout'
 import { MonthTabSelector } from '../../../components/ui/MonthTabSelector'
 import { EmptyState } from '../../../components/ui/EmptyState'
 import { LoadingSpinner } from '../../../components/ui/LoadingSpinner'
@@ -48,8 +48,7 @@ export default function PerUnitIncomeScreen() {
   const report = data ?? { entries: [], totalCollected: 0, bestUnitLabel: null }
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader title="Per-Unit Income" right={exportBtn} showBack />
+    <ScreenLayout title="Per-Unit Income" headerRight={exportBtn}>
       <MonthTabSelector
         months={MONTHS.map(getMonthLabel)}
         selected={getMonthLabel(month)}
@@ -91,6 +90,6 @@ export default function PerUnitIncomeScreen() {
           contentContainerStyle={{ paddingBottom: 128 }}
         />
       )}
-    </ScreenView>
+    </ScreenLayout>
   )
 }

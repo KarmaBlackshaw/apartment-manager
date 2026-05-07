@@ -5,7 +5,6 @@ import dayjs from 'dayjs'
 import { useTenant } from '../../../../hooks/useTenants'
 import { useBills } from '../../../../hooks/useBills'
 import {
-  AppHeader,
   AvatarInitials,
   AmountText,
   FilterChipBar,
@@ -13,8 +12,8 @@ import {
   StatusChip,
   AppText,
   LoadingSpinner,
-  ScreenView,
 } from '../../../../components/ui'
+import { ScreenLayout } from '../../../../layouts/ScreenLayout'
 import { colors } from '../../../../constants/theme'
 
 export default function PaymentHistoryScreen() {
@@ -33,30 +32,25 @@ export default function PaymentHistoryScreen() {
     if (chipFilter === 'all') return allBills
     if (chipFilter === 'paid') return allBills.filter(b => b.status === 'paid')
     if (chipFilter === 'overdue') return allBills.filter(b => b.status === 'overdue')
-    // 'partial' — no partial status yet, return empty
     return []
   }, [allBills, chipFilter])
 
+  const exportBtn = (
+    <Pressable hitSlop={8} onPress={() => { /* export placeholder */ }}>
+      <AppText style={{ fontSize: 14, color: colors.textLink }}>Export</AppText>
+    </Pressable>
+  )
+
   if (isLoading) {
     return (
-      <ScreenView>
+      <ScreenLayout title="Payment History">
         <LoadingSpinner />
-      </ScreenView>
+      </ScreenLayout>
     )
   }
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader
-        title="Payment History"
-        right={
-          <Pressable hitSlop={8} onPress={() => { /* export placeholder */ }}>
-            <AppText style={{ fontSize: 14, color: colors.textLink }}>Export</AppText>
-          </Pressable>
-        }
-      />
-
-      {/* Tenant header card */}
+    <ScreenLayout title="Payment History" headerRight={exportBtn}>
       <View className="bg-surface rounded-md mx-4 my-3 p-4">
         <View className="flex-row items-center gap-3">
           <AvatarInitials name={tenant?.full_name ?? ''} size="md" />
@@ -71,7 +65,6 @@ export default function PaymentHistoryScreen() {
         </View>
       </View>
 
-      {/* Filter chips */}
       <FilterChipBar
         options={[
           { label: 'All', value: 'all' },
@@ -83,7 +76,6 @@ export default function PaymentHistoryScreen() {
         onChange={setChipFilter}
       />
 
-      {/* Bills list */}
       <FlatList
         data={filteredBills}
         keyExtractor={b => b.id}
@@ -124,6 +116,6 @@ export default function PaymentHistoryScreen() {
           </View>
         }
       />
-    </ScreenView>
+    </ScreenLayout>
   )
 }

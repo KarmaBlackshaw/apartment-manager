@@ -3,7 +3,6 @@ import { View, ScrollView, Text, Pressable, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import {
-  AppHeader,
   MonthTabSelector,
   SegmentedControl,
   SectionHeader,
@@ -12,8 +11,8 @@ import {
   BottomCTABar,
   Button,
   LoadingSpinner,
-  ScreenView,
 } from '../../../components/ui'
+import { ScreenLayout } from '../../../layouts/ScreenLayout'
 import { colors } from '../../../constants/theme'
 import { formatCurrency } from '../../../lib/billing'
 import { useBillPreview, useGenerateBills } from '../../../hooks/useBillingOverview'
@@ -54,8 +53,7 @@ export default function GenerateBillsScreen() {
   }
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader title="Generate Bills" />
+    <ScreenLayout title="Generate Bills">
 
       <ScrollView
         className="flex-1"
@@ -138,6 +136,6 @@ export default function GenerateBillsScreen() {
           <Text className="text-text-secondary text-sm">Cancel</Text>
         </Pressable>
       </BottomCTABar>
-    </ScreenView>
+    </ScreenLayout>
   )
 }

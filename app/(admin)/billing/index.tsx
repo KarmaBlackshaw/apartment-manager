@@ -5,7 +5,6 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import dayjs from 'dayjs'
 import { colors } from '../../../constants/theme'
 import {
-  AppHeader,
   MonthTabSelector,
   FilterChipBar,
   ListRow,
@@ -15,8 +14,8 @@ import {
   EmptyState,
   FAB,
   PropertySelector,
-  ScreenView,
 } from '../../../components/ui'
+import { ScreenLayout } from '../../../layouts/ScreenLayout'
 import type { ChipVariant } from '../../../components/ui'
 import { useBillingOverview } from '../../../hooks/useBillingOverview'
 import type { BillingOverviewEntry } from '../../../types'
@@ -66,19 +65,19 @@ export default function BillingScreen() {
       : entries.filter((e) => e.month_status === filterValue)
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader
-        title="Billing"
-        right={
-          <Pressable
-            onPress={() => router.push('/(admin)/notifications')}
-            hitSlop={8}
-            accessibilityRole="button"
-          >
-            <Ionicons name="notifications-outline" size={22} color={colors.textSecondary} />
-          </Pressable>
-        }
-      />
+    <ScreenLayout
+      title="Billing"
+      headerLeft={undefined}
+      headerRight={
+        <Pressable
+          onPress={() => router.push('/(admin)/notifications')}
+          hitSlop={8}
+          accessibilityRole="button"
+        >
+          <Ionicons name="notifications-outline" size={22} color={colors.textSecondary} />
+        </Pressable>
+      }
+    >
 
       <FlatList
         data={filteredEntries}
@@ -194,6 +193,6 @@ export default function BillingScreen() {
       />
 
       <FAB onPress={() => router.push('/(admin)/billing/generate')} icon="add" bottomOffset={100} />
-    </ScreenView>
+    </ScreenLayout>
   )
 }

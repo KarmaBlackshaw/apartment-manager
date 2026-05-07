@@ -4,7 +4,8 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTabBarScrollHandler } from '../../../../../hooks/useTabBarScrollHandler'
 import { useUnits } from '../../../../../hooks/useUnits'
-import { LoadingSpinner, EmptyState, AppText, UnitCard, AppHeader, ScreenView } from '../../../../../components/ui'
+import { LoadingSpinner, EmptyState, AppText, UnitCard } from '../../../../../components/ui'
+import { ScreenLayout } from '../../../../../layouts/ScreenLayout'
 
 export default function UnitsScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()
@@ -19,19 +20,17 @@ export default function UnitsScreen() {
     </View>
   )
 
+  const addButton = (
+    <TouchableOpacity
+      onPress={() => router.push(`/(admin)/properties/${propertyId}/units/new`)}
+      hitSlop={8}
+    >
+      <Ionicons name="add" size={26} color="#3b82f6" />
+    </TouchableOpacity>
+  )
+
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader
-        title="Units"
-        right={
-          <TouchableOpacity
-            onPress={() => router.push(`/(admin)/properties/${propertyId}/units/new`)}
-            hitSlop={8}
-          >
-            <Ionicons name="add" size={26} color="#3b82f6" />
-          </TouchableOpacity>
-        }
-      />
+    <ScreenLayout title="Units" headerRight={addButton}>
       <FlatList
         data={units}
         keyExtractor={(u) => u.id}
@@ -49,6 +48,6 @@ export default function UnitsScreen() {
           />
         }
       />
-    </ScreenView>
+    </ScreenLayout>
   )
 }

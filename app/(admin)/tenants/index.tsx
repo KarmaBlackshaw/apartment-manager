@@ -16,9 +16,8 @@ import {
   LoadingSpinner,
   EmptyState,
   FAB,
-  AppHeader,
-  ScreenView,
 } from '../../../components/ui'
+import { ScreenLayout } from '../../../layouts/ScreenLayout'
 import { colors } from '../../../constants/theme'
 import type { ChipVariant } from '../../../components/ui'
 
@@ -70,18 +69,18 @@ export default function TenantsScreen() {
   if (isLoading) return <LoadingSpinner />
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader
-        title="Tenants"
-        right={
-          <Pressable
-            onPress={() => router.push('/notifications')}
-            hitSlop={8}
-          >
-            <Ionicons name="notifications-outline" size={24} color={colors.textSecondary} />
-          </Pressable>
-        }
-      />
+    <ScreenLayout
+      title="Tenants"
+      headerLeft={undefined}
+      headerRight={
+        <Pressable
+          onPress={() => router.push('/notifications')}
+          hitSlop={8}
+        >
+          <Ionicons name="notifications-outline" size={24} color={colors.textSecondary} />
+        </Pressable>
+      }
+    >
       {/* Search bar */}
       <View
         style={{
@@ -160,6 +159,6 @@ export default function TenantsScreen() {
       />
 
       <FAB onPress={() => router.push('/tenants/new')} />
-    </ScreenView>
+    </ScreenLayout>
   )
 }

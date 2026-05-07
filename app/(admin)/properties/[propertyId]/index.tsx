@@ -4,9 +4,8 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useProperty, usePropertyStats } from '../../../../hooks/useProperties'
 import { useUnitsWithStatus } from '../../../../hooks/useUnits'
-import {
-  AppHeader, LoadingSpinner, UnitGridCard, ScreenView,
-} from '../../../../components/ui'
+import { LoadingSpinner, UnitGridCard } from '../../../../components/ui'
+import { ScreenLayout } from '../../../../layouts/ScreenLayout'
 import { colors } from '../../../../constants/theme'
 
 function formatPHP(amount: number) {
@@ -36,30 +35,27 @@ export default function PropertyDetailScreen() {
     ? Math.round((stats.occupiedUnits / stats.totalUnits) * 100)
     : 0
 
-  return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader
-        title={property.name}
-        right={
-          <View className="flex-row items-center gap-1">
-            <TouchableOpacity
-              onPress={() => router.push(`/(admin)/properties/${propertyId}/units/new` as never)}
-              style={{ padding: 4 }}
-              accessibilityLabel="Add unit"
-            >
-              <Ionicons name="add" size={26} color={colors.textSecondary} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => router.push(`/(admin)/properties/${propertyId}/edit` as never)}
-              style={{ marginRight: 8, padding: 4 }}
-              accessibilityLabel="Edit property"
-            >
-              <Ionicons name="create-outline" size={22} color={colors.textSecondary} />
-            </TouchableOpacity>
-          </View>
-        }
-      />
+  const headerRight = (
+    <View className="flex-row items-center gap-1">
+      <TouchableOpacity
+        onPress={() => router.push(`/(admin)/properties/${propertyId}/units/new` as never)}
+        style={{ padding: 4 }}
+        accessibilityLabel="Add unit"
+      >
+        <Ionicons name="add" size={26} color={colors.textSecondary} />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => router.push(`/(admin)/properties/${propertyId}/edit` as never)}
+        style={{ marginRight: 8, padding: 4 }}
+        accessibilityLabel="Edit property"
+      >
+        <Ionicons name="create-outline" size={22} color={colors.textSecondary} />
+      </TouchableOpacity>
+    </View>
+  )
 
+  return (
+    <ScreenLayout title={property.name} headerRight={headerRight}>
       <FlatList
         data={units}
         keyExtractor={(u) => u.id}
@@ -69,7 +65,6 @@ export default function PropertyDetailScreen() {
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         ListHeaderComponent={
           <>
-            {/* Property summary card */}
             <View
               className="rounded-xl p-4 mt-3 mb-4"
               style={{ backgroundColor: colors.surface }}
@@ -153,6 +148,6 @@ export default function PropertyDetailScreen() {
           </View>
         }
       />
-    </ScreenView>
+    </ScreenLayout>
   )
 }

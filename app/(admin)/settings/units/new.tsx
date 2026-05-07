@@ -4,7 +4,8 @@ import { useRouter } from 'expo-router'
 import { useTabBarScrollHandler } from '../../../../hooks/useTabBarScrollHandler'
 import { useCreateUnit } from '../../../../hooks/useUnits'
 import { useProperties } from '../../../../hooks/useProperties'
-import { Input, Button, Select, AppHeader, ScreenView } from '../../../../components/ui'
+import { Input, Button, Select } from '../../../../components/ui'
+import { ScreenLayout } from '../../../../layouts/ScreenLayout'
 
 export default function NewUnitScreen() {
   const router = useRouter()
@@ -47,25 +48,24 @@ export default function NewUnitScreen() {
   }
 
   return (
-    <ScreenView edges={['bottom']}>
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
-      <AppHeader title="New Unit" />
-      <ScrollView contentContainerClassName="p-4 pb-32" keyboardShouldPersistTaps="handled" {...tabBarScroll}>
-        <Select
-          label="Property"
-          placeholder="Select a property…"
-          options={propertyOptions}
-          value={selectedPropertyId}
-          onChange={setSelectedPropertyId}
-          error={errors.property}
-        />
-        <Input label="Unit number / name" value={unitNumber} onChangeText={setUnitNumber} error={errors.unitNumber} placeholder="Unit 1A" />
-        <Input label="Monthly rent (₱)" value={monthlyRate} onChangeText={setMonthlyRate} keyboardType="decimal-pad" error={errors.monthlyRate} placeholder="3,500" />
-        <Input label="Billing day" value={billingDay} onChangeText={setBillingDay} keyboardType="number-pad" placeholder="1" />
-        <Input label="Notes (optional)" value={notes} onChangeText={setNotes} multiline numberOfLines={3} />
-        <Button label="Create Unit" onPress={handleSubmit} loading={isPending} className="mt-4" />
-      </ScrollView>
-    </KeyboardAvoidingView>
-    </ScreenView>
+    <ScreenLayout title="New Unit">
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
+        <ScrollView contentContainerClassName="p-4 pb-32" keyboardShouldPersistTaps="handled" {...tabBarScroll}>
+          <Select
+            label="Property"
+            placeholder="Select a property…"
+            options={propertyOptions}
+            value={selectedPropertyId}
+            onChange={setSelectedPropertyId}
+            error={errors.property}
+          />
+          <Input label="Unit number / name" value={unitNumber} onChangeText={setUnitNumber} error={errors.unitNumber} placeholder="Unit 1A" />
+          <Input label="Monthly rent (₱)" value={monthlyRate} onChangeText={setMonthlyRate} keyboardType="decimal-pad" error={errors.monthlyRate} placeholder="3,500" />
+          <Input label="Billing day" value={billingDay} onChangeText={setBillingDay} keyboardType="number-pad" placeholder="1" />
+          <Input label="Notes (optional)" value={notes} onChangeText={setNotes} multiline numberOfLines={3} />
+          <Button label="Create Unit" onPress={handleSubmit} loading={isPending} className="mt-4" />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </ScreenLayout>
   )
 }

@@ -6,7 +6,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useTenant } from '../../../../hooks/useTenants'
 import { fetchBills } from '../../../../lib/api/bills'
 import {
-  AppHeader,
   StatusChip,
   AvatarInitials,
   AmountText,
@@ -16,9 +15,9 @@ import {
   ListRow,
   AppText,
   LoadingSpinner,
-  ScreenView,
 } from '../../../../components/ui'
 import { Button } from '../../../../components/ui'
+import { ScreenLayout } from '../../../../layouts/ScreenLayout'
 
 export default function TenantDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -45,12 +44,11 @@ export default function TenantDetailScreen() {
 
   if (!tenant) {
     return (
-      <View className="flex-1 bg-background">
-        <AppHeader title="Tenant" />
+      <ScreenLayout title="Tenant">
         <View className="flex-1 items-center justify-center">
           <AppText color="danger">Tenant not found.</AppText>
         </View>
-      </View>
+      </ScreenLayout>
     )
   }
 
@@ -58,11 +56,7 @@ export default function TenantDetailScreen() {
   const statusLabel = tenant.status === 'active' ? 'ACTIVE' : 'INACTIVE'
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader
-        title={tenant.full_name}
-        right={<StatusChip variant={statusVariant} label={statusLabel} />}
-      />
+    <ScreenLayout title={tenant.full_name} headerRight={<StatusChip variant={statusVariant} label={statusLabel} />}>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 48 }}>
         {/* Profile card */}
@@ -172,6 +166,6 @@ export default function TenantDetailScreen() {
           />
         </View>
       </ScrollView>
-    </ScreenView>
+    </ScreenLayout>
   )
 }

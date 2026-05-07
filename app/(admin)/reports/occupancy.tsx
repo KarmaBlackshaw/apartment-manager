@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, ScrollView, FlatList, Pressable, Share } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import dayjs from 'dayjs'
-import { AppHeader, ScreenView } from '../../../components/ui'
+import { ScreenLayout } from '../../../layouts/ScreenLayout'
 import { SectionHeader } from '../../../components/ui/SectionHeader'
 import { ListRow } from '../../../components/ui/ListRow'
 import { AmountText } from '../../../components/ui/AmountText'
@@ -43,8 +43,7 @@ export default function OccupancyScreen() {
   }
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader title="Occupancy Rate" right={exportBtn} showBack />
+    <ScreenLayout title="Occupancy Rate" headerRight={exportBtn}>
 
       {isLoading ? (
         <LoadingSpinner />
@@ -127,6 +126,6 @@ export default function OccupancyScreen() {
           )}
         </ScrollView>
       )}
-    </ScreenView>
+    </ScreenLayout>
   )
 }

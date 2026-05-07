@@ -5,9 +5,10 @@ import * as ImagePicker from 'expo-image-picker'
 import dayjs from 'dayjs'
 import { useDocuments } from '../../../../../../hooks/useDocuments'
 import { useUnit } from '../../../../../../hooks/useUnits'
-import { AppHeader, FilterChipBar, LoadingSpinner, ScreenView } from '../../../../../../components/ui'
+import { FilterChipBar, LoadingSpinner } from '../../../../../../components/ui'
 import { DocumentRow } from '../../../../../../components/documents/DocumentRow'
 import type { DocCategory } from '../../../../../../components/documents/DocumentRow'
+import { ScreenLayout } from '../../../../../../layouts/ScreenLayout'
 import { colors } from '../../../../../../constants/theme'
 
 const CATEGORY_FILTERS = [
@@ -75,9 +76,7 @@ export default function UnitDocumentsScreen() {
   }
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader title={title} />
-
+    <ScreenLayout title={title}>
       <FilterChipBar
         options={filterOptions}
         selected={filter}
@@ -120,6 +119,6 @@ export default function UnitDocumentsScreen() {
           </TouchableOpacity>
         }
       />
-    </ScreenView>
+    </ScreenLayout>
   )
 }

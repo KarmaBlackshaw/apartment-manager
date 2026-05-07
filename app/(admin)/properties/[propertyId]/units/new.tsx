@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
+import { ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useCreateUnit } from '../../../../../hooks/useUnits'
 import { useHideTabBar } from '../../../../../hooks/useHideTabBar'
-import { Input, Button, AppHeader, ScreenView } from '../../../../../components/ui'
+import { Input, Button } from '../../../../../components/ui'
+import { ScreenLayout } from '../../../../../layouts/ScreenLayout'
 
 export default function NewUnitScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()
@@ -38,58 +39,57 @@ export default function NewUnitScreen() {
   }
 
   return (
-    <ScreenView edges={['bottom']}>
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1"
-    >
-      <AppHeader title="Add Unit" />
-      <ScrollView
-        contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="interactive"
+    <ScreenLayout title="Add Unit">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
       >
-        <Input
-          label="Unit number / name"
-          value={unitNumber}
-          onChangeText={setUnitNumber}
-          error={errors.unitNumber}
-          placeholder="Unit 1A"
-        />
+        <ScrollView
+          contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
+        >
+          <Input
+            label="Unit number / name"
+            value={unitNumber}
+            onChangeText={setUnitNumber}
+            error={errors.unitNumber}
+            placeholder="Unit 1A"
+          />
 
-        <Input
-          label="Monthly rent (₱)"
-          value={monthlyRent}
-          onChangeText={setMonthlyRent}
-          keyboardType="decimal-pad"
-          placeholder="3,500"
-          error={errors.monthlyRent}
-        />
+          <Input
+            label="Monthly rent (₱)"
+            value={monthlyRent}
+            onChangeText={setMonthlyRent}
+            keyboardType="decimal-pad"
+            placeholder="3,500"
+            error={errors.monthlyRent}
+          />
 
-        <Input
-          label="Billing day"
-          value={billingDay}
-          onChangeText={setBillingDay}
-          keyboardType="number-pad"
-          placeholder="1st of month"
-        />
+          <Input
+            label="Billing day"
+            value={billingDay}
+            onChangeText={setBillingDay}
+            keyboardType="number-pad"
+            placeholder="1st of month"
+          />
 
-        <Input
-          label="Notes (optional)"
-          value={notes}
-          onChangeText={setNotes}
-          multiline
-          numberOfLines={3}
-        />
+          <Input
+            label="Notes (optional)"
+            value={notes}
+            onChangeText={setNotes}
+            multiline
+            numberOfLines={3}
+          />
 
-        <Button
-          label="Save Unit"
-          onPress={handleSubmit}
-          loading={isPending}
-          className="mt-6"
-        />
-      </ScrollView>
-    </KeyboardAvoidingView>
-    </ScreenView>
+          <Button
+            label="Save Unit"
+            onPress={handleSubmit}
+            loading={isPending}
+            className="mt-6"
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </ScreenLayout>
   )
 }

@@ -3,7 +3,8 @@ import { View, ScrollView, Text, Pressable, Alert, Share } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import dayjs from 'dayjs'
-import { AppHeader, ReceiptDocument, LoadingSpinner, ScreenView } from '../../../components/ui'
+import { ReceiptDocument, LoadingSpinner } from '../../../components/ui'
+import { ScreenLayout } from '../../../layouts/ScreenLayout'
 import { useSettings } from '../../../hooks/useSettings'
 import { usePayment } from '../../../hooks/usePayments'
 
@@ -18,12 +19,11 @@ export default function ReceiptScreen() {
 
   if (!payment) {
     return (
-      <ScreenView edges={['bottom']}>
-        <AppHeader title="Receipt" />
+      <ScreenLayout title="Receipt">
         <View className="flex-1 items-center justify-center p-8">
           <Text className="text-danger text-center text-base">Payment not found.</Text>
         </View>
-      </ScreenView>
+      </ScreenLayout>
     )
   }
 
@@ -42,15 +42,14 @@ export default function ReceiptScreen() {
   }
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader
-        title="Receipt"
-        right={
-          <Pressable onPress={router.back} hitSlop={8}>
-            <Text className="text-primary text-base font-medium">Done</Text>
-          </Pressable>
-        }
-      />
+    <ScreenLayout
+      title="Receipt"
+      headerRight={
+        <Pressable onPress={router.back} hitSlop={8}>
+          <Text className="text-primary text-base font-medium">Done</Text>
+        </Pressable>
+      }
+    >
 
       <ScrollView
         className="flex-1"
@@ -95,6 +94,6 @@ export default function ReceiptScreen() {
           <Text className="text-text-primary font-semibold text-[15px]">Done</Text>
         </Pressable>
       </View>
-    </ScreenView>
+    </ScreenLayout>
   )
 }

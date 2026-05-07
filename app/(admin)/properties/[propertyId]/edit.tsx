@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useProperty, useUpdateProperty, useDeleteProperty } from '../../../../hooks/useProperties'
-import { Input, Button, AppText, LoadingSpinner, AppHeader, ScreenView } from '../../../../components/ui'
+import { Input, Button, AppText, LoadingSpinner } from '../../../../components/ui'
+import { ScreenLayout } from '../../../../layouts/ScreenLayout'
 
 export default function EditPropertyScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()
@@ -60,17 +61,16 @@ export default function EditPropertyScreen() {
   }
 
   return (
-    <ScreenView edges={['bottom']}>
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
-      <AppHeader title="Edit Property" />
-      <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 48 }}>
-        <Input label="Property Name" value={name} onChangeText={setName} error={errors.name} />
-        <Input label="Address" value={address} onChangeText={setAddress} error={errors.address} />
-        <Input label="Description" value={description} onChangeText={setDescription} multiline numberOfLines={3} />
-        <Button label="Save Changes" onPress={handleSave} loading={updating} className="mb-3 mt-2" />
-        <Button label="Delete Property" variant="danger" onPress={handleDelete} loading={deleting} />
-      </ScrollView>
-    </KeyboardAvoidingView>
-    </ScreenView>
+    <ScreenLayout title="Edit Property">
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
+        <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 48 }}>
+          <Input label="Property Name" value={name} onChangeText={setName} error={errors.name} />
+          <Input label="Address" value={address} onChangeText={setAddress} error={errors.address} />
+          <Input label="Description" value={description} onChangeText={setDescription} multiline numberOfLines={3} />
+          <Button label="Save Changes" onPress={handleSave} loading={updating} className="mb-3 mt-2" />
+          <Button label="Delete Property" variant="danger" onPress={handleDelete} loading={deleting} />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </ScreenLayout>
   )
 }

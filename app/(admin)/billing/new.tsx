@@ -3,14 +3,13 @@ import { View, Text, ScrollView, Pressable, KeyboardAvoidingView, Platform } fro
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import {
-  AppHeader,
   BottomCTABar,
   Button,
   Input,
   DateInput,
   AmountText,
-  ScreenView,
 } from '../../../components/ui'
+import { ScreenLayout } from '../../../layouts/ScreenLayout'
 import { useTenant } from '../../../hooks/useTenants'
 import { useUnit } from '../../../hooks/useUnits'
 import { useBill } from '../../../hooks/useBills'
@@ -64,12 +63,11 @@ export default function RecordPaymentScreen() {
   }
 
   return (
-    <ScreenView edges={['bottom']}>
+    <ScreenLayout title="Record Payment">
     <KeyboardAvoidingView
       className="flex-1"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <AppHeader title="Record Payment" />
 
       <ScrollView contentContainerStyle={{ paddingBottom: 160 }}>
         {/* 1. Tenant / unit card (read-only) */}
@@ -152,6 +150,6 @@ export default function RecordPaymentScreen() {
         </Pressable>
       </BottomCTABar>
     </KeyboardAvoidingView>
-    </ScreenView>
+    </ScreenLayout>
   )
 }

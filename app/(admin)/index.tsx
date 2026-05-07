@@ -14,8 +14,6 @@ import {
   useAnnualSummary,
 } from '../../hooks/useReports'
 import {
-  AppHeader,
-  ScreenView,
   KPICard,
   SectionHeader,
   QuickActionBar,
@@ -25,6 +23,7 @@ import {
   ReportCard,
   CollectionProgressBar,
 } from '../../components/ui'
+import { ScreenLayout } from '../../layouts/ScreenLayout'
 import { formatPHP } from '../../lib/format'
 
 export default function HomeScreen() {
@@ -176,26 +175,26 @@ export default function HomeScreen() {
   ])
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader
-        title="Home"
-        right={
-          <View className="flex-row gap-1">
-            <Pressable
-              className="p-1.5"
-              onPress={() => router.push('/(admin)/notifications' as any)}
-            >
-              <Ionicons name="notifications-outline" size={22} color="#94A3B8" />
-            </Pressable>
-            <Pressable
-              className="p-1.5"
-              onPress={() => router.push('/(admin)/settings' as any)}
-            >
-              <Ionicons name="settings-outline" size={22} color="#94A3B8" />
-            </Pressable>
-          </View>
-        }
-      />
+    <ScreenLayout
+      title="Home"
+      headerLeft={undefined}
+      headerRight={
+        <View className="flex-row gap-1">
+          <Pressable
+            className="p-1.5"
+            onPress={() => router.push('/(admin)/notifications' as any)}
+          >
+            <Ionicons name="notifications-outline" size={22} color="#94A3B8" />
+          </Pressable>
+          <Pressable
+            className="p-1.5"
+            onPress={() => router.push('/(admin)/settings' as any)}
+          >
+            <Ionicons name="settings-outline" size={22} color="#94A3B8" />
+          </Pressable>
+        </View>
+      }
+    >
 
       <ScrollView
         className="flex-1"
@@ -352,6 +351,6 @@ export default function HomeScreen() {
           ))}
         </View>
       </ScrollView>
-    </ScreenView>
+    </ScreenLayout>
   )
 }

@@ -3,15 +3,14 @@ import { View, ScrollView, Text, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import {
-  AppHeader,
   AmountText,
   SectionHeader,
   InfoRow,
   BottomCTABar,
   Button,
   LoadingSpinner,
-  ScreenView,
 } from '../../../../components/ui'
+import { ScreenLayout } from '../../../../layouts/ScreenLayout'
 import { colors } from '../../../../constants/theme'
 import { formatCurrency } from '../../../../lib/billing'
 import { usePayment, useVoidPayment } from '../../../../hooks/usePayments'
@@ -27,12 +26,11 @@ export default function PaymentDetailScreen() {
 
   if (!payment) {
     return (
-      <ScreenView edges={['bottom']}>
-        <AppHeader title="Payment Detail" />
+      <ScreenLayout title="Payment Detail">
         <View className="flex-1 items-center justify-center p-8">
           <Text className="text-danger text-center text-base">Payment not found.</Text>
         </View>
-      </ScreenView>
+      </ScreenLayout>
     )
   }
 
@@ -64,8 +62,7 @@ export default function PaymentDetailScreen() {
   }
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader title="Payment Detail" />
+    <ScreenLayout title="Payment Detail">
 
       <ScrollView
         className="flex-1"
@@ -120,6 +117,6 @@ export default function PaymentDetailScreen() {
           onPress={handleVoid}
         />
       </BottomCTABar>
-    </ScreenView>
+    </ScreenLayout>
   )
 }

@@ -4,7 +4,6 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import { colors } from '../../../constants/theme'
 import {
-  AppHeader,
   BottomCTABar,
   Button,
   LoadingSpinner,
@@ -12,8 +11,8 @@ import {
   InfoRow,
   StatusChip,
   AvatarInitials,
-  ScreenView,
 } from '../../../components/ui'
+import { ScreenLayout } from '../../../layouts/ScreenLayout'
 import type { ChipVariant } from '../../../components/ui'
 import { useBill } from '../../../hooks/useBills'
 import { useTenant } from '../../../hooks/useTenants'
@@ -47,23 +46,21 @@ export default function BillDetailScreen() {
 
   if (isLoading) {
     return (
-      <ScreenView edges={['bottom']}>
-        <AppHeader title="Bill" />
+      <ScreenLayout title="Bill">
         <LoadingSpinner />
-      </ScreenView>
+      </ScreenLayout>
     )
   }
 
   if (isError || !bill) {
     return (
-      <ScreenView edges={['bottom']}>
-        <AppHeader title="Bill" />
+      <ScreenLayout title="Bill">
         <View className="flex-1 items-center justify-center p-8">
           <Text className="text-danger text-center text-[15px]">
             {isError ? 'Could not load bill.' : 'Bill not found.'}
           </Text>
         </View>
-      </ScreenView>
+      </ScreenLayout>
     )
   }
 
@@ -110,8 +107,7 @@ export default function BillDetailScreen() {
   }
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader title={headerTitle} />
+    <ScreenLayout title={headerTitle}>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         {/* 1. Tenant header card */}
@@ -229,6 +225,6 @@ export default function BillDetailScreen() {
           />
         </View>
       </BottomCTABar>
-    </ScreenView>
+    </ScreenLayout>
   )
 }

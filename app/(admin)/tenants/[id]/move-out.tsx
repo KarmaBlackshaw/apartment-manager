@@ -6,15 +6,14 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTenant, useDeactivateTenant } from '../../../../hooks/useTenants'
 import { useBills } from '../../../../hooks/useBills'
 import {
-  AppHeader,
   WarningBanner,
   SettlementRow,
   BottomCTABar,
   Button,
   AppText,
   LoadingSpinner,
-  ScreenView,
 } from '../../../../components/ui'
+import { ScreenLayout } from '../../../../layouts/ScreenLayout'
 import { colors } from '../../../../constants/theme'
 
 export default function MoveOutScreen() {
@@ -29,7 +28,6 @@ export default function MoveOutScreen() {
     [allBills],
   )
 
-  // Prorated rent: placeholder — requires unit rate join
   const proratedRent = useMemo(() => {
     if (!tenant?.unit) return 0
     const today = dayjs()
@@ -39,8 +37,6 @@ export default function MoveOutScreen() {
       : dayjs(tenant.move_in_date)
     const daysUsed = today.diff(periodStart, 'day')
     if (daysUsed <= 0) return 0
-    // Estimate daily rate from monthly_rate (if available)
-    // Note: unit monthly_rate not directly available in TenantWithUnit, approximate
     return 0 // placeholder — requires unit rate join
   }, [tenant, allBills])
 
@@ -78,32 +74,30 @@ export default function MoveOutScreen() {
     )
   }
 
+  const backButton = (
+    <Pressable
+      onPress={() => {
+        Alert.alert('Discard changes?', 'The move-out will not be processed.', [
+          { text: 'Keep editing', style: 'cancel' },
+          { text: 'Discard', style: 'destructive', onPress: () => router.back() },
+        ])
+      }}
+      hitSlop={8}
+    >
+      <Ionicons name="chevron-back" size={28} color={colors.textPrimary} />
+    </Pressable>
+  )
+
   if (isLoading) {
     return (
-      <ScreenView>
+      <ScreenLayout title="Move-Out">
         <LoadingSpinner />
-      </ScreenView>
+      </ScreenLayout>
     )
   }
 
   return (
-    <ScreenView edges={['bottom']}>
-      <AppHeader
-        title="Move-Out"
-        left={
-          <Pressable
-            onPress={() => {
-              Alert.alert('Discard changes?', 'The move-out will not be processed.', [
-                { text: 'Keep editing', style: 'cancel' },
-                { text: 'Discard', style: 'destructive', onPress: () => router.back() },
-              ])
-            }}
-            hitSlop={8}
-          >
-            <Ionicons name="chevron-back" size={28} color={colors.textPrimary} />
-          </Pressable>
-        }
-      />
+    <ScreenLayout title="Move-Out" headerLeft={backButton}>
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         <View className="mt-3">
           <WarningBanner
@@ -112,7 +106,6 @@ export default function MoveOutScreen() {
           />
         </View>
 
-        {/* Settlement breakdown */}
         <AppText
           className="text-[11px] font-semibold text-text-muted mx-4 mt-5 mb-2"
           style={{ letterSpacing: 0.5, textTransform: 'uppercase' }}
@@ -140,7 +133,6 @@ export default function MoveOutScreen() {
           />
         </View>
 
-        {/* Add damage row */}
         {addingDamage ? (
           <View className="flex-row gap-2 px-4 py-3 items-center">
             <TextInput
@@ -184,7 +176,6 @@ export default function MoveOutScreen() {
           </Pressable>
         )}
 
-        {/* Notes */}
         <AppText
           className="text-[11px] font-semibold text-text-muted mx-4 mt-5 mb-2"
           style={{ letterSpacing: 0.5, textTransform: 'uppercase' }}
@@ -211,6 +202,6 @@ export default function MoveOutScreen() {
           <AppText color="secondary">Cancel</AppText>
         </Pressable>
       </BottomCTABar>
-    </ScreenView>
+    </ScreenLayout>
   )
 }
