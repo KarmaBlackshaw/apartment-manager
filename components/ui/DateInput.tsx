@@ -54,10 +54,10 @@ export function DateInput({ label, value, onChange, error, minimumDate, maximumD
         <Modal transparent animationType="slide">
           <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <View style={{ backgroundColor: '#1a1a1a', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 16 }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <View className="flex-row justify-between items-center mb-2">
                 <AppText variant="subheading">Select Date</AppText>
                 <TouchableOpacity onPress={() => setShow(false)} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-                  <AppText color="primary" style={{ color: '#3b82f6' }}>Done</AppText>
+                  <AppText color="primary">Done</AppText>
                 </TouchableOpacity>
               </View>
               <DateTimePicker

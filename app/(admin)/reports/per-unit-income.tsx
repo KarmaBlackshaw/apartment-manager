@@ -7,7 +7,6 @@ import { MonthTabSelector } from '../../../components/ui/MonthTabSelector'
 import { EmptyState } from '../../../components/ui/EmptyState'
 import { LoadingSpinner } from '../../../components/ui/LoadingSpinner'
 import { UnitIncomeRow } from '../../../components/reports/UnitIncomeRow'
-import { colors } from '../../../constants/theme'
 import { buildCSV } from '../../../lib/csv'
 import { usePerUnitIncome } from '../../../hooks/useReports'
 
@@ -50,7 +49,7 @@ export default function PerUnitIncomeScreen() {
 
   return (
     <ScreenView edges={['bottom']}>
-      <AppHeader title="Per-Unit Income" right={exportBtn} />
+      <AppHeader title="Per-Unit Income" right={exportBtn} showBack />
       <MonthTabSelector
         months={MONTHS.map(getMonthLabel)}
         selected={getMonthLabel(month)}
@@ -67,19 +66,19 @@ export default function PerUnitIncomeScreen() {
           keyExtractor={(e) => e.unit_id}
           ListHeaderComponent={
             <View className="flex-row gap-3 mx-4 mt-3 mb-3">
-              <View className="flex-1 rounded-xl p-4" style={{ backgroundColor: colors.surface }}>
-                <Text className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: colors.textMuted }}>
+              <View className="flex-1 rounded-xl p-4 bg-surface">
+                <Text className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">
                   Total collected
                 </Text>
-                <Text className="text-[22px] font-bold mt-1" style={{ color: colors.success }}>
+                <Text className="text-[22px] font-bold mt-1 text-success">
                   ₱{report.totalCollected.toLocaleString('en-PH', { minimumFractionDigits: 0 })}
                 </Text>
               </View>
-              <View className="flex-1 rounded-xl p-4" style={{ backgroundColor: colors.surface }}>
-                <Text className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: colors.textMuted }}>
+              <View className="flex-1 rounded-xl p-4 bg-surface">
+                <Text className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">
                   Best unit
                 </Text>
-                <Text className="text-[22px] font-bold mt-1" style={{ color: colors.primary }}>
+                <Text className="text-[22px] font-bold mt-1 text-primary">
                   {report.bestUnitLabel ?? '—'}
                 </Text>
               </View>

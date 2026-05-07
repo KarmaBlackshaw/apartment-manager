@@ -10,7 +10,6 @@ import { StatusChip } from '../../../components/ui/StatusChip'
 import { AmountText } from '../../../components/ui/AmountText'
 import { EmptyState } from '../../../components/ui/EmptyState'
 import { LoadingSpinner } from '../../../components/ui/LoadingSpinner'
-import { colors } from '../../../constants/theme'
 import { buildCSV } from '../../../lib/csv'
 import { useMonthlyCollection } from '../../../hooks/useReports'
 import type { MonthlyCollectionEntry } from '../../../types'
@@ -60,7 +59,7 @@ export default function MonthlyCollectionScreen() {
 
   return (
     <ScreenView edges={['bottom']}>
-      <AppHeader title={title} right={exportBtn} />
+      <AppHeader title={title} right={exportBtn} showBack />
       <MonthTabSelector
         months={MONTHS.map(getMonthLabel)}
         selected={getMonthLabel(month)}
@@ -76,10 +75,7 @@ export default function MonthlyCollectionScreen() {
           data={entries}
           keyExtractor={(e) => e.tenant_id}
           ListHeaderComponent={
-            <View
-              className="mx-4 mt-2 mb-3 rounded-xl p-4"
-              style={{ backgroundColor: colors.surface }}
-            >
+            <View className="mx-4 mt-2 mb-3 rounded-xl p-4 bg-surface">
               <Text className="text-xs text-text-muted uppercase tracking-wide mb-1">Total collected</Text>
               <AmountText amount={stats.totalCollected} variant="paid" size="large" />
               <Text className="text-sm text-text-secondary mt-1">
@@ -87,7 +83,7 @@ export default function MonthlyCollectionScreen() {
                 <Text className="font-semibold text-text-primary">
                   ₱{stats.totalBilled.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </Text>{' '}
-                <Text style={{ color: colors.success }}>({pct}%)</Text>
+                <Text className="text-success">({pct}%)</Text>
               </Text>
               <View className="mt-3">
                 <CollectionProgressBar

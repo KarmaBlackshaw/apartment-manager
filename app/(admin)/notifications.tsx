@@ -7,7 +7,6 @@ import { eq, and, lt, lte } from 'drizzle-orm'
 
 import { db } from '../../db'
 import { bills, tenants, contracts, units } from '../../db/schema'
-import { colors, spacing } from '../../constants/theme'
 import { FilterChipBar, NotificationRow, EmptyState, ScreenView } from '../../components/ui'
 
 // ---------------------------------------------------------------------------
@@ -201,7 +200,7 @@ export default function NotificationsScreen() {
               accessibilityRole="button"
               accessibilityLabel="Clear all notifications"
             >
-              <Text style={{ color: colors.primary, fontSize: 15, fontWeight: '500' }}>
+              <Text className="text-primary text-[15px] font-medium">
                 Clear All
               </Text>
             </Pressable>
@@ -211,9 +210,9 @@ export default function NotificationsScreen() {
 
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={{ flex: 1, backgroundColor: colors.background }}
+        className="flex-1 bg-background"
       >
-        <View style={{ paddingTop: spacing[3], paddingBottom: spacing[4] }}>
+        <View className="pt-3 pb-4">
           <FilterChipBar
             options={FILTER_OPTIONS}
             selected={selected}
@@ -233,7 +232,7 @@ export default function NotificationsScreen() {
         ))}
 
         {filtered.length === 0 && (
-          <View style={{ marginTop: spacing[10] }}>
+          <View className="mt-10">
             <EmptyState
               title="No notifications"
               description={

@@ -79,7 +79,7 @@ export function FilterChipBar({ options, selected, onChange }: FilterChipBarProp
         gap: 8,
         alignItems: 'center',
       }}
-      style={{ flexGrow: 0, flexShrink: 0 }}
+      className="grow-0 shrink-0"
     >
       {options.map((option) => (
         <FilterChip

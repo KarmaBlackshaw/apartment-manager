@@ -27,7 +27,7 @@ function formatPHP(n: number) {
 
 function UnitCostRow({ item }: { item: MaintenanceCostByUnit }) {
   return (
-    <View className="px-4 py-3 border-b border-muted flex-row items-center" style={{ backgroundColor: colors.surface }}>
+    <View className="px-4 py-3 border-b border-muted flex-row items-center bg-surface">
       <View className="flex-1 mr-3">
         <Text className="text-[15px] font-semibold text-text-primary" numberOfLines={1}>
           {item.unit_label}
@@ -37,15 +37,15 @@ function UnitCostRow({ item }: { item: MaintenanceCostByUnit }) {
         </Text>
       </View>
       <View className="items-end">
-        <Text className="text-[15px] font-semibold" style={{ color: colors.warning }}>
+        <Text className="text-[15px] font-semibold text-warning">
           {formatPHP(item.cost)}
         </Text>
         {item.fromTenant != null ? (
-          <Text className="text-xs mt-[2px]" style={{ color: colors.success }}>
+          <Text className="text-xs mt-[2px] text-success">
             {formatPHP(item.fromTenant)} from tenant
           </Text>
         ) : (
-          <Text className="text-xs mt-[2px]" style={{ color: colors.textMuted }}>
+          <Text className="text-xs mt-[2px] text-text-muted">
             pending
           </Text>
         )}
@@ -85,7 +85,7 @@ export default function MaintenanceCostsScreen() {
 
   return (
     <ScreenView edges={['bottom']}>
-      <AppHeader title="Maintenance Costs" right={exportBtn} />
+      <AppHeader title="Maintenance Costs" right={exportBtn} showBack />
       <MonthTabSelector
         months={MONTHS.map(getMonthLabel)}
         selected={getMonthLabel(month)}
@@ -103,26 +103,26 @@ export default function MaintenanceCostsScreen() {
           ListHeaderComponent={
             <View>
               <View className="flex-row gap-3 mx-4 mt-3 mb-1">
-                <View className="flex-1 rounded-xl p-4" style={{ backgroundColor: colors.surface }}>
-                  <Text className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: colors.textMuted }}>
+                <View className="flex-1 rounded-xl p-4 bg-surface">
+                  <Text className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">
                     This month
                   </Text>
-                  <Text className="text-[22px] font-bold mt-1" style={{ color: colors.warning }}>
+                  <Text className="text-[22px] font-bold mt-1 text-warning">
                     {formatPHP(report.thisMonthCost)}
                   </Text>
                 </View>
-                <View className="flex-1 rounded-xl p-4" style={{ backgroundColor: colors.surface }}>
-                  <Text className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: colors.textMuted }}>
+                <View className="flex-1 rounded-xl p-4 bg-surface">
+                  <Text className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">
                     YTD total
                   </Text>
-                  <Text className="text-[22px] font-bold mt-1" style={{ color: colors.neutral }}>
+                  <Text className="text-[22px] font-bold mt-1 text-neutral">
                     {formatPHP(report.ytdCost)}
                   </Text>
                 </View>
               </View>
 
               <SectionHeader title="Issues This Month" />
-              <View className="mx-4 rounded-xl overflow-hidden" style={{ backgroundColor: colors.surface }}>
+              <View className="mx-4 rounded-xl overflow-hidden bg-surface">
                 <InfoRow label="Open"              value={String(report.openCount)}              valueColor={colors.danger}  />
                 <InfoRow label="Resolved"          value={String(report.resolvedCount)}          valueColor={colors.success} />
                 <InfoRow label="Charged to tenant" value={String(report.chargedToTenantCount)}   valueColor={colors.neutral} showDivider={false} />

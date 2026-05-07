@@ -64,7 +64,7 @@ export default function AnnualSummaryScreen() {
 
   return (
     <ScreenView edges={['bottom']}>
-      <AppHeader title="Annual Summary" right={exportBtn} />
+      <AppHeader title="Annual Summary" right={exportBtn} showBack />
       {isLoading ? (
         <LoadingSpinner />
       ) : (
@@ -75,29 +75,20 @@ export default function AnnualSummaryScreen() {
             onChange={(v) => setYear(Number(v))}
           />
 
-          <View
-            className="mx-4 mt-1 rounded-xl p-5"
-            style={{ backgroundColor: colors.successBg }}
-          >
-            <Text
-              className="text-[11px] font-semibold uppercase tracking-wide"
-              style={{ color: colors.textMuted }}
-            >
+          <View className="mx-4 mt-1 rounded-xl p-5 bg-success-bg">
+            <Text className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">
               YTD INCOME (JAN–{currentMonthShort})
             </Text>
-            <Text className="text-[32px] font-bold mt-1" style={{ color: colors.success }}>
+            <Text className="text-[32px] font-bold mt-1 text-success">
               {formatAmount(report.ytdIncome)}
             </Text>
-            <Text className="text-xs mt-1" style={{ color: colors.textMuted }}>
+            <Text className="text-xs mt-1 text-text-muted">
               Projected full year: {formatAmount(report.projectedFullYear)}
             </Text>
           </View>
 
           <SectionHeader title="Monthly Breakdown" />
-          <View
-            className="mx-4 rounded-xl overflow-hidden"
-            style={{ backgroundColor: colors.surface }}
-          >
+          <View className="mx-4 rounded-xl overflow-hidden bg-surface">
             {report.monthly.map((m, idx) => (
               <InfoRow
                 key={m.month}
@@ -110,10 +101,7 @@ export default function AnnualSummaryScreen() {
           </View>
 
           <SectionHeader title="Summary" />
-          <View
-            className="mx-4 rounded-xl overflow-hidden"
-            style={{ backgroundColor: colors.surface }}
-          >
+          <View className="mx-4 rounded-xl overflow-hidden bg-surface">
             <InfoRow label="Total billed" value={formatAmount(report.totalBilled)} />
             <InfoRow
               label="Total collected"

@@ -180,15 +180,15 @@ export default function HomeScreen() {
       <AppHeader
         title="Home"
         right={
-          <View style={{ flexDirection: 'row', gap: 4 }}>
+          <View className="flex-row gap-1">
             <Pressable
-              style={{ padding: 6 }}
+              className="p-1.5"
               onPress={() => router.push('/(admin)/notifications' as any)}
             >
               <Ionicons name="notifications-outline" size={22} color="#94A3B8" />
             </Pressable>
             <Pressable
-              style={{ padding: 6 }}
+              className="p-1.5"
               onPress={() => router.push('/(admin)/settings' as any)}
             >
               <Ionicons name="settings-outline" size={22} color="#94A3B8" />
@@ -198,7 +198,7 @@ export default function HomeScreen() {
       />
 
       <ScrollView
-        style={{ flex: 1 }}
+        className="flex-1"
         contentContainerStyle={{
           paddingTop: 14,
           paddingHorizontal: 16,
@@ -250,8 +250,7 @@ export default function HomeScreen() {
         <QuickActionBar />
 
         <View
-          className="bg-surface rounded-[16px] overflow-hidden"
-          style={{ padding: 14, paddingHorizontal: 16 }}
+          className="bg-surface rounded-[16px] overflow-hidden px-4 py-[14px]"
         >
           <CollectionProgressBar
             monthLabel={`${dayjs(monthPrefix).format('MMMM YYYY')} collection`}
@@ -319,7 +318,7 @@ export default function HomeScreen() {
             />
             <View className="flex-row flex-wrap gap-2">
               {unitCells.map((c, i) => (
-                <View key={`${c.status}-${c.unitNumber}-${i}`} style={{ width: '48.5%' }}>
+                <View key={`${c.status}-${c.unitNumber}-${i}`} className="w-[48.5%]">
                   <UnitCell
                     unitNumber={c.unitNumber}
                     tenantName={c.tenantName}
@@ -339,7 +338,7 @@ export default function HomeScreen() {
         />
         <View className="flex-row flex-wrap gap-2">
           {reportCards.map((card) => (
-            <View key={card.route} style={{ width: '48.5%' }}>
+            <View key={card.route} className="w-[48.5%]">
               <ReportCard
                 label={card.label}
                 value={card.value}

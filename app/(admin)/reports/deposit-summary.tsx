@@ -8,7 +8,6 @@ import { StatusChip } from '../../../components/ui/StatusChip'
 import { AmountText } from '../../../components/ui/AmountText'
 import { EmptyState } from '../../../components/ui/EmptyState'
 import { LoadingSpinner } from '../../../components/ui/LoadingSpinner'
-import { colors } from '../../../constants/theme'
 import { buildCSV } from '../../../lib/csv'
 import { useDepositSummary } from '../../../hooks/useReports'
 
@@ -35,7 +34,7 @@ export default function DepositSummaryScreen() {
 
   return (
     <ScreenView edges={['bottom']}>
-      <AppHeader title="Deposit Summary" right={exportBtn} />
+      <AppHeader title="Deposit Summary" right={exportBtn} showBack />
       {isLoading ? (
         <LoadingSpinner />
       ) : (
@@ -43,15 +42,12 @@ export default function DepositSummaryScreen() {
           data={report.entries}
           keyExtractor={(e) => e.tenant_id}
           ListHeaderComponent={
-            <View
-              className="mx-4 mt-2 mb-3 rounded-xl p-4"
-              style={{ backgroundColor: colors.surface }}
-            >
-              <Text className="text-[11px] font-semibold uppercase tracking-wide mb-1" style={{ color: colors.textMuted }}>
+            <View className="mx-4 mt-2 mb-3 rounded-xl p-4 bg-surface">
+              <Text className="text-[11px] font-semibold uppercase tracking-wide mb-1 text-text-muted">
                 Total deposits held
               </Text>
               <AmountText amount={report.totalHeld} size="large" />
-              <Text className="text-sm mt-1" style={{ color: colors.textSecondary }}>
+              <Text className="text-sm mt-1 text-text-secondary">
                 {report.tenantCount} tenant{report.tenantCount !== 1 ? 's' : ''}
               </Text>
             </View>

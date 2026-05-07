@@ -9,7 +9,6 @@ import { AmountText } from '../../../components/ui/AmountText'
 import { EmptyState } from '../../../components/ui/EmptyState'
 import { LoadingSpinner } from '../../../components/ui/LoadingSpinner'
 import { OccupancyBarChart } from '../../../components/home/OccupancyBarChart'
-import { colors } from '../../../constants/theme'
 import { buildCSV } from '../../../lib/csv'
 import { useOccupancyReport } from '../../../hooks/useReports'
 
@@ -45,31 +44,32 @@ export default function OccupancyScreen() {
 
   return (
     <ScreenView edges={['bottom']}>
-      <AppHeader title="Occupancy Rate" right={exportBtn} />
+      <AppHeader title="Occupancy Rate" right={exportBtn} showBack />
+
       {isLoading ? (
         <LoadingSpinner />
       ) : (
         <ScrollView contentContainerStyle={{ paddingBottom: 128 }}>
           <View className="flex-row gap-3 mx-4 mt-3">
-            <View className="flex-1 rounded-xl p-4" style={{ backgroundColor: colors.surface }}>
-              <Text className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: colors.textMuted }}>
+            <View className="flex-1 rounded-xl p-4 bg-surface">
+              <Text className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">
                 Overall
               </Text>
-              <Text className="text-[28px] font-bold mt-1" style={{ color: colors.success }}>
+              <Text className="text-[28px] font-bold mt-1 text-success">
                 {report.overallPct}%
               </Text>
-              <Text className="text-xs mt-1" style={{ color: colors.textSecondary }}>
+              <Text className="text-xs mt-1 text-text-secondary">
                 {report.occupiedUnits}/{report.totalUnits} units
               </Text>
             </View>
-            <View className="flex-1 rounded-xl p-4" style={{ backgroundColor: colors.surface }}>
-              <Text className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: colors.textMuted }}>
+            <View className="flex-1 rounded-xl p-4 bg-surface">
+              <Text className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">
                 Vacant
               </Text>
-              <Text className="text-[28px] font-bold mt-1" style={{ color: colors.danger }}>
+              <Text className="text-[28px] font-bold mt-1 text-danger">
                 {report.vacantUnits}
               </Text>
-              <Text className="text-xs mt-1" style={{ color: colors.textSecondary }}>
+              <Text className="text-xs mt-1 text-text-secondary">
                 units
               </Text>
             </View>
@@ -92,13 +92,13 @@ export default function OccupancyScreen() {
                   <Text className="text-sm text-text-primary font-medium w-[120px]" numberOfLines={1}>
                     {p.property_name}
                   </Text>
-                  <View className="flex-1 h-[6px] rounded-full mx-3 overflow-hidden" style={{ backgroundColor: colors.border }}>
+                  <View className="flex-1 h-[6px] rounded-full mx-3 overflow-hidden bg-border">
                     <View
-                      className="h-[6px] rounded-full"
-                      style={{ width: `${p.pct}%`, backgroundColor: colors.success }}
+                      className="h-[6px] rounded-full bg-success"
+                      style={{ width: `${p.pct}%` }}
                     />
                   </View>
-                  <Text className="text-sm font-semibold w-[40px] text-right" style={{ color: colors.success }}>
+                  <Text className="text-sm font-semibold w-[40px] text-right text-success">
                     {p.pct}%
                   </Text>
                 </View>

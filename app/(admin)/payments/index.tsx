@@ -90,21 +90,20 @@ function PaymentRow({
           onPress={onRecordPayment}
         >
           <Ionicons name="cash-outline" size={20} color="#000" />
-          <Text className="text-[10px] font-bold text-center" style={{ color: '#000' }}>Record{'\n'}Payment</Text>
+          <Text className="text-[10px] font-bold text-center text-black">Record{'\n'}Payment</Text>
         </Pressable>
       )}
       overshootLeft={false}
     >
       <Pressable
         onPress={onPress}
-        className="flex-row items-center px-4 bg-background gap-3"
-        style={{ paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: '#1a1a1a' }}
+        className="flex-row items-center px-4 bg-background gap-3 py-[14px] border-b border-b-[#1a1a1a]"
       >
         <View
           className="w-[40px] h-[40px] rounded-[10px] items-center justify-center"
           style={{ backgroundColor: color }}
         >
-          <Text className="text-[15px] font-bold" style={{ color: '#fff' }}>{initial}</Text>
+          <Text className="text-[15px] font-bold text-white">{initial}</Text>
         </View>
         <View className="flex-1">
           <Text className="text-[15px] font-semibold text-text-primary">{entry.tenant_full_name}</Text>
@@ -163,10 +162,7 @@ export default function PaymentsOverviewScreen() {
     <ScreenView>
       {/* Header */}
       <View className="flex-row items-center justify-between px-4 py-3">
-        <Text
-          className="text-2xl text-text-primary"
-          style={{ fontWeight: '800', letterSpacing: -0.5 }}
-        >
+        <Text className="text-2xl font-extrabold tracking-tight text-text-primary">
           Payments
         </Text>
         <Pressable
@@ -192,10 +188,9 @@ export default function PaymentsOverviewScreen() {
           return (
             <Pressable
               onPress={() => setSelectedIdx(index)}
-              className={`px-4 py-2 rounded-full items-center border ${
+              className={`px-4 py-2 rounded-full items-center border min-w-24 ${
                 active ? 'bg-primary border-primary' : 'bg-surface border-border'
               }`}
-              style={{ minWidth: 96 }}
             >
               <Text className={`text-[13px] font-semibold ${active ? 'text-white' : 'text-text-secondary'}`}>
                 {item.label}
@@ -208,17 +203,17 @@ export default function PaymentsOverviewScreen() {
       {/* Summary strip */}
       <View className="flex-row bg-surface mx-4 rounded-md p-3 mb-2 border border-border">
         <View className="flex-1 items-center">
-          <Text className="text-[15px] font-bold" style={{ color: '#22c55e' }}>{formatPHP(summary.collected)}</Text>
+          <Text className="text-[15px] font-bold text-[#22c55e]">{formatPHP(summary.collected)}</Text>
           <Text className="text-[11px] text-text-secondary mt-[2px]">Collected</Text>
         </View>
         <View className="w-[1px] bg-border mx-2" />
         <View className="flex-1 items-center">
-          <Text className="text-[15px] font-bold" style={{ color: '#f59e0b' }}>{summary.pending}</Text>
+          <Text className="text-[15px] font-bold text-warning">{summary.pending}</Text>
           <Text className="text-[11px] text-text-secondary mt-[2px]">Pending</Text>
         </View>
         <View className="w-[1px] bg-border mx-2" />
         <View className="flex-1 items-center">
-          <Text className="text-[15px] font-bold" style={{ color: '#ef4444' }}>{summary.overdue}</Text>
+          <Text className="text-[15px] font-bold text-danger">{summary.overdue}</Text>
           <Text className="text-[11px] text-text-secondary mt-[2px]">Overdue</Text>
         </View>
       </View>
@@ -227,17 +222,16 @@ export default function PaymentsOverviewScreen() {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={{ maxHeight: 44 }}
+        className="max-h-11"
         contentContainerStyle={{ paddingHorizontal: 16, gap: 8, paddingVertical: 4 }}
       >
         {FILTERS.map(({ key, label }) => (
           <Pressable
             key={key}
             onPress={() => setFilter(key)}
-            className={`px-4 rounded-full border ${
+            className={`px-4 py-[6px] rounded-full border ${
               filter === key ? 'bg-elevated border-primary' : 'bg-surface border-border'
             }`}
-            style={{ paddingVertical: 6 }}
           >
             <Text className={`text-[13px] font-medium ${filter === key ? 'text-primary' : 'text-text-secondary'}`}>
               {label}
@@ -248,9 +242,9 @@ export default function PaymentsOverviewScreen() {
 
       {/* List */}
       {isLoading ? (
-        <ActivityIndicator color="#3b82f6" style={{ marginTop: 32 }} />
+        <ActivityIndicator color="#3b82f6" className="mt-8" />
       ) : filtered.length === 0 ? (
-        <Text className="text-sm text-center mt-12" style={{ color: '#555555' }}>No tenants match this filter</Text>
+        <Text className="text-sm text-center mt-12 text-[#555555]">No tenants match this filter</Text>
       ) : (
         <ScrollView {...tabBarScroll} className="flex-1 mt-2">
           {filtered.map((entry) => (
@@ -261,7 +255,7 @@ export default function PaymentsOverviewScreen() {
               onPress={() => handleRowPress(entry)}
             />
           ))}
-          <View style={{ height: 100 }} />
+          <View className="h-[100px]" />
         </ScrollView>
       )}
     </ScreenView>

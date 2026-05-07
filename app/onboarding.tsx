@@ -13,7 +13,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { nanoid } from 'nanoid/non-secure'
 
-import { colors, radius, spacing } from '../constants/theme'
 import { ScreenView } from '../components/ui'
 import { ProgressStepIndicator } from '../components/ui/ProgressStepIndicator'
 import { BottomCTABar } from '../components/ui/BottomCTABar'
@@ -40,7 +39,7 @@ interface FormState {
 
 function FieldLabel({ children }: { children: string }) {
   return (
-    <Text style={{ color: colors.textSecondary, fontSize: 13, marginBottom: 4 }}>
+    <Text className="text-text-secondary text-[13px] mb-1">
       {children}
     </Text>
   )
@@ -48,22 +47,11 @@ function FieldLabel({ children }: { children: string }) {
 
 function FieldNote({ children }: { children: string }) {
   return (
-    <Text style={{ color: colors.textMuted, fontSize: 12, marginTop: 4 }}>
+    <Text className="text-text-muted text-[12px] mt-1">
       {children}
     </Text>
   )
 }
-
-const inputStyle = {
-  backgroundColor: colors.surface,
-  borderRadius: radius.md,
-  borderCurve: 'continuous' as const,
-  borderWidth: 1,
-  borderColor: colors.border,
-  padding: 14,
-  color: colors.textPrimary,
-  fontSize: 16,
-} as const
 
 function Field({
   label,
@@ -84,11 +72,12 @@ function Field({
     <View>
       <FieldLabel>{label}</FieldLabel>
       <TextInput
-        style={inputStyle}
+        className="bg-surface rounded-md border border-border p-[14px] text-text-primary text-base"
+        style={{ borderCurve: 'continuous' }}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor={colors.textMuted}
+        placeholderTextColor="#64748B"
         keyboardType={keyboardType}
         autoCorrect={false}
       />
@@ -101,12 +90,12 @@ function Field({
 
 function StepProperty({ form, setForm }: { form: FormState; setForm: React.Dispatch<React.SetStateAction<FormState>> }) {
   return (
-    <View style={{ gap: 16 }}>
-      <View style={{ gap: 4 }}>
-        <Text style={{ color: colors.textPrimary, fontSize: 26, fontWeight: '800', letterSpacing: -0.5 }}>
+    <View className="gap-4">
+      <View className="gap-1">
+        <Text className="text-text-primary text-[26px] font-extrabold tracking-tight">
           Set Up Your Property
         </Text>
-        <Text style={{ color: colors.textSecondary, fontSize: 15 }}>
+        <Text className="text-text-secondary text-[15px]">
           Tell us about the property you manage.
         </Text>
       </View>
@@ -142,12 +131,12 @@ function StepProperty({ form, setForm }: { form: FormState; setForm: React.Dispa
 
 function StepOwner({ form, setForm }: { form: FormState; setForm: React.Dispatch<React.SetStateAction<FormState>> }) {
   return (
-    <View style={{ gap: 16 }}>
-      <View style={{ gap: 4 }}>
-        <Text style={{ color: colors.textPrimary, fontSize: 26, fontWeight: '800', letterSpacing: -0.5 }}>
+    <View className="gap-4">
+      <View className="gap-1">
+        <Text className="text-text-primary text-[26px] font-extrabold tracking-tight">
           Your Profile
         </Text>
-        <Text style={{ color: colors.textSecondary, fontSize: 15 }}>
+        <Text className="text-text-secondary text-[15px]">
           Let tenants and records know who's managing this property.
         </Text>
       </View>
@@ -171,12 +160,12 @@ function StepOwner({ form, setForm }: { form: FormState; setForm: React.Dispatch
 
 function StepBilling({ form, setForm }: { form: FormState; setForm: React.Dispatch<React.SetStateAction<FormState>> }) {
   return (
-    <View style={{ gap: 16 }}>
-      <View style={{ gap: 4 }}>
-        <Text style={{ color: colors.textPrimary, fontSize: 26, fontWeight: '800', letterSpacing: -0.5 }}>
+    <View className="gap-4">
+      <View className="gap-1">
+        <Text className="text-text-primary text-[26px] font-extrabold tracking-tight">
           Billing Settings
         </Text>
-        <Text style={{ color: colors.textSecondary, fontSize: 15 }}>
+        <Text className="text-text-secondary text-[15px]">
           These defaults apply to all new billing cycles.
         </Text>
       </View>
@@ -211,33 +200,16 @@ function StepBilling({ form, setForm }: { form: FormState; setForm: React.Dispat
 
 function StepDone() {
   return (
-    <View style={{ gap: 24, alignItems: 'center', paddingTop: 32 }}>
-      <View
-        style={{
-          width: 96,
-          height: 96,
-          borderRadius: 48,
-          backgroundColor: `${colors.success}22`,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Ionicons name="checkmark-circle" size={64} color={colors.success} />
+    <View className="gap-6 items-center pt-8">
+      <View className="w-24 h-24 rounded-full bg-success/[.13] items-center justify-center">
+        <Ionicons name="checkmark-circle" size={64} color="#10B981" />
       </View>
 
-      <View style={{ gap: 8, alignItems: 'center' }}>
-        <Text
-          style={{
-            color: colors.textPrimary,
-            fontSize: 26,
-            fontWeight: '800',
-            letterSpacing: -0.5,
-            textAlign: 'center',
-          }}
-        >
+      <View className="gap-2 items-center">
+        <Text className="text-text-primary text-[26px] font-extrabold tracking-tight text-center">
           You're all set! 🎉
         </Text>
-        <Text style={{ color: colors.textSecondary, fontSize: 15, textAlign: 'center', lineHeight: 22 }}>
+        <Text className="text-text-secondary text-[15px] text-center leading-[22px]">
           Your property is configured. Start adding tenants and tracking rent.
         </Text>
       </View>
@@ -309,19 +281,19 @@ export default function OnboardingScreen() {
         className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <View style={{ flex: 1 }}>
+        <View className="flex-1">
           {/* Top area: safe inset + back button + progress bar */}
-          <View style={{ paddingTop: insets.top + 12, paddingHorizontal: spacing[5], gap: 16 }}>
+          <View className="px-5 gap-4" style={{ paddingTop: insets.top + 12 }}>
             {/* Back button row — visible on steps 1, 2 (not 0 or 3) */}
-            <View style={{ height: 36, justifyContent: 'center' }}>
+            <View className="h-9 justify-center">
               {step > 0 && step < TOTAL_STEPS - 1 ? (
                 <Pressable
                   onPress={goBack}
                   hitSlop={12}
-                  style={{ flexDirection: 'row', alignItems: 'center', gap: 4, alignSelf: 'flex-start' }}
+                  className="flex-row items-center gap-1 self-start"
                 >
-                  <Ionicons name="chevron-back" size={20} color={colors.textSecondary} />
-                  <Text style={{ color: colors.textSecondary, fontSize: 15 }}>Back</Text>
+                  <Ionicons name="chevron-back" size={20} color="#94A3B8" />
+                  <Text className="text-text-secondary text-[15px]">Back</Text>
                 </Pressable>
               ) : null}
             </View>
@@ -333,7 +305,7 @@ export default function OnboardingScreen() {
           <ScrollView
             contentInsetAdjustmentBehavior="automatic"
             keyboardShouldPersistTaps="handled"
-            contentContainerStyle={{ padding: spacing[5], gap: 16, paddingBottom: 32 }}
+            contentContainerStyle={{ padding: 20, gap: 16, paddingBottom: 32 }}
           >
             {step === 0 && <StepProperty form={form} setForm={setForm} />}
             {step === 1 && <StepOwner form={form} setForm={setForm} />}
@@ -344,7 +316,7 @@ export default function OnboardingScreen() {
           {/* Bottom CTA */}
           <BottomCTABar>
             {step < TOTAL_STEPS - 1 ? (
-              <View style={{ gap: 10 }}>
+              <View className="gap-[10px]">
                 <Button label="Next" variant="primary" onPress={goNext} />
                 {step > 0 ? (
                   <Button label="Back" variant="ghost" onPress={goBack} />

@@ -7,7 +7,6 @@ import { AvatarInitials } from '../../../components/ui/AvatarInitials'
 import { AmountText } from '../../../components/ui/AmountText'
 import { EmptyState } from '../../../components/ui/EmptyState'
 import { LoadingSpinner } from '../../../components/ui/LoadingSpinner'
-import { colors } from '../../../constants/theme'
 import { buildCSV } from '../../../lib/csv'
 import { useOutstandingBalances } from '../../../hooks/useReports'
 
@@ -35,7 +34,7 @@ export default function OutstandingBalancesScreen() {
 
   return (
     <ScreenView edges={['bottom']}>
-      <AppHeader title="Outstanding" right={exportBtn} />
+      <AppHeader title="Outstanding" right={exportBtn} showBack />
       {isLoading ? (
         <LoadingSpinner />
       ) : (
@@ -43,21 +42,18 @@ export default function OutstandingBalancesScreen() {
           data={report.entries}
           keyExtractor={(e) => e.tenant_id}
           ListHeaderComponent={
-            <View
-              className="mx-4 mt-2 mb-3 rounded-xl p-4 flex-row"
-              style={{ backgroundColor: colors.dangerBg }}
-            >
+            <View className="mx-4 mt-2 mb-3 rounded-xl p-4 flex-row bg-danger-bg">
               <View className="flex-1 mr-4">
-                <Text className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: colors.textMuted }}>
+                <Text className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">
                   TOTAL OUTSTANDING
                 </Text>
                 <AmountText amount={report.totalOutstanding} variant="owed" size="large" />
               </View>
               <View className="items-start">
-                <Text className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: colors.textMuted }}>
+                <Text className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">
                   TENANTS
                 </Text>
-                <Text className="text-[28px] font-bold" style={{ color: colors.danger }}>
+                <Text className="text-[28px] font-bold text-danger">
                   {report.tenantCount}
                 </Text>
               </View>
