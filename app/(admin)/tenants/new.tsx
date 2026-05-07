@@ -1,423 +1,250 @@
-import React, { useState, useEffect } from 'react'
-import { View, ScrollView, KeyboardAvoidingView, Platform, Pressable } from 'react-native'
+import React from 'react'
+import { View } from 'react-native'
 import { useRouter } from 'expo-router'
+import { FormProvider, useForm, useFormContext } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { toast } from 'sonner-native'
 import dayjs from 'dayjs'
 import { useCreateTenant } from '~/hooks/useTenants'
 import { useProperties } from '~/hooks/useProperties'
 import { useUnits } from '~/hooks/useUnits'
-import { useTabBarVisibility } from '~/context/TabBarVisibilityContext'
-import { Input } from '~/components/ui/Input'
-import { Button } from '~/components/ui/Button'
-import { AppText } from '~/components/ui/AppText'
-import { Select } from '~/components/ui/Select'
-import { DateInput } from '~/components/ui/DateInput'
-import { SegmentedControl } from '~/components/ui/SegmentedControl'
-import { ProgressStepIndicator } from '~/components/ui/ProgressStepIndicator'
-import { BottomCTABar } from '~/components/ui/BottomCTABar'
-import { CameraCapture } from '~/components/ui/CameraCapture'
-import { ScreenView } from '~/components/ui/ScreenView'
-// ─── Constants ────────────────────────────────────────────────────────────────
+import { useSettings } from '~/hooks/useSettings'
+import { WizardShell, WizardStepDef } from '~/components/form/WizardShell'
+import { FormField } from '~/components/form/FormField'
+import { FormSelect } from '~/components/form/FormSelect'
+import { FormDateInput } from '~/components/form/FormDateInput'
+import { FormSegmentedControl } from '~/components/form/FormSegmentedControl'
+import { FormToggleRow } from '~/components/form/FormToggleRow'
+import { FormCameraCapture } from '~/components/form/FormCameraCapture'
+import { SectionLabel } from '~/components/ui/SectionLabel'
+import { InfoNote } from '~/components/ui/InfoNote'
 
-const STEP_TITLES: Record<number, string> = {
-  1: 'Personal Info',
-  2: 'ID Capture',
-  3: 'Emergency Contact',
-  4: 'Unit Assignment',
-  5: 'Billing Setup',
+const schema = z.object({
+  fullName: z.string().min(2, 'Name required'),
+  nickname: z.string(),
+  phone: z.string().min(7, 'Phone required'),
+  email: z.string(),
+  occupation: z.string(),
+  homeProvince: z.string(),
+  idFrontUri: z.string().nullable(),
+  idBackUri: z.string().nullable(),
+  emergencyName: z.string().min(2, 'Contact required'),
+  emergencyRelation: z.string(),
+  emergencyPhone: z.string().min(7, 'Phone required'),
+  propertyId: z.string().min(1, 'Select property'),
+  unitId: z.string().min(1, 'Select unit'),
+  moveInDate: z.string(),
+  contractType: z.enum(['monthly', 'fixed']),
+  contractEndDate: z.string(),
+  billingType: z.enum(['monthly', 'daily']),
+  monthlyRent: z.string(),
+  dailyRate: z.string(),
+  numberOfDays: z.string(),
+  securityDeposit: z.string(),
+  advance: z.string(),
+  billingDay: z.string(),
+  includeInternet: z.boolean(),
+  waterReading: z.string(),
+  electricityReading: z.string(),
+})
+
+type FormData = z.infer<typeof schema>
+
+const defaults: FormData = {
+  fullName: '', nickname: '', phone: '', email: '', occupation: '', homeProvince: '',
+  idFrontUri: null, idBackUri: null,
+  emergencyName: '', emergencyRelation: '', emergencyPhone: '',
+  propertyId: '', unitId: '', moveInDate: dayjs().format('YYYY-MM-DD'),
+  contractType: 'monthly', contractEndDate: '',
+  billingType: 'monthly', monthlyRent: '', dailyRate: '', numberOfDays: '',
+  securityDeposit: '', advance: '', billingDay: dayjs().format('D'),
+  includeInternet: false, waterReading: '', electricityReading: '',
 }
-
-// SegmentedControl only accepts string[], not { label, value } objects.
-// We store display labels and map back to our typed value on change.
-const CONTRACT_OPTIONS = ['Month-to-month', 'Fixed term']
-
-// ─── Screen ───────────────────────────────────────────────────────────────────
 
 export default function NewTenantScreen() {
   const router = useRouter()
   const { mutateAsync: createTenant, isPending } = useCreateTenant()
-  const { setVisible } = useTabBarVisibility()
 
-  useEffect(() => {
-    setVisible(false)
-    return () => setVisible(true)
-  }, [])
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: defaults,
+    mode: 'onTouched',
+  })
 
-  // ── Step ──────────────────────────────────────────────────────────────────
-  const [step, setStep] = useState(1)
-
-  // ── Step 1 — Personal Info ────────────────────────────────────────────────
-  const [fullName, setFullName] = useState('')
-  const [nickname, setNickname] = useState('')
-  const [phone, setPhone] = useState('')
-  const [email, setEmail] = useState('')
-  const [occupation, setOccupation] = useState('')
-  const [homeProvince, setHomeProvince] = useState('')
-
-  // ── Step 2 — ID Capture ───────────────────────────────────────────────────
-  const [idFrontUri, setIdFrontUri] = useState<string | undefined>()
-  const [idBackUri, setIdBackUri] = useState<string | undefined>()
-
-  // ── Step 3 — Emergency Contact ────────────────────────────────────────────
-  const [emergencyName, setEmergencyName] = useState('')
-  const [emergencyRelation, setEmergencyRelation] = useState('')
-  const [emergencyPhone, setEmergencyPhone] = useState('')
-
-  // ── Step 4 — Unit Assignment ──────────────────────────────────────────────
-  const [selectedPropertyId, setSelectedPropertyId] = useState('')
-  const [selectedUnitId, setSelectedUnitId] = useState('')
-  const [moveInDate, setMoveInDate] = useState(dayjs().format('YYYY-MM-DD'))
-  const [contractType, setContractType] = useState<'monthly' | 'fixed'>('monthly')
-  const [contractEndDate, setContractEndDate] = useState('')
-
-  // ── Step 5 — Billing Setup ────────────────────────────────────────────────
-  const [monthlyRent, setMonthlyRent] = useState('')
-  const [securityDeposit, setSecurityDeposit] = useState('')
-  const [advance, setAdvance] = useState('')
-  const [billingDay, setBillingDay] = useState('1')
-
-  // ── Validation errors ─────────────────────────────────────────────────────
-  const [errors, setErrors] = useState<Record<string, string>>({})
-
-  // ── Data ──────────────────────────────────────────────────────────────────
-  const { data: properties } = useProperties()
-  const { data: units } = useUnits(selectedPropertyId)
-
-  // ─── Navigation / Validation ─────────────────────────────────────────────
-
-  function handleNext(skipValidation = false) {
-    setErrors({})
-
-    if (!skipValidation) {
-      const errs: Record<string, string> = {}
-
-      if (step === 1) {
-        if (!fullName.trim()) errs.fullName = 'Name is required'
-        if (!phone.trim()) errs.phone = 'Phone is required'
-      }
-
-      if (step === 3) {
-        if (!emergencyName.trim()) errs.emergencyName = 'Contact name is required'
-        if (!emergencyPhone.trim()) errs.emergencyPhone = 'Phone is required'
-      }
-
-      if (step === 4) {
-        if (!selectedPropertyId) errs.selectedPropertyId = 'Select a property'
-        if (!selectedUnitId) errs.selectedUnitId = 'Select a unit'
-      }
-
-      if (step === 5) {
-        if (!monthlyRent.trim() || isNaN(parseFloat(monthlyRent))) {
-          errs.monthlyRent = 'Enter rent amount'
-        }
-        const dd = parseInt(billingDay)
-        if (isNaN(dd) || dd < 1 || dd > 28) {
-          errs.billingDay = 'Enter a day between 1 and 28'
-        }
-      }
-
-      if (Object.keys(errs).length > 0) {
-        setErrors(errs)
-        return
-      }
-    }
-
-    if (step < 5) {
-      setStep((s) => s + 1)
-      return
-    }
-
-    void handleSubmit()
-  }
-
-  function handleBack() {
-    if (step === 1) {
-      router.back()
-      return
-    }
-    setStep((s) => s - 1)
-  }
-
-  async function handleSubmit() {
+  async function onSubmit(values: FormData) {
     try {
-      const created = await createTenant({
-        unit_id: selectedUnitId,
-        full_name: fullName.trim(),
-        email: email.trim(),
-        phone: phone.trim(),
-        billing_type: 'monthly',
-        move_in_date: moveInDate,
-        emergency_contact: `${emergencyName.trim()}${
-          emergencyRelation ? ' (' + emergencyRelation + ')' : ''
-        } — ${emergencyPhone.trim()}`,
-        due_day: parseInt(billingDay),
+      const tenant = await createTenant({
+        unit_id: values.unitId,
+        full_name: values.fullName.trim(),
+        nickname: values.nickname.trim() || undefined,
+        email: values.email.trim(),
+        phone: values.phone.trim(),
+        occupation: values.occupation.trim() || undefined,
+        billing_type: values.billingType as 'monthly' | 'daily',
+        move_in_date: values.moveInDate,
+        address: values.homeProvince.trim() || undefined,
+        emergency_contact: JSON.stringify({
+          name: values.emergencyName.trim(),
+          relation: values.emergencyRelation.trim() || null,
+          phone: values.emergencyPhone.trim(),
+        }),
+        water_reading: values.waterReading ? parseFloat(values.waterReading) : undefined,
+        electricity_reading: values.electricityReading ? parseFloat(values.electricityReading) : undefined,
+        due_day: values.billingType === 'monthly' ? parseInt(values.billingDay, 10) : undefined,
+        include_internet: values.billingType === 'monthly' && values.includeInternet,
       })
-      toast.success('Tenant added successfully')
-      router.replace({ pathname: '/tenants/[id]', params: { id: created.id } })
-    } catch {
+      toast.success('Tenant added')
+      router.replace({ pathname: '/(admin)/tenants/[id]', params: { id: tenant.id } })
+    } catch (e) {
+      console.error('createTenant failed', e)
       toast.error('Could not save tenant. Please try again.')
     }
   }
 
-  // ─── Step Renderers ───────────────────────────────────────────────────────
-
-  function renderStep1() {
-    return (
-      <>
-        <Input
-          label="Full Name *"
-          value={fullName}
-          onChangeText={setFullName}
-          autoFocus
-          error={errors.fullName}
-          placeholder="e.g. Maria Santos"
-        />
-        <Input
-          label="Nickname"
-          value={nickname}
-          onChangeText={setNickname}
-          placeholder="Optional"
-        />
-        <Input
-          label="Phone *"
-          value={phone}
-          onChangeText={setPhone}
-          keyboardType="phone-pad"
-          error={errors.phone}
-          placeholder="+63 912 345 6789"
-        />
-        <Input
-          label="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholder="Optional"
-        />
-        <Input
-          label="Occupation"
-          value={occupation}
-          onChangeText={setOccupation}
-          placeholder="Optional"
-        />
-        <Input
-          label="Home Province"
-          value={homeProvince}
-          onChangeText={setHomeProvince}
-          placeholder="Optional"
-        />
-      </>
-    )
-  }
-
-  function renderStep2() {
-    return (
-      <>
-        <AppText variant="caption" color="muted" className="mb-4">
-          Accepted: UMID · Driver's License · Passport · PhilHealth · Voter's ID
-        </AppText>
-        <AppText variant="label" color="secondary" className="mb-2">
-          Front of valid ID
-        </AppText>
-        <CameraCapture
-          label="Tap to capture front of ID"
-          onCapture={setIdFrontUri}
-          captured={idFrontUri}
-        />
-        <View className="h-4" />
-        <AppText variant="label" color="secondary" className="mb-2">
-          Back of ID
-        </AppText>
-        <CameraCapture
-          label="Tap to capture back of ID"
-          onCapture={setIdBackUri}
-          captured={idBackUri}
-        />
-        <Pressable onPress={() => handleNext(true)} className="items-center mt-4">
-          <AppText color="muted" variant="caption">
-            Skip (not recommended)
-          </AppText>
-        </Pressable>
-      </>
-    )
-  }
-
-  function renderStep3() {
-    return (
-      <>
-        <Input
-          label="Contact Name *"
-          value={emergencyName}
-          onChangeText={setEmergencyName}
-          error={errors.emergencyName}
-          placeholder="Full name"
-        />
-        <Input
-          label="Relationship"
-          value={emergencyRelation}
-          onChangeText={setEmergencyRelation}
-          placeholder="e.g. Spouse, Parent"
-        />
-        <Input
-          label="Phone *"
-          value={emergencyPhone}
-          onChangeText={setEmergencyPhone}
-          keyboardType="phone-pad"
-          error={errors.emergencyPhone}
-          placeholder="+63 912 345 6789"
-        />
-      </>
-    )
-  }
-
-  function renderStep4() {
-    const propertyOptions = (properties ?? []).map((p) => ({ value: p.id, label: p.name }))
-    const unitOptions = (units ?? [])
-      .filter((u) => u.status === 'available')
-      .map((u) => ({
-        value: u.id,
-        label: `Unit ${u.unit_number}${
-          u.monthly_rate != null ? ` — ₱${u.monthly_rate.toFixed(0)}/mo` : ''
-        }`,
-      }))
-
-    return (
-      <>
-        <Select
-          label="Property *"
-          placeholder="Select property..."
-          options={propertyOptions}
-          value={selectedPropertyId}
-          onChange={(v) => {
-            setSelectedPropertyId(v)
-            setSelectedUnitId('')
-          }}
-          error={errors.selectedPropertyId}
-        />
-        <Select
-          label="Unit *"
-          placeholder={selectedPropertyId ? 'Select unit...' : 'Select property first'}
-          options={unitOptions}
-          value={selectedUnitId}
-          onChange={(v) => {
-            setSelectedUnitId(v)
-            const unit = units?.find((u) => u.id === v)
-            if (unit?.monthly_rate) setMonthlyRent(unit.monthly_rate.toFixed(0))
-          }}
-          error={errors.selectedUnitId}
-        />
-        <DateInput label="Move-in Date *" value={moveInDate} onChange={setMoveInDate} />
-        <AppText variant="label" color="secondary" className="mt-2 mb-2">
-          Contract Type
-        </AppText>
-        <SegmentedControl
-          options={CONTRACT_OPTIONS}
-          selected={contractType === 'monthly' ? 'Month-to-month' : 'Fixed term'}
-          onChange={(v) => setContractType(v === 'Fixed term' ? 'fixed' : 'monthly')}
-        />
-        {contractType === 'fixed' && (
-          <View className="mt-3">
-            <DateInput
-              label="Contract End Date"
-              value={contractEndDate}
-              onChange={setContractEndDate}
-            />
-          </View>
-        )}
-      </>
-    )
-  }
-
-  function renderStep5() {
-    return (
-      <>
-        <Input
-          label="Monthly Rent *"
-          value={monthlyRent}
-          onChangeText={setMonthlyRent}
-          keyboardType="decimal-pad"
-          error={errors.monthlyRent}
-          placeholder="e.g. 3500"
-        />
-        <Input
-          label="Security Deposit"
-          value={securityDeposit}
-          onChangeText={setSecurityDeposit}
-          keyboardType="decimal-pad"
-          placeholder="e.g. 3500"
-        />
-        <Input
-          label="Advance Payment"
-          value={advance}
-          onChangeText={setAdvance}
-          keyboardType="decimal-pad"
-          placeholder="e.g. 3500"
-        />
-        <Input
-          label="Billing Day (1–28)"
-          value={billingDay}
-          onChangeText={setBillingDay}
-          keyboardType="number-pad"
-          error={errors.billingDay}
-          placeholder="1"
-        />
-      </>
-    )
-  }
-
-  function renderStep() {
-    switch (step) {
-      case 1:
-        return renderStep1()
-      case 2:
-        return renderStep2()
-      case 3:
-        return renderStep3()
-      case 4:
-        return renderStep4()
-      case 5:
-        return renderStep5()
-      default:
-        return null
-    }
-  }
-
-  // ─── Render ───────────────────────────────────────────────────────────────
+  const steps: WizardStepDef<FormData>[] = [
+    {
+      key: 'personal',
+      title: 'New Tenant',
+      shortTitle: 'ID Capture',
+      fields: ['fullName', 'phone', 'email'] as const,
+      render: () => <PersonalInfoStep />,
+    },
+    {
+      key: 'id',
+      title: 'Capture ID',
+      shortTitle: 'Emergency Contact',
+      fields: [] as const,
+      optional: true,
+      render: () => <IdCaptureStep />,
+    },
+    {
+      key: 'emergency',
+      title: 'Emergency Contact',
+      shortTitle: 'Unit Assignment',
+      fields: ['emergencyName', 'emergencyPhone'] as const,
+      render: () => <EmergencyContactStep />,
+    },
+    {
+      key: 'unit',
+      title: 'Assign Unit',
+      shortTitle: 'Billing Setup',
+      fields: ['propertyId', 'unitId', 'moveInDate'] as const,
+      render: () => <UnitAssignmentStep />,
+    },
+    {
+      key: 'billing',
+      title: 'Billing Setup',
+      shortTitle: '',
+      fields: ['billingType', 'monthlyRent', 'dailyRate', 'numberOfDays', 'billingDay'] as const,
+      render: () => <BillingStep />,
+    },
+  ]
 
   return (
-    <ScreenView edges={['bottom']}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1"
-      >
-        <View className="px-4 pt-3 pb-2 bg-surface">
-          <ProgressStepIndicator steps={5} current={step} />
-          <AppText
-            variant="caption"
-            color="muted"
-            className="mt-2 uppercase tracking-[0.5px]"
-          >
-            Step {step} of 5 — {STEP_TITLES[step]}
-          </AppText>
-        </View>
+    <FormProvider {...form}>
+      <WizardShell
+        form={form}
+        steps={steps}
+        onSubmit={onSubmit}
+        submitLabel="Save Tenant"
+        isSubmitting={isPending}
+        discardConfirm={{ title: 'Discard new tenant?', message: 'Your changes will be lost.' }}
+      />
+    </FormProvider>
+  )
+}
 
-        <ScrollView contentContainerClassName="p-4 pb-[88px]">{renderStep()}</ScrollView>
+function PersonalInfoStep() {
+  return (
+    <View>
+      <FormField name="fullName" label="Full Name *" placeholder="e.g. Maria Santos" autoCapitalize="words" autoComplete="name" transform="trim" autoFocus />
+      <FormField name="nickname" label="Nickname" placeholder="Optional" />
+      <FormField name="phone" label="Phone *" placeholder="+63 912 345 6789" keyboardType="phone-pad" autoComplete="tel" />
+      <FormField name="email" label="Email" placeholder="Optional" keyboardType="email-address" autoCapitalize="none" autoComplete="email" />
+      <FormField name="occupation" label="Occupation" placeholder="e.g. Teacher" />
+      <FormField name="homeProvince" label="Home Province" placeholder="e.g. Pampanga" />
+    </View>
+  )
+}
 
-        <BottomCTABar>
-          <Button
-            label={step === 5 ? 'Save Tenant' : `Next — ${STEP_TITLES[step + 1]}`}
-            onPress={() => handleNext()}
-            loading={isPending}
-          />
-          {step > 1 && (
-            <Pressable onPress={handleBack} className="items-center mt-3">
-              <AppText color="primary">
-                Back
-              </AppText>
-            </Pressable>
-          )}
-        </BottomCTABar>
-      </KeyboardAvoidingView>
-    </ScreenView>
+function IdCaptureStep() {
+  return (
+    <View>
+      <InfoNote>Accepted: UMID · Driver's License · Passport · PhilHealth · Voter's ID</InfoNote>
+      <SectionLabel className="mt-2">Front of valid ID</SectionLabel>
+      <FormCameraCapture name="idFrontUri" label="Tap to capture front of ID" />
+      <View className="h-4" />
+      <SectionLabel>Back of ID</SectionLabel>
+      <FormCameraCapture name="idBackUri" label="Tap to capture back of ID" />
+    </View>
+  )
+}
+
+function EmergencyContactStep() {
+  return (
+    <View>
+      <FormField name="emergencyName" label="Contact Name *" placeholder="Full name" transform="trim" />
+      <FormField name="emergencyRelation" label="Relationship" placeholder="e.g. Spouse, Parent" />
+      <FormField name="emergencyPhone" label="Phone *" placeholder="+63 912 345 6789" keyboardType="phone-pad" />
+    </View>
+  )
+}
+
+function UnitAssignmentStep() {
+  const { watch, setValue } = useFormContext<FormData>()
+  const propertyId = watch('propertyId')
+  const contractType = watch('contractType')
+  const { data: properties } = useProperties()
+  const { data: units } = useUnits(propertyId)
+
+  const propertyOptions = (properties ?? []).map((p) => ({ value: p.id, label: p.name }))
+  const unitOptions = (units ?? [])
+    .filter((u) => u.status === 'available')
+    .map((u) => ({
+      value: u.id,
+      label: `Unit ${u.unit_number}${u.monthly_rate != null ? ` — ₱${u.monthly_rate.toFixed(0)}/mo` : ''}`,
+    }))
+
+  return (
+    <View>
+      <FormSelect name="propertyId" label="Property *" placeholder="Select property…" options={propertyOptions} onChange={() => setValue('unitId', '')} />
+      <FormSelect name="unitId" label="Unit *" placeholder={propertyId ? 'Select unit…' : 'Select property first'} options={unitOptions} disabled={!propertyId} />
+      <FormDateInput name="moveInDate" label="Move-in Date *" />
+      <FormSegmentedControl name="contractType" label="Contract Type" options={[{ value: 'monthly', label: 'Month-to-month' }, { value: 'fixed', label: 'Fixed term' }]} />
+      {contractType === 'fixed' && <FormDateInput name="contractEndDate" label="Contract End Date *" />}
+    </View>
+  )
+}
+
+function BillingStep() {
+  const { watch } = useFormContext<FormData>()
+  const billingType = watch('billingType')
+  const { data: settings } = useSettings()
+  const internetRate = settings?.internet_rate ?? 0
+
+  return (
+    <View>
+      <FormSegmentedControl name="billingType" label="Billing Type" options={[{ value: 'monthly', label: 'Monthly' }, { value: 'daily', label: 'Daily' }]} />
+      {billingType === 'monthly' ? (
+        <>
+          <FormField name="monthlyRent" label="Monthly Rent *" keyboardType="decimal-pad" placeholder="e.g. 3500" />
+          <FormField name="securityDeposit" label="Security Deposit" keyboardType="decimal-pad" />
+          <FormField name="advance" label="Advance Payment" keyboardType="decimal-pad" />
+          <FormField name="billingDay" label="Billing Day (1–28) *" keyboardType="number-pad" />
+          <FormToggleRow name="includeInternet" label={`Include Internet (₱${internetRate.toFixed(0)}/mo)`} sublabel="Adds a flat charge to each monthly bill" />
+          <SectionLabel>Initial Meter Readings (optional)</SectionLabel>
+          <FormField name="waterReading" label="Water Reading (cu.m)" keyboardType="decimal-pad" />
+          <FormField name="electricityReading" label="Electricity Reading (kWh)" keyboardType="decimal-pad" />
+        </>
+      ) : (
+        <>
+          <FormField name="dailyRate" label="Daily Rate *" keyboardType="decimal-pad" />
+          <FormField name="numberOfDays" label="Number of Days *" keyboardType="number-pad" />
+          <FormField name="securityDeposit" label="Security Deposit" keyboardType="decimal-pad" />
+          <FormField name="advance" label="Advance Payment" keyboardType="decimal-pad" />
+        </>
+      )}
+    </View>
   )
 }

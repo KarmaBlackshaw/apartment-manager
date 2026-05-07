@@ -76,8 +76,10 @@ export interface Tenant {
   id: string
   unit_id: string | null
   full_name: string
+  nickname?: string | null
   email: string
   phone: string
+  occupation?: string | null
   billing_type: BillingType
   move_in_date: string
   move_out_date: string | null

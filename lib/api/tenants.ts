@@ -12,8 +12,10 @@ export interface TenantFilters {
 export interface CreateTenantInput {
   unit_id: string
   full_name: string
+  nickname?: string
   email: string
   phone: string
+  occupation?: string
   billing_type: 'monthly' | 'daily'
   move_in_date: string
   address?: string
@@ -123,8 +125,10 @@ export async function createTenant(input: CreateTenantInput): Promise<Tenant> {
     id,
     unit_id: input.unit_id,
     full_name: input.full_name,
+    nickname: input.nickname ?? null,
     email: input.email,
     phone: input.phone,
+    occupation: input.occupation ?? null,
     billing_type: input.billing_type,
     move_in_date: input.move_in_date,
     status: 'active',
