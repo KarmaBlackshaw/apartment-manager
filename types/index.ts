@@ -72,6 +72,7 @@ export interface PropertyStats {
   expectedMonthlyIncome: number
   collectedThisMonth: number
   expiringContracts: number
+  openIssueCount: number
 }
 
 export interface Tenant {

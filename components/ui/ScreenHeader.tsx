@@ -55,7 +55,7 @@ export function ScreenHeader({ title, left, right, onLeftPress }: ScreenHeaderPr
             {title}
           </Text>
         </View>
-        <View className="min-w-[44px] h-[44px] items-center justify-end pr-2">{right ?? null}</View>
+        <View className="w-[44px] h-[44px] items-center justify-center">{right ?? null}</View>
       </View>
     </SafeAreaView>
   )

@@ -1,5 +1,5 @@
 import { db } from '~/db'
-import { properties, units, contracts, payments } from '~/db/schema'
+import { properties, units, contracts, payments, maintenanceIssues } from '~/db/schema'
 import { eq, and, lte, isNull, sql } from 'drizzle-orm'
 import type { Property, PropertyWithStats, PropertyStats } from '~/types'
 import { nanoid } from 'nanoid/non-secure'
@@ -73,6 +73,17 @@ export async function fetchPropertyStats(propertyId: string): Promise<PropertySt
       ),
     )
 
+  const openIssuesRows = await db
+    .select({ count: sql<number>`COUNT(*)` })
+    .from(maintenanceIssues)
+    .innerJoin(units, eq(maintenanceIssues.unit_id, units.id))
+    .where(
+      and(
+        eq(units.property_id, propertyId),
+        sql`${maintenanceIssues.status} IN ('REPORTED', 'IN_PROGRESS')`,
+      ),
+    )
+
   return {
     totalUnits: unitRows[0]?.totalUnits ?? 0,
     occupiedUnits: unitRows[0]?.occupiedUnits ?? 0,
@@ -80,6 +91,7 @@ export async function fetchPropertyStats(propertyId: string): Promise<PropertySt
     expectedMonthlyIncome: unitRows[0]?.expectedMonthlyIncome ?? 0,
     collectedThisMonth: collectedRows[0]?.collected ?? 0,
     expiringContracts: expiringRows[0]?.count ?? 0,
+    openIssueCount: openIssuesRows[0]?.count ?? 0,
   }
 }
 

@@ -1,16 +1,17 @@
 import React from 'react'
-import { View, FlatList, Text, TouchableOpacity } from 'react-native'
+import { View, FlatList, Pressable } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useProperty, usePropertyStats } from '~/hooks/useProperties'
 import { useUnitsWithStatus } from '~/hooks/useUnits'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
+import { AppText } from '~/components/ui/AppText'
+import { Button } from '~/components/ui/Button'
 import { UnitGridCard } from '~/components/properties/UnitGridCard'
-import { FAB } from '~/components/ui/FAB'
 import { SectionHeader } from '~/components/ui/SectionHeader'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
-import { colors } from '~/constants/theme'
 import { PropertySummaryCard } from '~/components/properties/PropertySummaryCard'
+import { colors } from '~/constants/theme'
 
 export default function PropertyDetailScreen() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>()
@@ -23,12 +24,12 @@ export default function PropertyDetailScreen() {
   if (isLoading) return <LoadingSpinner />
   if (isError || !property) return (
     <View className="flex-1 items-center justify-center p-8 bg-app">
-      <Text className="text-danger text-center mb-4">
+      <AppText className="text-danger text-center mb-4">
         {isError ? `Error: ${String(error)}` : 'Property not found.'}
-      </Text>
-      <TouchableOpacity onPress={() => router.back()} style={{ padding: 12 }}>
-        <Text style={{ color: colors.primary }}>← Go back</Text>
-      </TouchableOpacity>
+      </AppText>
+      <Pressable onPress={() => router.back()} className="px-3 py-2">
+        <AppText className="text-primary">← Go back</AppText>
+      </Pressable>
     </View>
   )
 
@@ -37,13 +38,14 @@ export default function PropertyDetailScreen() {
     : 0
 
   const headerRight = (
-    <TouchableOpacity
+    <Pressable
       onPress={() => router.push(`/(admin)/properties/${propertyId}/edit` as never)}
-      style={{ marginRight: 8, padding: 4 }}
+      hitSlop={8}
       accessibilityLabel="Edit property"
+      className="px-1"
     >
       <Ionicons name="create-outline" size={22} color={colors.textSecondary} />
-    </TouchableOpacity>
+    </Pressable>
   )
 
   return (
@@ -52,18 +54,19 @@ export default function PropertyDetailScreen() {
         data={units}
         keyExtractor={(u) => u.id}
         numColumns={2}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 120 }}
-        columnWrapperStyle={{ gap: 10 }}
-        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+        contentContainerClassName="px-4 pb-[88px]"
+        columnWrapperClassName="gap-2.5"
+        ItemSeparatorComponent={() => <View className="h-2.5" />}
         ListHeaderComponent={
           <>
-            <View className="pt-3 pb-0">
+            <View className="pt-3">
               <PropertySummaryCard
                 occupancyPct={occupancyPct}
                 collectedThisMonth={stats?.collectedThisMonth ?? 0}
                 expectedMonthlyIncome={stats?.expectedMonthlyIncome ?? 0}
                 overdueCount={overdueCount}
                 expiringContracts={stats?.expiringContracts ?? 0}
+                openIssueCount={stats?.openIssueCount ?? 0}
               />
             </View>
             <SectionHeader
@@ -93,20 +96,15 @@ export default function PropertyDetailScreen() {
         )}
         ListEmptyComponent={
           <View className="items-center py-12">
-            <Text className="text-sm" style={{ color: colors.textMuted }}>
-              No units yet
-            </Text>
-            <TouchableOpacity
-              onPress={() => router.push(`/(admin)/properties/${propertyId}/units/new`)}
-              className="mt-4 px-6 py-3 rounded-full"
-              style={{ backgroundColor: colors.primary }}
-            >
-              <Text className="text-white text-sm font-semibold">Add Unit</Text>
-            </TouchableOpacity>
+            <AppText className="text-text-muted text-sm">No units yet</AppText>
+            <Button
+              label="Add Unit"
+              className="mt-4"
+              onPress={() => router.push(`/(admin)/properties/${propertyId}/units/new` as never)}
+            />
           </View>
         }
       />
-      <FAB onPress={() => router.push(`/(admin)/properties/${propertyId}/units/new` as never)} />
     </ScreenLayout>
   )
 }
