@@ -108,7 +108,7 @@ today. Compared against `dark_20_unit_detail.png` and `CLAUDE.md`:
 ```tsx
 <ScreenLayout
   title={`Unit ${unit.unit_number}`}                        // prefix "Unit "
-  backHref={`/(admin)/properties/${propertyId}/units`}      // already correct
+  backHref={`/(admin)/properties/${propertyId}`}      // already correct
   headerRight={
     <View className="flex-row items-center gap-2">
       <IconButton icon="create-outline" onPress={() => router.push(

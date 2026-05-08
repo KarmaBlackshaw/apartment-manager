@@ -10,7 +10,6 @@ export default function SettingsLayout() {
         <Stack.Screen name="general"  options={{ title: 'General' }} />
         <Stack.Screen name="rates"    options={{ title: 'Rates' }} />
         <Stack.Screen name="security" options={{ title: 'Security' }} />
-        <Stack.Screen name="units"    options={{ headerShown: false }} />
       </Stack>
     </View>
   )

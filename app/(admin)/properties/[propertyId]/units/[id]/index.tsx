@@ -71,7 +71,7 @@ export default function UnitDetailScreen() {
   return (
     <ScreenLayout
       title={`Unit ${unit.unit_number}`}
-      backHref={`/(admin)/properties/${propertyId}/units`}
+      backHref={`/(admin)/properties/${propertyId}`}
       headerRight={
         <View className="flex-row items-center gap-2">
           <Pressable
