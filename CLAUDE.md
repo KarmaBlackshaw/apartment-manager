@@ -88,27 +88,37 @@ Prefer small, focused components over large monolithic screens.
 
 ---
 
-## Safe Area
+## Safe area
 
-Always wrap screen content in `<ScreenView>` from `components/ui`. It handles `bg-app`, `flex-1`, and safe-area insets automatically.
+Always wrap screen content in `<ScreenView>` from `components/ui`. It uses
+`<SafeAreaView edges={...}>` from `react-native-safe-area-context` internally —
+no manual inset math required.
 
 ```tsx
-import { ScreenView } from '../components/ui'
+// Screen with ScreenLayout (default — header owns top inset):
+<ScreenLayout title="…">
+  {/* content */}
+</ScreenLayout>
 
-// Screen with ScreenLayout (custom in-body header — default pattern):
-<ScreenView edges={['bottom']}>
-  ...
-</ScreenView>
-
-// Full-screen custom layout (no ScreenLayout — lock, onboarding, modals):
-<ScreenView>   {/* defaults to edges={['top', 'bottom']} */}
-  ...
+// Standalone (lock, onboarding, modals with no ScreenLayout):
+<ScreenView>          {/* edges defaults to ['top','bottom'] */}
+  {/* content */}
 </ScreenView>
 ```
 
-For scrollable content inside `ScreenView`, always add `contentContainerClassName="pb-[88px]"` on ScrollView/FlashList to clear the floating pill nav. Never reduce or remove this value.
+**Forbidden:**
+- `useSafeAreaInsets()` in screen files. The hook is only acceptable inside
+  primitives (`ScreenView`, `ScreenHeader`, `BottomCTABar`). If you find
+  yourself reaching for it in `app/**/*.tsx`, you are doing it wrong — wrap in
+  `ScreenView` or `ScreenLayout` instead.
+- `paddingTop: insets.top` / `paddingBottom: insets.bottom` anywhere. Manual
+  inset math is unreliable on Android edge-to-edge (returns 0). Use
+  `<SafeAreaView edges={...}>` always.
+- `<SafeAreaView>` from `react-native` (the deprecated one). Always import from
+  `react-native-safe-area-context`.
 
-**Do NOT use `<SafeAreaView>` from `react-native`** — it ignores the dark theme. Never call `useSafeAreaInsets()` directly in screen files; use `ScreenView` instead.
+**Rule of thumb:** if a screen does not use `ScreenLayout`, it must wrap in
+`<ScreenView>` (default `edges`). Both edges are handled.
 
 ---
 

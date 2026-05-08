@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
+import { ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useTabBarScrollHandler } from '~/hooks/useTabBarScrollHandler'
 import { useCreateProperty } from '~/hooks/useProperties'
 import { Input } from '~/components/ui/Input'
 import { Button } from '~/components/ui/Button'
-import { AppText } from '~/components/ui/AppText'
-import { ScreenView } from '~/components/ui/ScreenView'
+import { ScreenLayout } from '~/layouts/ScreenLayout'
+
 export default function NewPropertyScreen() {
   const router = useRouter()
   const tabBarScroll = useTabBarScrollHandler()
@@ -32,16 +32,15 @@ export default function NewPropertyScreen() {
   }
 
   return (
-    <ScreenView edges={['bottom']}>
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
-      <ScrollView contentContainerClassName="p-4 pb-32" {...tabBarScroll}>
-        <AppText variant="subheading" className="mb-4">Property Details</AppText>
-        <Input label="Property Name" value={name} onChangeText={setName} error={errors.name} placeholder="e.g. Sunset Apartments" />
-        <Input label="Address" value={address} onChangeText={setAddress} error={errors.address} placeholder="123 Main Street" />
-        <Input label="Description (optional)" value={description} onChangeText={setDescription} multiline numberOfLines={3} placeholder="Additional notes..." />
-        <Button label="Create Property" onPress={handleSubmit} loading={isPending} className="mt-4" />
-      </ScrollView>
-    </KeyboardAvoidingView>
-    </ScreenView>
+    <ScreenLayout title="Add Property" backHref="/(admin)/properties">
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+        <ScrollView contentContainerClassName="px-4 pt-3 pb-[88px]" {...tabBarScroll}>
+          <Input label="Property Name" value={name} onChangeText={setName} error={errors.name} placeholder="e.g. Sunset Apartments" />
+          <Input label="Address" value={address} onChangeText={setAddress} error={errors.address} placeholder="123 Main Street" />
+          <Input label="Description (optional)" value={description} onChangeText={setDescription} multiline numberOfLines={3} placeholder="Additional notes..." />
+          <Button label="Create Property" onPress={handleSubmit} loading={isPending} className="mt-4" />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </ScreenLayout>
   )
 }

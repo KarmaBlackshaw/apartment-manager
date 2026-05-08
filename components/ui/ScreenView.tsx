@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ViewStyle } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { ViewStyle } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { colors } from '~/constants/theme'
 
 type Edge = 'top' | 'bottom'
@@ -8,9 +8,9 @@ type Edge = 'top' | 'bottom'
 interface ScreenViewProps {
   children: React.ReactNode
   /**
-   * Which edges to apply safe-area padding.
-   * - Screens using ScreenLayout: edges={['bottom']} — top is handled by ScreenHeader's own SafeAreaView
-   * - Custom-header screens (onboarding, lock, modals): default ['top', 'bottom']
+   * Which edges to apply safe-area inset.
+   * - With `ScreenLayout`: `['bottom']` (top is owned by `ScreenHeader`).
+   * - Standalone (lock, onboarding, modals without `ScreenLayout`): default `['top', 'bottom']`.
    */
   edges?: Edge[]
   className?: string
@@ -23,20 +23,13 @@ export function ScreenView({
   className,
   style,
 }: ScreenViewProps) {
-  const insets = useSafeAreaInsets()
   return (
-    <View
+    <SafeAreaView
+      edges={edges}
       className={`flex-1${className ? ` ${className}` : ''}`}
-      style={[
-        {
-          backgroundColor: colors.background,
-          paddingTop: edges.includes('top') ? insets.top : undefined,
-          paddingBottom: edges.includes('bottom') ? insets.bottom : undefined,
-        },
-        style,
-      ]}
+      style={[{ backgroundColor: colors.background }, style]}
     >
       {children}
-    </View>
+    </SafeAreaView>
   )
 }
