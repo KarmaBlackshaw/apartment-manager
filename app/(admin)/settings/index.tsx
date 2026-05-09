@@ -1,22 +1,13 @@
 import React from 'react'
-import { View, Text, ScrollView } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Avatar } from '~/components/ui/Avatar'
+import { View, ScrollView, Switch } from 'react-native'
 import { ScreenView } from '~/components/ui/ScreenView'
-import { SectionHeader } from '~/components/ui/SectionHeader'
-import { SettingsRow } from '~/components/settings/SettingsRow'
+import { AppText } from '~/components/ui/AppText'
+import { Avatar } from '~/components/ui/Avatar'
+import { SettingsCard } from '~/components/cards/SettingsCard'
+import { colors } from '~/constants/theme'
 import { useSettings, useUpdateSetting } from '~/hooks/useSettings'
-import { colors, radius, spacing } from '~/constants/theme'
-
-const cardStyle = {
-  backgroundColor: colors.surface,
-  borderRadius: radius.lg,
-  borderCurve: 'continuous' as const,
-  overflow: 'hidden' as const,
-}
 
 export default function SettingsScreen() {
-  const insets = useSafeAreaInsets()
   const { data: settings } = useSettings()
   const { mutate: updateSetting } = useUpdateSetting()
 
@@ -30,161 +21,118 @@ export default function SettingsScreen() {
 
   return (
     <ScreenView>
-    <ScrollView
-      contentInsetAdjustmentBehavior="automatic"
-      contentContainerStyle={{
-        paddingTop: spacing[5],
-        paddingHorizontal: spacing[4],
-        paddingBottom: insets.bottom + 100,
-      }}
-    >
-      {/* Screen title */}
-      <Text
-        style={{
-          fontSize: 28,
-          fontWeight: '700',
-          color: colors.textPrimary,
-          marginBottom: spacing[5],
-        }}
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerClassName="px-4 pt-5 pb-[88px] gap-3"
+        showsVerticalScrollIndicator={false}
       >
-        Settings
-      </Text>
+        {/* Screen title */}
+        <AppText variant="heading" className="mb-1">Settings</AppText>
 
-      {/* Profile card */}
-      <View
-        style={{
-          ...cardStyle,
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: spacing[4],
-          padding: spacing[5],
-          marginBottom: spacing[3],
-        }}
-      >
-        <Avatar name={ownerName || 'Owner'} size="lg" />
-        <View style={{ flex: 1 }}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: '700',
-              color: colors.textPrimary,
-              marginBottom: 2,
-            }}
-            numberOfLines={1}
-          >
-            {ownerName || 'Set owner name'}
-          </Text>
-          <Text style={{ fontSize: 13, color: colors.textSecondary }}>
-            {ownerPhone ? `${ownerPhone} · Owner` : 'Owner'}
-          </Text>
+        {/* Profile header — NOT in a card per design */}
+        <View className="flex-row items-center gap-4 py-2">
+          <Avatar name={ownerName || 'Owner'} size="lg" />
+          <View className="flex-1">
+            <AppText className="text-[14px] font-bold text-text-primary" numberOfLines={1}>
+              {ownerName || 'Set owner name'}
+            </AppText>
+            <AppText className="text-[11px] text-text-secondary mt-[2px]">
+              {ownerPhone ? `${ownerPhone} · Owner` : 'Owner'}
+            </AppText>
+          </View>
         </View>
-      </View>
 
-      {/* Section: Apartment */}
-      <SectionHeader title="Apartment" />
-      <View style={{ ...cardStyle, marginBottom: spacing[3] }}>
-        <SettingsRow
-          label="Apartment Name"
-          type="navigate"
-          value={apartmentName || undefined}
-          onPress={() => {}}
-        />
-        <SettingsRow
-          label="Address"
-          type="navigate"
-          value="Not set"
-          onPress={() => {}}
-        />
-      </View>
+        {/* Apartment */}
+        <SettingsSectionLabel>Apartment</SettingsSectionLabel>
+        <View className="gap-1.5">
+          <SettingsCard label="Apartment Name" value={apartmentName || 'Not set'} chevron onPress={() => {}} />
+          {/* FIXME(v2): route to address edit screen */}
+          <SettingsCard label="Address" value="Not set" chevron onPress={() => {}} />
+        </View>
 
-      {/* Section: Billing Defaults */}
-      <SectionHeader title="Billing Defaults" />
-      <View style={{ ...cardStyle, marginBottom: spacing[3] }}>
-        <SettingsRow
-          label="Billing Day"
-          type="navigate"
-          value="1st of month"
-          onPress={() => {}}
-        />
-        <SettingsRow
-          label="Late Fee"
-          type="navigate"
-          value="10%"
-          onPress={() => {}}
-        />
-      </View>
+        {/* Billing defaults */}
+        <SettingsSectionLabel>Billing defaults</SettingsSectionLabel>
+        <View className="gap-1.5">
+          {/* FIXME(v2): route to billing day picker */}
+          <SettingsCard label="Billing day" value="1st of month" chevron onPress={() => {}} />
+          {/* FIXME(v2): route to late fee screen */}
+          <SettingsCard label="Late fee" value="₱200 · 5 days" chevron onPress={() => {}} />
+        </View>
 
-      {/* Section: Notifications */}
-      <SectionHeader title="Notifications" />
-      <View style={{ ...cardStyle, marginBottom: spacing[3] }}>
-        <SettingsRow
-          label="Rent Reminders"
-          type="toggle"
-          isEnabled={rentReminders}
-          onToggle={(val: boolean) =>
-            updateSetting({ key: 'notif_rent_reminders', value: val ? '1' : '0' })
-          }
-        />
-        <SettingsRow
-          label="Contract Expiry Alerts"
-          type="toggle"
-          isEnabled={contractExpiry}
-          onToggle={(val: boolean) =>
-            updateSetting({ key: 'notif_contract_expiry', value: val ? '1' : '0' })
-          }
-        />
-        <SettingsRow
-          label="Vacancy Alerts"
-          type="toggle"
-          isEnabled={vacancyAlerts}
-          onToggle={(val: boolean) =>
-            updateSetting({ key: 'notif_vacancy_alerts', value: val ? '1' : '0' })
-          }
-        />
-        <SettingsRow
-          label="Quiet Hours"
-          type="navigate"
-          value="10pm – 7am"
-          onPress={() => {}}
-        />
-      </View>
+        {/* Notifications */}
+        <SettingsSectionLabel>Notifications</SettingsSectionLabel>
+        <View className="gap-1.5">
+          <SettingsCard
+            label="Rent reminders"
+            right={
+              <Switch
+                value={rentReminders}
+                onValueChange={(v) => updateSetting({ key: 'notif_rent_reminders', value: v ? '1' : '0' })}
+                trackColor={{ false: colors.border, true: colors.primary }}
+                thumbColor="white"
+                ios_backgroundColor={colors.border}
+              />
+            }
+          />
+          <SettingsCard
+            label="Contract expiry"
+            right={
+              <Switch
+                value={contractExpiry}
+                onValueChange={(v) => updateSetting({ key: 'notif_contract_expiry', value: v ? '1' : '0' })}
+                trackColor={{ false: colors.border, true: colors.primary }}
+                thumbColor="white"
+                ios_backgroundColor={colors.border}
+              />
+            }
+          />
+          <SettingsCard
+            label="Vacancy alerts"
+            right={
+              <Switch
+                value={vacancyAlerts}
+                onValueChange={(v) => updateSetting({ key: 'notif_vacancy_alerts', value: v ? '1' : '0' })}
+                trackColor={{ false: colors.border, true: colors.primary }}
+                thumbColor="white"
+                ios_backgroundColor={colors.border}
+              />
+            }
+          />
+          {/* FIXME(v2): route to quiet hours screen */}
+          <SettingsCard label="Quiet hours" value="10pm–7am" chevron onPress={() => {}} />
+        </View>
 
-      {/* Section: Security */}
-      <SectionHeader title="Security" />
-      <View style={{ ...cardStyle, marginBottom: spacing[3] }}>
-        <SettingsRow
-          label="App Lock"
-          type="toggle"
-          isEnabled={false}
-        />
-      </View>
+        {/* Security */}
+        <SettingsSectionLabel>Security</SettingsSectionLabel>
+        <View className="gap-1.5">
+          {/* FIXME(v2): route to app lock screen */}
+          <SettingsCard label="App lock" value="Biometric" chevron onPress={() => {}} />
+        </View>
 
-      {/* Section: Data */}
-      <SectionHeader title="Data" />
-      <View style={{ ...cardStyle, marginBottom: spacing[3] }}>
-        <SettingsRow
-          label="Last Backup"
-          type="info"
-          value="Never"
-          valueColor={colors.textMuted}
-        />
-        <SettingsRow
-          label="Back Up Now"
-          type="navigate"
-          onPress={() => {}}
-        />
-      </View>
+        {/* Data */}
+        <SettingsSectionLabel>Data</SettingsSectionLabel>
+        <View className="gap-1.5">
+          <SettingsCard label="Last backup" value="Today 8:00am" valueColor="success" />
+          {/* FIXME(v2): route to backup screen */}
+          <SettingsCard label="Back up now" chevron onPress={() => {}} />
+          {/* FIXME(v2): route to restore screen */}
+          <SettingsCard label="Restore from backup" chevron onPress={() => {}} />
+        </View>
 
-      {/* Section: About */}
-      <SectionHeader title="About" />
-      <View style={{ ...cardStyle, marginBottom: spacing[3] }}>
-        <SettingsRow
-          label="Version"
-          type="info"
-          value="1.0.0"
-        />
-      </View>
-    </ScrollView>
+        {/* About */}
+        <SettingsSectionLabel>About</SettingsSectionLabel>
+        <View className="gap-1.5">
+          <SettingsCard label="Version" value="1.0.0 (42)" valueMono />
+        </View>
+      </ScrollView>
     </ScreenView>
+  )
+}
+
+function SettingsSectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <AppText className="text-[11px] font-semibold text-text-secondary px-1 pt-2">
+      {children}
+    </AppText>
   )
 }
