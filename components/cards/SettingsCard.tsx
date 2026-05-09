@@ -52,13 +52,13 @@ export function SettingsCard({
         accessibilityLabel={accessibilityLabel ?? label}
         className="bg-surface rounded-md px-4 py-3.5 flex-row items-center justify-between min-h-[44px]"
       >
-        <AppText className="text-[11px] font-medium text-text-primary flex-1" numberOfLines={1}>
+        <AppText className="text-sm font-medium text-text-primary flex-1" numberOfLines={1}>
           {label}
         </AppText>
         <View className="flex-row items-center gap-1.5">
           {right ?? (
             value != null && (
-              <AppText className={cn('text-[8px] font-normal', valueColorClass, valueMono && 'font-mono')}>
+              <AppText className={cn('text-sm font-normal', valueColorClass, valueMono && 'font-mono')}>
                 {value}
               </AppText>
             )
@@ -73,13 +73,13 @@ export function SettingsCard({
 
   return (
     <View className="bg-surface rounded-md px-4 py-3.5 flex-row items-center justify-between min-h-[44px]">
-      <AppText className="text-[11px] font-medium text-text-primary flex-1" numberOfLines={1}>
+      <AppText className="text-sm font-medium text-text-primary flex-1" numberOfLines={1}>
         {label}
       </AppText>
       <View className="flex-row items-center gap-1.5">
         {right ?? (
           value != null && (
-            <AppText className={cn('text-[8px] font-normal', valueColorClass, valueMono && 'font-mono')}>
+            <AppText className={cn('text-sm font-normal', valueColorClass, valueMono && 'font-mono')}>
               {value}
             </AppText>
           )
