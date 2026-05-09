@@ -11,7 +11,7 @@ import { Input } from '~/components/ui/Input'
 import { Button } from '~/components/ui/Button'
 import { AppText } from '~/components/ui/AppText'
 import { AvatarInitials } from '~/components/ui/AvatarInitials'
-import { StatusChip } from '~/components/ui/StatusChip'
+import { Chip } from '~/components/ui/Chip'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { editUnitSchema, EditUnitFormData } from './edit.schema'
 import { colors } from '~/constants/theme'
@@ -113,7 +113,7 @@ export default function EditUnitScreen() {
                 </AppText>
               )}
             </View>
-            <StatusChip variant={isOccupied ? 'success' : 'neutral'} label={isOccupied ? 'OCCUPIED' : 'VACANT'} />
+            <Chip variant={isOccupied ? 'success' : 'neutral'} label={isOccupied ? 'OCCUPIED' : 'VACANT'} />
           </View>
 
           <Controller control={control} name="unit_number" render={({ field }) => (

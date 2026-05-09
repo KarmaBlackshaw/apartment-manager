@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, ScrollView, Text } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
-import { FilterChipBar } from '~/components/ui/FilterChipBar'
+import { ChipBar } from '~/components/ui/ChipBar'
 import { InfoRow } from '~/components/ui/InfoRow'
 import { AmountText } from '~/components/ui/AmountText'
 import { Button } from '~/components/ui/Button'
@@ -88,7 +88,7 @@ export default function UtilityReadingScreen() {
       </Text>
 
       {/* Utility type selector */}
-      <FilterChipBar
+      <ChipBar
         options={UTILITY_OPTIONS}
         selected={utilityType}
         onChange={(v) => setUtilityType(v as 'electricity' | 'water')}

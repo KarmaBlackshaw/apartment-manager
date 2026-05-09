@@ -7,17 +7,17 @@ import dayjs from 'dayjs'
 import { useTabBarScrollHandler } from '~/hooks/useTabBarScrollHandler'
 import { useTenants } from '~/hooks/useTenants'
 import { useBills } from '~/hooks/useBills'
-import { FilterChipBar } from '~/components/ui/FilterChipBar'
+import { ChipBar } from '~/components/ui/ChipBar'
 import { ListRow } from '~/components/ui/ListRow'
 import { AvatarInitials } from '~/components/ui/AvatarInitials'
-import { StatusChip } from '~/components/ui/StatusChip'
+import { Chip } from '~/components/ui/Chip'
 import { AmountText } from '~/components/ui/AmountText'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { EmptyState } from '~/components/ui/EmptyState'
 import { FAB } from '~/components/ui/FAB'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
 import { colors } from '~/constants/theme'
-import type { ChipVariant } from '~/components/ui/StatusChip'
+import type { ChipVariant } from '~/components/ui/Chip'
 export default function TenantsScreen() {
   const router = useRouter()
   const tabBarScroll = useTabBarScrollHandler()
@@ -99,7 +99,7 @@ export default function TenantsScreen() {
       </View>
 
       {/* Filter chips */}
-      <FilterChipBar
+      <ChipBar
         options={[
           { label: `All (${total})`, value: 'all' },
           { label: 'Active', value: 'active' },
@@ -138,7 +138,7 @@ export default function TenantsScreen() {
                   ? `Unit ${tenant.unit.unit_number} · Since ${dayjs(tenant.move_in_date).format('MMM YYYY')}`
                   : `No unit · Since ${dayjs(tenant.move_in_date).format('MMM YYYY')}`
               }
-              trailingChip={<StatusChip variant={chipVariant} label={chipLabel} />}
+              trailingChip={<Chip variant={chipVariant} label={chipLabel} />}
               trailingAmount={<AmountText amount={owed} variant={owed > 0 ? 'owed' : 'zero'} />}
               onPress={() => router.push({ pathname: '/tenants/[id]', params: { id: tenant.id } })}
             />

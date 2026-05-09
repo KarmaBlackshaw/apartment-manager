@@ -2,17 +2,16 @@ import React, { useState } from 'react'
 import { View, Text, FlatList } from 'react-native'
 import { useRouter } from 'expo-router'
 import dayjs from 'dayjs'
-import { MonthTabSelector } from '~/components/ui/MonthTabSelector'
-import { FilterChipBar } from '~/components/ui/FilterChipBar'
+import { ChipBar } from '~/components/ui/ChipBar'
 import { ListRow } from '~/components/ui/ListRow'
-import { StatusChip } from '~/components/ui/StatusChip'
+import { Chip } from '~/components/ui/Chip'
 import { AmountText } from '~/components/ui/AmountText'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { EmptyState } from '~/components/ui/EmptyState'
 import { FAB } from '~/components/ui/FAB'
 import { PropertySelector } from '~/components/properties/PropertySelector'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
-import type { ChipVariant } from '~/components/ui/StatusChip'
+import type { ChipVariant } from '~/components/ui/Chip'
 import { useBillingOverview } from '~/hooks/useBillingOverview'
 import type { BillingOverviewEntry } from '~/types'
 
@@ -84,8 +83,8 @@ export default function BillingScreen() {
             </View>
 
             {/* Month tabs — compact */}
-            <MonthTabSelector
-              months={monthEntries.map((m) => m.label)}
+            <ChipBar
+              options={monthEntries.map((m) => m.label)}
               selected={selectedLabel}
               onChange={setSelectedLabel}
             />
@@ -135,7 +134,7 @@ export default function BillingScreen() {
             </View>
 
             {/* Filter chips */}
-            <FilterChipBar
+            <ChipBar
               options={FILTER_OPTIONS}
               selected={filterValue}
               onChange={setFilterValue}
@@ -154,7 +153,7 @@ export default function BillingScreen() {
             <ListRow
               title={item.tenant_full_name}
               subtitle={`Unit ${item.unit_number ?? '—'} · ₱${item.monthly_rate.toLocaleString()}/mo`}
-              trailingChip={<StatusChip variant={chip.variant} label={chip.label} size="sm" />}
+              trailingChip={<Chip variant={chip.variant} label={chip.label} size="sm" />}
               trailingAmount={
                 item.bill_id ? (
                   <AmountText amount={displayAmount} variant={amountVariant} size="small" />

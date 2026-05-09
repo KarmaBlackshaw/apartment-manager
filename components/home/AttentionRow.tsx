@@ -1,6 +1,6 @@
 import React from 'react'
 import { Pressable, Text, View } from 'react-native'
-import { StatusChip } from '~/components/ui/StatusChip'
+import { Chip } from '~/components/ui/Chip'
 import { formatPHP } from '~/lib/format'
 
 export interface AttentionRowProps {
@@ -40,7 +40,7 @@ export function AttentionRow({
 
       {/* Right column */}
       <View className="items-end gap-1">
-        <StatusChip
+        <Chip
           variant={status === 'overdue' ? 'danger' : 'warning'}
           label={status === 'overdue' ? 'OVERDUE' : 'PENDING'}
         />

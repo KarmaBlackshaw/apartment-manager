@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import { useQuery } from '@tanstack/react-query'
 import { useTenant } from '~/hooks/useTenants'
 import { fetchBills } from '~/lib/api/bills'
-import { StatusChip } from '~/components/ui/StatusChip'
+import { Chip } from '~/components/ui/Chip'
 import { AvatarInitials } from '~/components/ui/AvatarInitials'
 import { AmountText } from '~/components/ui/AmountText'
 import { BalanceCard } from '~/components/billing/BalanceCard'
@@ -55,7 +55,7 @@ export default function TenantDetailScreen() {
   const statusLabel = tenant.status === 'active' ? 'ACTIVE' : 'INACTIVE'
 
   return (
-    <ScreenLayout title={tenant.full_name} headerRight={<StatusChip variant={statusVariant} label={statusLabel} />} backHref="/(admin)/tenants">
+    <ScreenLayout title={tenant.full_name} headerRight={<Chip variant={statusVariant} label={statusLabel} />} backHref="/(admin)/tenants">
 
       <ScrollView contentContainerStyle={{ paddingBottom: 48 }}>
         {/* Profile card */}
@@ -69,7 +69,7 @@ export default function TenantDetailScreen() {
                 {' · '}Move-in {dayjs(tenant.move_in_date).format('MMM D, YYYY')}
               </AppText>
               <View className="mt-[6px]">
-                <StatusChip
+                <Chip
                   variant="info"
                   label={tenant.billing_type === 'monthly' ? 'Month-to-month' : 'Daily'}
                   size="sm"
@@ -124,7 +124,7 @@ export default function TenantDetailScreen() {
                   title={dayjs(bill.period_start).format('MMM YYYY')}
                   subtitle={`Due ${dayjs(bill.due_date).format('MMM D')} · ${bill.status}`}
                   trailingChip={
-                    <StatusChip
+                    <Chip
                       variant={
                         bill.status === 'paid'
                           ? 'success'

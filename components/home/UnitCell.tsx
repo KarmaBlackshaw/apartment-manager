@@ -1,6 +1,6 @@
 import React from 'react'
 import { Pressable, Text, View } from 'react-native'
-import { StatusChip } from '~/components/ui/StatusChip'
+import { Chip } from '~/components/ui/Chip'
 
 type UnitStatus = 'occupied-paid' | 'occupied-overdue' | 'vacant'
 
@@ -41,12 +41,12 @@ export function UnitCell({ unitNumber, tenantName, status, onPress }: UnitCellPr
       </Text>
       {status === 'occupied-overdue' && (
         <View style={{ marginTop: 6 }}>
-          <StatusChip variant="danger" label="OVERDUE" />
+          <Chip variant="danger" label="OVERDUE" />
         </View>
       )}
       {status === 'vacant' && (
         <View style={{ marginTop: 6 }}>
-          <StatusChip variant="neutral" label="VACANT" />
+          <Chip variant="neutral" label="VACANT" />
         </View>
       )}
     </Pressable>

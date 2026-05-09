@@ -4,7 +4,7 @@ import { useLocalSearchParams } from 'expo-router'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
 import { ListRow } from '~/components/ui/ListRow'
 import { AvatarInitials } from '~/components/ui/AvatarInitials'
-import { StatusChip } from '~/components/ui/StatusChip'
+import { Chip } from '~/components/ui/Chip'
 import { AmountText } from '~/components/ui/AmountText'
 import { EmptyState } from '~/components/ui/EmptyState'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
@@ -60,7 +60,7 @@ export default function DepositSummaryScreen() {
               title={item.tenant_name}
               subtitle={`Unit ${item.unit_number ?? '—'} · ₱${item.deposit.toLocaleString('en-PH', { minimumFractionDigits: 0 })} deposit`}
               trailingChip={
-                <StatusChip
+                <Chip
                   variant={item.status === 'ACTIVE' ? 'success' : 'neutral'}
                   label={item.status}
                 />

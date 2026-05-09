@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker'
 import dayjs from 'dayjs'
 import { useDocuments } from '~/hooks/useDocuments'
 import { useUnit } from '~/hooks/useUnits'
-import { FilterChipBar } from '~/components/ui/FilterChipBar'
+import { ChipBar } from '~/components/ui/ChipBar'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { DocumentRow } from '~/components/documents/DocumentRow'
 import type { DocCategory } from '~/components/documents/DocumentRow'
@@ -79,7 +79,7 @@ export default function UnitDocumentsScreen() {
 
   return (
     <ScreenLayout title={title} backHref={`/(admin)/properties/${propertyId}/units/${id}`}>
-      <FilterChipBar
+      <ChipBar
         options={filterOptions}
         selected={filter}
         onChange={setFilter}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import { StatusChip } from '~/components/ui/StatusChip'
+import { Chip } from '~/components/ui/Chip'
 
 interface PropertySummaryCardProps {
   occupancyPct: number
@@ -50,13 +50,13 @@ export function PropertySummaryCard({
         {hasChips && (
           <View className="flex-row" style={{ gap: 5 }}>
             {openIssueCount > 0 && (
-              <StatusChip variant="danger" size="xs" label={`${openIssueCount} issues`} />
+              <Chip variant="danger" size="xs" label={`${openIssueCount} issues`} />
             )}
             {overdueCount > 0 && (
-              <StatusChip variant="danger" size="xs" label={`${overdueCount} overdue`} />
+              <Chip variant="danger" size="xs" label={`${overdueCount} overdue`} />
             )}
             {expiringContracts > 0 && (
-              <StatusChip variant="warning" size="xs" label={`${expiringContracts} expiring`} />
+              <Chip variant="warning" size="xs" label={`${expiringContracts} expiring`} />
             )}
           </View>
         )}

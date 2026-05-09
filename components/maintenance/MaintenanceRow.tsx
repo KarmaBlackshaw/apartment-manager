@@ -6,7 +6,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import { colors } from '~/constants/theme'
-import { StatusChip, ChipVariant } from '~/components/ui/StatusChip'
+import { Chip, ChipVariant } from '~/components/ui/Chip'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
@@ -85,7 +85,7 @@ export function MaintenanceRow({
       </View>
 
       <View className="items-end gap-1">
-        <StatusChip
+        <Chip
           variant={STATUS_CHIP_VARIANT[status]}
           label={STATUS_CHIP_LABEL[status]}
         />

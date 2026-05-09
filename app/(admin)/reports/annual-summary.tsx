@@ -3,7 +3,7 @@ import { View, Text, ScrollView, Pressable, Share } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import dayjs from 'dayjs'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
-import { FilterChipBar } from '~/components/ui/FilterChipBar'
+import { ChipBar } from '~/components/ui/ChipBar'
 import { SectionHeader } from '~/components/ui/SectionHeader'
 import { InfoRow } from '~/components/ui/InfoRow'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
@@ -68,7 +68,7 @@ export default function AnnualSummaryScreen() {
         <LoadingSpinner />
       ) : (
         <ScrollView contentContainerStyle={{ paddingBottom: 128 }}>
-          <FilterChipBar
+          <ChipBar
             options={YEAR_OPTIONS}
             selected={String(year)}
             onChange={(v) => setYear(Number(v))}

@@ -6,9 +6,9 @@ import { useTenant } from '~/hooks/useTenants'
 import { useBills } from '~/hooks/useBills'
 import { AvatarInitials } from '~/components/ui/AvatarInitials'
 import { AmountText } from '~/components/ui/AmountText'
-import { FilterChipBar } from '~/components/ui/FilterChipBar'
+import { ChipBar } from '~/components/ui/ChipBar'
 import { ListRow } from '~/components/ui/ListRow'
-import { StatusChip } from '~/components/ui/StatusChip'
+import { Chip } from '~/components/ui/Chip'
 import { AppText } from '~/components/ui/AppText'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
@@ -63,7 +63,7 @@ export default function PaymentHistoryScreen() {
         </View>
       </View>
 
-      <FilterChipBar
+      <ChipBar
         options={[
           { label: 'All', value: 'all' },
           { label: 'Paid', value: 'paid' },
@@ -87,7 +87,7 @@ export default function PaymentHistoryScreen() {
                 : `Due ${dayjs(bill.due_date).format('MMM D')} · ${bill.status}`
             }
             trailingChip={
-              <StatusChip
+              <Chip
                 variant={
                   bill.status === 'paid'
                     ? 'success'

@@ -72,6 +72,8 @@ Place components in `components/ui/` for generic UI primitives, or `components/`
 
 Prefer small, focused components over large monolithic screens.
 
+**Chip pattern:** static labels use `<Chip>`; interactive selectable pill rows use `<ChipBar>`. There is no third chip primitive. New "chip-like" needs MUST extend one of these two — do not create a sibling component. (Consolidation lives in spec 11.)
+
 ---
 
 ## Tech Stack
@@ -371,7 +373,8 @@ Reports have NO tab — accessed by tapping KPI cards on the Home screen.
 components/
   ui/
     Text.tsx              Typography scale (h1/h2/title/body/label/caption/mono)
-    Chip.tsx              Status badges (paid/unpaid/partial/overdue/expiring/advance/neutral)
+    Chip.tsx              Static badge — variant: success|warning|danger|info|neutral|advance, size: xs|sm|md. Use for status labels, counts, etc. Non-interactive.
+    ChipBar.tsx           Interactive horizontal scroll of single-select pills. Use for filter rows and month/scope tab strips. Single visual (bg-surface ↔ bg-primary).
     Avatar.tsx            Initials, always neutral Surface 3 bg — never colored
     IconButton.tsx        28×28px header icon buttons
     BackButton.tsx        28×28px chevron-only, Surface 2 bg

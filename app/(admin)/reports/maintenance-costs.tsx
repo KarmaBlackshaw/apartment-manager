@@ -3,7 +3,7 @@ import { View, Text, FlatList, Pressable, Share } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import dayjs from 'dayjs'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
-import { MonthTabSelector } from '~/components/ui/MonthTabSelector'
+import { ChipBar } from '~/components/ui/ChipBar'
 import { SectionHeader } from '~/components/ui/SectionHeader'
 import { InfoRow } from '~/components/ui/InfoRow'
 import { EmptyState } from '~/components/ui/EmptyState'
@@ -85,8 +85,8 @@ export default function MaintenanceCostsScreen() {
 
   return (
     <ScreenLayout title="Maintenance Costs" headerRight={exportBtn} backHref="/(admin)/reports">
-      <MonthTabSelector
-        months={MONTHS.map(getMonthLabel)}
+      <ChipBar
+        options={MONTHS.map(getMonthLabel)}
         selected={getMonthLabel(month)}
         onChange={(label) => {
           const found = MONTHS.find((m) => getMonthLabel(m) === label)

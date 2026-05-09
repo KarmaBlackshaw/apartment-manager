@@ -6,7 +6,7 @@ import { eq, and, lt, lte } from 'drizzle-orm'
 
 import { db } from '~/db'
 import { bills, tenants, contracts, units } from '~/db/schema'
-import { FilterChipBar } from '~/components/ui/FilterChipBar'
+import { ChipBar } from '~/components/ui/ChipBar'
 import { NotificationRow } from '~/components/notifications/NotificationRow'
 import { EmptyState } from '~/components/ui/EmptyState'
 import { ScreenView } from '~/components/ui/ScreenView'
@@ -197,7 +197,7 @@ export default function NotificationsScreen() {
         className="flex-1 bg-background"
       >
         <View className="pt-3 pb-4">
-          <FilterChipBar
+          <ChipBar
             options={FILTER_OPTIONS}
             selected={selected}
             onChange={setSelected}

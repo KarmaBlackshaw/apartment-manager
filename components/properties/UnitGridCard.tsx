@@ -6,8 +6,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import { colors } from '~/constants/theme'
-import { StatusChip } from '~/components/ui/StatusChip'
-import type { ChipVariant } from '~/components/ui/StatusChip'
+import { Chip } from '~/components/ui/Chip'
+import type { ChipVariant } from '~/components/ui/Chip'
 
 export type UnitStatus = 'paid' | 'overdue' | 'vacant' | 'partial'
 
@@ -69,7 +69,7 @@ export function UnitGridCard({ unitName, tenantName, status, onPress }: UnitGrid
         {tenantName ?? 'Vacant'}
       </Text>
       <View className="mt-[6px]">
-        <StatusChip variant={chipVariantMap[status]} label={chipLabelMap[status]} size="xs" />
+        <Chip variant={chipVariantMap[status]} label={chipLabelMap[status]} size="xs" />
       </View>
     </AnimatedPressable>
   )

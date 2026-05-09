@@ -3,10 +3,10 @@ import { View, Text, FlatList, Pressable, Share } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import dayjs from 'dayjs'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
-import { MonthTabSelector } from '~/components/ui/MonthTabSelector'
+import { ChipBar } from '~/components/ui/ChipBar'
 import { CollectionProgressBar } from '~/components/billing/CollectionProgressBar'
 import { ListRow } from '~/components/ui/ListRow'
-import { StatusChip } from '~/components/ui/StatusChip'
+import { Chip } from '~/components/ui/Chip'
 import { AmountText } from '~/components/ui/AmountText'
 import { EmptyState } from '~/components/ui/EmptyState'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
@@ -59,8 +59,8 @@ export default function MonthlyCollectionScreen() {
 
   return (
     <ScreenLayout title={title} headerRight={exportBtn} backHref="/(admin)/reports">
-      <MonthTabSelector
-        months={MONTHS.map(getMonthLabel)}
+      <ChipBar
+        options={MONTHS.map(getMonthLabel)}
         selected={getMonthLabel(month)}
         onChange={(label) => {
           const found = MONTHS.find((m) => getMonthLabel(m) === label)
@@ -102,7 +102,7 @@ export default function MonthlyCollectionScreen() {
               title={item.tenant_full_name}
               subtitle={`Unit ${item.unit_number ?? '—'} · ₱${(item.monthly_rate).toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}/mo`}
               trailingChip={
-                <StatusChip variant={statusVariant(item.month_status)} label={item.month_status.replace('_', ' ').toUpperCase()} />
+                <Chip variant={statusVariant(item.month_status)} label={item.month_status.replace('_', ' ').toUpperCase()} />
               }
               trailingAmount={
                 <AmountText

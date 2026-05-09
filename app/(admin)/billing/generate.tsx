@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, ScrollView, Text, Pressable, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import dayjs from 'dayjs'
-import { MonthTabSelector } from '~/components/ui/MonthTabSelector'
+import { ChipBar } from '~/components/ui/ChipBar'
 import { SegmentedControl } from '~/components/ui/SegmentedControl'
 import { SectionHeader } from '~/components/ui/SectionHeader'
 import { InfoRow } from '~/components/ui/InfoRow'
@@ -59,8 +59,8 @@ export default function GenerateBillsScreen() {
       >
         {/* Month selector */}
         <View className="mt-4">
-          <MonthTabSelector
-            months={monthEntries.map((m) => m.label)}
+          <ChipBar
+            options={monthEntries.map((m) => m.label)}
             selected={selectedLabel}
             onChange={setSelectedLabel}
           />

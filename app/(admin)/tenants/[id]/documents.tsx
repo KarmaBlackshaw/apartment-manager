@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker'
 import dayjs from 'dayjs'
 import { useTenant } from '~/hooks/useTenants'
 import { useDocuments } from '~/hooks/useDocuments'
-import { FilterChipBar } from '~/components/ui/FilterChipBar'
+import { ChipBar } from '~/components/ui/ChipBar'
 import { DocumentRow } from '~/components/documents/DocumentRow'
 import { AppText } from '~/components/ui/AppText'
 import { EmptyState } from '~/components/ui/EmptyState'
@@ -42,7 +42,7 @@ export default function DocumentsScreen() {
 
   return (
     <ScreenLayout title={tenant ? `${tenant.full_name.split(' ').pop()} — Docs` : 'Documents'} backHref={`/(admin)/tenants/${id}`}>
-      <FilterChipBar
+      <ChipBar
         options={[
           { label: `All (${documents.length})`, value: 'all' },
           { label: 'Contract', value: 'contract' },

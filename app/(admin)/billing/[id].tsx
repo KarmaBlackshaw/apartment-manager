@@ -7,10 +7,10 @@ import { Button } from '~/components/ui/Button'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { SectionHeader } from '~/components/ui/SectionHeader'
 import { InfoRow } from '~/components/ui/InfoRow'
-import { StatusChip } from '~/components/ui/StatusChip'
+import { Chip } from '~/components/ui/Chip'
 import { AvatarInitials } from '~/components/ui/AvatarInitials'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
-import type { ChipVariant } from '~/components/ui/StatusChip'
+import type { ChipVariant } from '~/components/ui/Chip'
 import { useBill } from '~/hooks/useBills'
 import { useTenant } from '~/hooks/useTenants'
 import { useUnit } from '~/hooks/useUnits'
@@ -22,7 +22,7 @@ import {
 } from '~/lib/billing'
 
 // ---------------------------------------------------------------------------
-// Bill status → StatusChip variant
+// Bill status → Chip variant
 // ---------------------------------------------------------------------------
 function billStatusChip(status: string): { variant: ChipVariant; label: string } {
   if (status === 'paid') return { variant: 'success', label: 'PAID' }
@@ -118,7 +118,7 @@ export default function BillDetailScreen() {
               {unit ? `Unit ${unit.unit_number}` : '—'} · Due {dueDisplay}
             </Text>
           </View>
-          <StatusChip variant={chip.variant} label={chip.label} size="sm" />
+          <Chip variant={chip.variant} label={chip.label} size="sm" />
         </View>
 
         {/* 2. Bill breakdown section */}

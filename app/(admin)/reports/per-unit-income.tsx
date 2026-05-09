@@ -3,7 +3,7 @@ import { View, Text, FlatList, Pressable, Share } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import dayjs from 'dayjs'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
-import { MonthTabSelector } from '~/components/ui/MonthTabSelector'
+import { ChipBar } from '~/components/ui/ChipBar'
 import { EmptyState } from '~/components/ui/EmptyState'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { UnitIncomeRow } from '~/components/reports/UnitIncomeRow'
@@ -49,8 +49,8 @@ export default function PerUnitIncomeScreen() {
 
   return (
     <ScreenLayout title="Per-Unit Income" headerRight={exportBtn} backHref="/(admin)/reports">
-      <MonthTabSelector
-        months={MONTHS.map(getMonthLabel)}
+      <ChipBar
+        options={MONTHS.map(getMonthLabel)}
         selected={getMonthLabel(month)}
         onChange={(label) => {
           const found = MONTHS.find((m) => getMonthLabel(m) === label)
