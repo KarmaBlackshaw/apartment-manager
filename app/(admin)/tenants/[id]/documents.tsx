@@ -8,6 +8,7 @@ import { useDocuments } from '~/hooks/useDocuments'
 import { FilterChipBar } from '~/components/ui/FilterChipBar'
 import { DocumentRow } from '~/components/documents/DocumentRow'
 import { AppText } from '~/components/ui/AppText'
+import { EmptyState } from '~/components/ui/EmptyState'
 import type { DocCategory } from '~/components/documents/DocumentRow'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
 import { colors } from '~/constants/theme'
@@ -74,9 +75,13 @@ export default function DocumentsScreen() {
           </Pressable>
         }
         ListEmptyComponent={
-          <View className="p-8 items-center">
-            <AppText color="muted">No documents yet</AppText>
-          </View>
+          <EmptyState
+            size="md"
+            title="No documents yet"
+            description="Tap + to attach a contract or ID."
+            actionLabel="Add document"
+            onAction={handleAddDocument}
+          />
         }
       />
     </ScreenLayout>

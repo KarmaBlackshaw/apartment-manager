@@ -6,7 +6,7 @@ import { useProperty, usePropertyStats } from '~/hooks/useProperties'
 import { useUnitsWithStatus } from '~/hooks/useUnits'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { AppText } from '~/components/ui/AppText'
-import { Button } from '~/components/ui/Button'
+import { EmptyState } from '~/components/ui/EmptyState'
 import { UnitGridCard } from '~/components/properties/UnitGridCard'
 import { SectionHeader } from '~/components/ui/SectionHeader'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
@@ -95,14 +95,12 @@ export default function PropertyDetailScreen() {
           </View>
         )}
         ListEmptyComponent={
-          <View className="items-center py-12">
-            <AppText className="text-text-muted text-sm">No units yet</AppText>
-            <Button
-              label="Add Unit"
-              className="mt-4"
-              onPress={() => router.push(`/(admin)/properties/${propertyId}/units/new` as never)}
-            />
-          </View>
+          <EmptyState
+            size="md"
+            title="No units yet"
+            actionLabel="Add Unit"
+            onAction={() => router.push(`/(admin)/properties/${propertyId}/units/new` as never)}
+          />
         }
       />
     </ScreenLayout>

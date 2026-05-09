@@ -7,6 +7,7 @@ import { Swipeable } from 'react-native-gesture-handler'
 import { useRouter } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { ScreenView } from '~/components/ui/ScreenView'
+import { EmptyState } from '~/components/ui/EmptyState'
 import { usePaymentsOverview } from '~/hooks/usePaymentsOverview'
 import { useTabBarScrollHandler } from '~/hooks/useTabBarScrollHandler'
 import type { TenantMonthEntry, TenantMonthStatus } from '~/lib/api/paymentsOverview'
@@ -244,7 +245,7 @@ export default function PaymentsOverviewScreen() {
       {isLoading ? (
         <ActivityIndicator color="#3b82f6" className="mt-8" />
       ) : filtered.length === 0 ? (
-        <Text className="text-sm text-center mt-12 text-[#555555]">No tenants match this filter</Text>
+        <EmptyState size="md" title="No matches" description="No tenants match this filter." />
       ) : (
         <ScrollView {...tabBarScroll} className="flex-1 mt-2">
           {filtered.map((entry) => (

@@ -107,7 +107,7 @@ export default function OccupancyScreen() {
 
           <SectionHeader title="Vacant Units" count={report.vacantList.length} />
           {report.vacantList.length === 0 ? (
-            <EmptyState title="No vacancies" description="All units are currently occupied." />
+            <EmptyState size="lg" title="No vacancies" description="All units are currently occupied." />
           ) : (
             <FlatList
               data={report.vacantList}

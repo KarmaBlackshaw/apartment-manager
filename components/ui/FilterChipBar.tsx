@@ -36,10 +36,10 @@ function FilterChip({ option, isSelected, onPress }: ChipProps) {
   return (
     <AnimatedPressable
       className={[
-        'px-[14px] py-2 rounded-full min-h-[44px] justify-center',
+        'px-4 py-1 rounded-full h-[30px] justify-center',
         isSelected
           ? 'bg-primary'
-          : 'bg-surface border border-border',
+          : 'bg-surface ',
       ].join(' ')}
       onPressIn={() => {
         scale.value = withTiming(0.97, { duration: 100 })
@@ -57,7 +57,7 @@ function FilterChip({ option, isSelected, onPress }: ChipProps) {
     >
       <Text
         className={[
-          'text-[13px] font-medium',
+          'text-[11px] font-medium',
           isSelected ? 'text-white' : 'text-text-secondary',
         ].join(' ')}
       >
@@ -75,7 +75,7 @@ export function FilterChipBar({ options, selected, onChange }: FilterChipBarProp
       contentContainerStyle={{
         flexDirection: 'row',
         paddingHorizontal: 16,
-        paddingVertical: 8,
+        paddingVertical: 5,
         gap: 8,
         alignItems: 'center',
       }}

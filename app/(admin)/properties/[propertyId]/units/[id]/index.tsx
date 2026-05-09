@@ -15,6 +15,7 @@ import { AmountText } from '~/components/ui/AmountText'
 import { InfoRow } from '~/components/ui/InfoRow'
 import { MaintenanceRow } from '~/components/maintenance/MaintenanceRow'
 import { DocumentRow } from '~/components/documents/DocumentRow'
+import { EmptyState } from '~/components/ui/EmptyState'
 import { getBalanceBreakdown } from '~/lib/balance'
 import { formatPHP } from '~/lib/format'
 import { formatDate } from '~/lib/date'
@@ -186,9 +187,7 @@ export default function UnitDetailScreen() {
               />
             ))
           ) : (
-            <AppText variant="caption" color="muted" className="px-4 py-2">
-              No documents
-            </AppText>
+            <EmptyState size="sm" title="No documents" />
           )}
         </View>
       </ScrollView>

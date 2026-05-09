@@ -84,7 +84,7 @@ export default function PerUnitIncomeScreen() {
             </View>
           }
           ListEmptyComponent={
-            <EmptyState title="No units" description="No units found for this period." />
+            <EmptyState size="lg" title="No units" description="No units found for this period." />
           }
           renderItem={({ item }) => <UnitIncomeRow entry={item} />}
           contentContainerStyle={{ paddingBottom: 128 }}

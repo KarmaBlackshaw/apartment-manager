@@ -59,6 +59,7 @@ export default function PropertiesScreen() {
         }}
         ListEmptyComponent={
           <EmptyState
+            size="lg"
             title="No properties yet"
             description="Add your first property to get started"
             actionLabel="Add Property"

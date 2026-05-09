@@ -172,6 +172,7 @@ export default function BillingScreen() {
         ListEmptyComponent={
           !isLoading ? (
             <EmptyState
+              size="lg"
               title="No entries"
               description="No billing records for this month"
             />

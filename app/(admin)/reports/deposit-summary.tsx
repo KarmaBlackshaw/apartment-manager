@@ -52,7 +52,7 @@ export default function DepositSummaryScreen() {
             </View>
           }
           ListEmptyComponent={
-            <EmptyState title="No deposits" description="No deposit records found." />
+            <EmptyState size="lg" title="No deposits" description="No deposit records found." />
           }
           renderItem={({ item }) => (
             <ListRow

@@ -15,6 +15,7 @@ import { ListRow } from '~/components/ui/ListRow'
 import { AppText } from '~/components/ui/AppText'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { Button } from '~/components/ui/Button'
+import { EmptyState } from '~/components/ui/EmptyState'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
 
 export default function TenantDetailScreen() {
@@ -115,9 +116,7 @@ export default function TenantDetailScreen() {
           />
           <View className="bg-surface rounded-md mx-4 mt-3 overflow-hidden">
             {recentBills.length === 0 ? (
-              <AppText color="muted" style={{ padding: 16 }}>
-                No payments yet
-              </AppText>
+              <EmptyState size="sm" title="No payments yet" />
             ) : (
               recentBills.map((bill, idx) => (
                 <ListRow

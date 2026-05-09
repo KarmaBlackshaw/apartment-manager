@@ -9,6 +9,7 @@ import { FilterChipBar } from '~/components/ui/FilterChipBar'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { DocumentRow } from '~/components/documents/DocumentRow'
 import type { DocCategory } from '~/components/documents/DocumentRow'
+import { EmptyState } from '~/components/ui/EmptyState'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
 import { colors } from '~/constants/theme'
 
@@ -97,11 +98,11 @@ export default function UnitDocumentsScreen() {
           />
         )}
         ListEmptyComponent={
-          <View className="items-center py-12 px-4">
-            <Text className="text-sm text-center" style={{ color: colors.textMuted }}>
-              No {filter === 'all' ? '' : filter} documents yet
-            </Text>
-          </View>
+          <EmptyState
+            size="md"
+            title={`No ${filter === 'all' ? '' : filter} documents yet`.replace(/\s+/g, ' ').trim()}
+            description="Tap + to attach a document."
+          />
         }
         ListFooterComponent={
           <TouchableOpacity

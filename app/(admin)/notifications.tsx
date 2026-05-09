@@ -218,6 +218,7 @@ export default function NotificationsScreen() {
         {filtered.length === 0 && (
           <View className="mt-10">
             <EmptyState
+              size="lg"
               title="No notifications"
               description={
                 selected === 'All'
