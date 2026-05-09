@@ -47,7 +47,7 @@ export default function ReceiptScreen() {
       title="Receipt"
       backHref="/(admin)/billing"
       headerRight={
-        <Pressable onPress={router.back} hitSlop={8}>
+        <Pressable onPress={() => router.replace('/(admin)/billing')} hitSlop={8}>
           <Text className="text-primary text-base font-medium">Done</Text>
         </Pressable>
       }
@@ -91,7 +91,7 @@ export default function ReceiptScreen() {
         </Pressable>
         <Pressable
           className="flex-1 py-[14px] rounded-md items-center justify-center bg-elevated"
-          onPress={router.back}
+          onPress={() => router.replace('/(admin)/billing')}
         >
           <Text className="text-text-primary font-semibold text-[15px]">Done</Text>
         </Pressable>

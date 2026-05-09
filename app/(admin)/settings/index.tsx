@@ -1,23 +1,24 @@
 import React from 'react'
-import { View, ScrollView, Switch } from 'react-native'
+import { View, ScrollView } from 'react-native'
+import { useRouter } from 'expo-router'
 import { ScreenView } from '~/components/ui/ScreenView'
 import { AppText } from '~/components/ui/AppText'
 import { Avatar } from '~/components/ui/Avatar'
 import { SettingsCard } from '~/components/cards/SettingsCard'
-import { colors } from '~/constants/theme'
-import { useSettings, useUpdateSetting } from '~/hooks/useSettings'
+import { useSettings } from '~/hooks/useSettings'
+import { formatPHP } from '~/lib/format'
 
 export default function SettingsScreen() {
+  const router = useRouter()
   const { data: settings } = useSettings()
-  const { mutate: updateSetting } = useUpdateSetting()
 
   const ownerName     = settings?.owner_name      ?? ''
   const ownerPhone    = settings?.owner_phone     ?? ''
   const apartmentName = settings?.apartment_name  ?? ''
-
-  const rentReminders  = (settings?.notif_rent_reminders  ?? '1') === '1'
-  const contractExpiry = (settings?.notif_contract_expiry ?? '1') === '1'
-  const vacancyAlerts  = (settings?.notif_vacancy_alerts  ?? '1') === '1'
+  const address       = settings?.address         ?? ''
+  const billingDay    = settings?.billing_day
+  const lateFeeAmount = settings?.late_fee_amount
+  const lateFeeGrace  = settings?.late_fee_grace_days
 
   return (
     <ScreenView>
@@ -45,61 +46,35 @@ export default function SettingsScreen() {
         {/* Apartment */}
         <SettingsSectionLabel>Apartment</SettingsSectionLabel>
         <View className="gap-1.5">
-          <SettingsCard label="Apartment Name" value={apartmentName || 'Not set'} chevron onPress={() => {}} />
-          {/* FIXME(v2): route to address edit screen */}
-          <SettingsCard label="Address" value="Not set" chevron onPress={() => {}} />
+          <SettingsCard
+            label="Apartment Name"
+            value={apartmentName || 'Not set'}
+            chevron
+            onPress={() => router.push('/(admin)/settings/apartment-name')}
+          />
+          <SettingsCard
+            label="Address"
+            value={address || 'Not set'}
+            chevron
+            onPress={() => router.push('/(admin)/settings/address')}
+          />
         </View>
 
         {/* Billing defaults */}
         <SettingsSectionLabel>Billing defaults</SettingsSectionLabel>
         <View className="gap-1.5">
-          {/* FIXME(v2): route to billing day picker */}
-          <SettingsCard label="Billing day" value="1st of month" chevron onPress={() => {}} />
-          {/* FIXME(v2): route to late fee screen */}
-          <SettingsCard label="Late fee" value="₱200 · 5 days" chevron onPress={() => {}} />
-        </View>
-
-        {/* Notifications */}
-        <SettingsSectionLabel>Notifications</SettingsSectionLabel>
-        <View className="gap-1.5">
           <SettingsCard
-            label="Rent reminders"
-            right={
-              <Switch
-                value={rentReminders}
-                onValueChange={(v) => updateSetting({ key: 'notif_rent_reminders', value: v ? '1' : '0' })}
-                trackColor={{ false: colors.border, true: colors.primary }}
-                thumbColor="white"
-                ios_backgroundColor={colors.border}
-              />
-            }
+            label="Billing day"
+            value={formatBillingDay(billingDay)}
+            chevron
+            onPress={() => router.push('/(admin)/settings/billing-day')}
           />
           <SettingsCard
-            label="Contract expiry"
-            right={
-              <Switch
-                value={contractExpiry}
-                onValueChange={(v) => updateSetting({ key: 'notif_contract_expiry', value: v ? '1' : '0' })}
-                trackColor={{ false: colors.border, true: colors.primary }}
-                thumbColor="white"
-                ios_backgroundColor={colors.border}
-              />
-            }
+            label="Late fee"
+            value={formatLateFee(lateFeeAmount, lateFeeGrace)}
+            chevron
+            onPress={() => router.push('/(admin)/settings/late-fee')}
           />
-          <SettingsCard
-            label="Vacancy alerts"
-            right={
-              <Switch
-                value={vacancyAlerts}
-                onValueChange={(v) => updateSetting({ key: 'notif_vacancy_alerts', value: v ? '1' : '0' })}
-                trackColor={{ false: colors.border, true: colors.primary }}
-                thumbColor="white"
-                ios_backgroundColor={colors.border}
-              />
-            }
-          />
-          {/* FIXME(v2): route to quiet hours screen */}
-          <SettingsCard label="Quiet hours" value="10pm–7am" chevron onPress={() => {}} />
         </View>
 
         {/* Security */}
@@ -135,4 +110,24 @@ function SettingsSectionLabel({ children }: { children: React.ReactNode }) {
       {children}
     </AppText>
   )
+}
+
+function ordinal(n: number): string {
+  const s = ['th', 'st', 'nd', 'rd']
+  const v = n % 100
+  return n + (s[(v - 20) % 10] || s[v] || s[0])
+}
+
+function formatBillingDay(day: number | null | undefined): string {
+  if (day == null) return 'Not set'
+  return `${ordinal(day)} of month`
+}
+
+function formatLateFee(
+  amount: number | null | undefined,
+  graceDays: number | null | undefined,
+): string {
+  if (amount == null || amount === 0) return 'Not set'
+  const grace = graceDays != null && graceDays > 0 ? ` · ${graceDays} days` : ''
+  return `${formatPHP(amount)}${grace}`
 }

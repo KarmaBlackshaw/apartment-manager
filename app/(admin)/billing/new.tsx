@@ -55,7 +55,7 @@ export default function RecordPaymentScreen() {
     if (withReceipt) {
       router.replace(`/(admin)/billing/receipt?paymentId=${result.id}`)
     } else {
-      router.back()
+      router.replace('/(admin)/billing')
     }
   }
 

@@ -31,7 +31,7 @@ export default function NewUnitScreen() {
         billing_day: billingDay ? parseInt(billingDay) : 1,
         notes: notes.trim() || null,
       })
-      router.back()
+      router.replace(`/(admin)/properties/${propertyId}`)
     } catch {
       Alert.alert('Error', 'Could not create unit. Please try again.')
     }

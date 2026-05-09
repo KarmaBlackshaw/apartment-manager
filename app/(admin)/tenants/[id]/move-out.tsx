@@ -61,7 +61,7 @@ export default function MoveOutScreen() {
           onPress: async () => {
             try {
               await deactivate({ id, unitId: tenant.unit_id! })
-              router.replace('/tenants')
+              router.replace('/(admin)/tenants')
             } catch {
               Alert.alert('Error', 'Could not process move-out. Please try again.')
             }
@@ -76,7 +76,7 @@ export default function MoveOutScreen() {
       onPress={() => {
         Alert.alert('Discard changes?', 'The move-out will not be processed.', [
           { text: 'Keep editing', style: 'cancel' },
-          { text: 'Discard', style: 'destructive', onPress: () => router.back() },
+          { text: 'Discard', style: 'destructive', onPress: () => router.push(`/(admin)/tenants/${id}`) },
         ])
       }}
       hitSlop={8}
@@ -197,7 +197,7 @@ export default function MoveOutScreen() {
             className="mt-4"
           />
           <Pressable
-            onPress={() => router.back()}
+            onPress={() => router.push(`/(admin)/tenants/${id}`)}
             className="items-center mt-3"
             accessibilityRole="button"
           >

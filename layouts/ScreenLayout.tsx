@@ -14,6 +14,13 @@ interface ScreenLayoutProps {
 
 export function ScreenLayout({ title, headerLeft = 'back', backHref, headerRight, children }: ScreenLayoutProps) {
   const router = useRouter()
+  /**
+   * Fallback only — screen-level navigation must use explicit hrefs (router.replace/push).
+   * When `backHref` is omitted, ScreenHeader falls through to navigation.goBack() as
+   * defense-in-depth. router.back() is forbidden in screens: brittle on deep-link entry,
+   * multi-source push, and hot-reload stack restoration.
+   * See docs/specs/24_settings_functionality_spec.md section 2.4.
+   */
   const onLeftPress = backHref ? () => router.navigate(backHref as never) : undefined
   return (
     <ScreenView edges={['bottom']}>

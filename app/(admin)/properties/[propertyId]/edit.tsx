@@ -42,7 +42,7 @@ export default function EditPropertyScreen() {
     if (Object.keys(errs).length) { setErrors(errs); return }
     try {
       await update({ id: propertyId, input: { name: name.trim(), address: address.trim(), description: description.trim() || null } })
-      router.back()
+      router.replace(`/(admin)/properties/${propertyId}`)
     } catch {
       Alert.alert('Error', 'Could not save changes. Please try again.')
     }
@@ -54,8 +54,7 @@ export default function EditPropertyScreen() {
       { text: 'Delete', style: 'destructive', onPress: async () => {
         try {
           await remove(propertyId)
-          router.back()
-          router.back()
+          router.replace('/(admin)/properties')
         } catch {
           Alert.alert('Error', 'Could not delete property. Please try again.')
         }

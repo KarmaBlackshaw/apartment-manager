@@ -48,7 +48,7 @@ export default function PaymentDetailScreen() {
           onPress: async () => {
             try {
               await voidMutate(payment!.id)
-              router.back()
+              router.replace('/(admin)/billing')
             } catch {
               Alert.alert('Error', 'Could not void payment. Please try again.')
             }

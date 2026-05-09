@@ -27,7 +27,7 @@ export default function PropertyDetailScreen() {
       <AppText className="text-danger text-center mb-4">
         {isError ? `Error: ${String(error)}` : 'Property not found.'}
       </AppText>
-      <Pressable onPress={() => router.back()} className="px-3 py-2">
+      <Pressable onPress={() => router.replace('/(admin)/properties')} className="px-3 py-2">
         <AppText className="text-primary">← Go back</AppText>
       </Pressable>
     </View>

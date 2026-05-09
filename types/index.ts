@@ -122,9 +122,10 @@ export interface AppSettings {
   apartment_name: string
   owner_name: string
   owner_phone: string
-  notif_rent_reminders: string
-  notif_contract_expiry: string
-  notif_vacancy_alerts: string
+  address: string
+  billing_day: number
+  late_fee_amount: number
+  late_fee_grace_days: number
 }
 
 // Enriched types used in UI list views

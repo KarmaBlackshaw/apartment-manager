@@ -74,7 +74,7 @@ export default function UtilityReadingScreen() {
       current_reading: parsedCurrent,
       rate: parsedRate,
     })
-    router.back()
+    router.replace('/(admin)/billing')
   }
 
   if (unitLoading || readingLoading) return <LoadingSpinner />

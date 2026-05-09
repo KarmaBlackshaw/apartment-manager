@@ -19,6 +19,11 @@ export function ScreenHeader({ title, left, right, onLeftPress }: ScreenHeaderPr
     if (onLeftPress) {
       onLeftPress()
     } else {
+      /**
+       * Fallback only — screen-level navigation must use explicit hrefs (router.replace/push).
+       * router.back() is forbidden in screens: brittle on deep-link entry, multi-source push,
+       * and hot-reload stack restoration. See docs/specs/24_settings_functionality_spec.md section 2.4.
+       */
       navigation.goBack()
     }
   }

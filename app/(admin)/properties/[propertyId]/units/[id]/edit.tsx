@@ -52,7 +52,7 @@ export default function EditUnitScreen() {
           notes: data.notes.trim() || null,
         },
       })
-      router.back()
+      router.replace(`/(admin)/properties/${propertyId}/units/${id}`)
     } catch {
       Alert.alert('Error', 'Could not update unit. Please try again.')
     }

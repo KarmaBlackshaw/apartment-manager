@@ -42,7 +42,7 @@ export default function GenerateBillsScreen() {
       Alert.alert(
         'Done',
         `Generated ${count} bill${count !== 1 ? 's' : ''} for ${dayjs(selectedMonth).format('MMMM YYYY')}`,
-        [{ text: 'OK', onPress: () => router.back() }],
+        [{ text: 'OK', onPress: () => router.replace('/(admin)/billing') }],
       )
     } catch {
       Alert.alert('Error', 'Could not generate bills. Please try again.')
@@ -130,7 +130,7 @@ export default function GenerateBillsScreen() {
             className="mt-4"
           />
           <Pressable
-            onPress={router.back}
+            onPress={() => router.push('/(admin)/billing')}
             className="items-center mt-3"
             accessibilityRole="button"
           >

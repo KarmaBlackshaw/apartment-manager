@@ -24,7 +24,7 @@ export default function NewPropertyScreen() {
 
     try {
       await mutateAsync({ name: name.trim(), address: address.trim(), description: description.trim() || null })
-      router.back()
+      router.replace('/(admin)/properties')
     } catch (e) {
       console.error('[createProperty]', e)
       Alert.alert('Error', 'Could not save property. Please try again.')
