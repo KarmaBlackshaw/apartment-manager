@@ -30,7 +30,7 @@ Forbidden: mt-5 / mt-6 / mt-7 (off the 4/8 dp grid).
 Allowed exceptions: mt-4 / mt-8 for deliberate heavier breaks
 (e.g. Danger zone separators).
 
-Run `npx tsc --noEmit`. Verify §5 acceptance. Smoke test — visuals
+Run `npx tsc --noEmit`. Verify section 5 acceptance. Smoke test — visuals
 tighter and more consistent. ~60 min. Do NOT commit.
 
 After verification passes, mark this spec done:
@@ -59,7 +59,7 @@ Don't use `mt-5` / `mt-6` / `mt-7` — they fall off the 4/8 dp grid.
 
 Manual review of each screen's scroll content. Look for `mt-2`, `mt-4`, `mt-5` between top-level sections (between BalanceCard and Tenant Info, between Maintenance and Documents, etc.).
 
-Spec 03 (Unit Detail) §2 already established this for one screen. Apply project-wide.
+Spec 03 (Unit Detail) section 2 already established this for one screen. Apply project-wide.
 
 ```bash
 grep -rEn "className=\"[^\"]*mt-[2-9]" app/ components/

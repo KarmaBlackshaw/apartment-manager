@@ -12,7 +12,7 @@ Audit: **7 callers**. 4 are legitimate primitives. **3 are screen-level violatio
 - `app/(admin)/billing/receipt.tsx`
 - `components/tenants/TenantQuickSearchModal.tsx` (boundary case — modal-as-component)
 
-This spec migrates each so the rule (per spec 07 §4.1) is project-wide enforceable by grep.
+This spec migrates each so the rule (per spec 07 section 4.1) is project-wide enforceable by grep.
 
 ## Agent prompt
 
@@ -29,19 +29,19 @@ Audit:
 Expected callers AFTER spec 07:
   ✅ components/ui/FAB.tsx                            (primitive — keep)
   ✅ components/navigation/FloatingTabBar.tsx          (primitive — keep)
-  🟡 components/tenants/TenantQuickSearchModal.tsx    (boundary — see §3)
-  ❌ app/onboarding.tsx                                → migrate (§2.1)
-  ❌ app/setup-pin.tsx                                 → migrate (§2.2)
-  ❌ app/(admin)/settings/index.tsx                    → migrate (§2.3)
-  ❌ app/(admin)/billing/receipt.tsx                   → migrate (§2.4)
+  🟡 components/tenants/TenantQuickSearchModal.tsx    (boundary — see section 3)
+  ❌ app/onboarding.tsx                                → migrate (section 2.1)
+  ❌ app/setup-pin.tsx                                 → migrate (section 2.2)
+  ❌ app/(admin)/settings/index.tsx                    → migrate (section 2.3)
+  ❌ app/(admin)/billing/receipt.tsx                   → migrate (section 2.4)
 
 Migrate each ❌ screen by wrapping in <ScreenView> or <ScreenLayout>;
 drop manual paddingTop/paddingBottom: insets.* math.
 
-For TenantQuickSearchModal (§2.5): keep useSafeAreaInsets but add a
+For TenantQuickSearchModal (section 2.5): keep useSafeAreaInsets but add a
 header comment justifying the exception (modal-as-component).
 
-Run `npx tsc --noEmit`. Verify §5 acceptance. Smoke test on Android
+Run `npx tsc --noEmit`. Verify section 5 acceptance. Smoke test on Android
 specifically (the platform where manual insets break). ~30 min.
 Do NOT commit.
 
@@ -63,7 +63,7 @@ Returns 7 files:
 |---|---|
 | `components/ui/FAB.tsx` | ✅ Primitive — keep |
 | `components/navigation/FloatingTabBar.tsx` | ✅ Primitive — keep |
-| `components/tenants/TenantQuickSearchModal.tsx` | 🟡 Boundary — modal-as-component; reasonable to keep but verify (see §3) |
+| `components/tenants/TenantQuickSearchModal.tsx` | 🟡 Boundary — modal-as-component; reasonable to keep but verify (see section 3) |
 | `app/onboarding.tsx` | ❌ Screen — migrate |
 | `app/setup-pin.tsx` | ❌ Screen — migrate |
 | `app/(admin)/settings/index.tsx` | ❌ Screen — migrate |
@@ -131,11 +131,11 @@ Engineer's call. If kept, document in the file with a comment why this is an exc
 | # | Task | Complexity |
 |---|---|---|
 | 1 | Verify spec 07 is applied (`ScreenView` does NOT call `useSafeAreaInsets`) | XS |
-| 2 | Migrate `app/onboarding.tsx` per §2.1 | S |
-| 3 | Migrate `app/setup-pin.tsx` per §2.2 | S |
-| 4 | Migrate `app/(admin)/settings/index.tsx` per §2.3 | S |
-| 5 | Migrate `app/(admin)/billing/receipt.tsx` per §2.4 | S |
-| 6 | Decide on `TenantQuickSearchModal` per §2.5; add justifying comment if kept | XS |
+| 2 | Migrate `app/onboarding.tsx` per section 2.1 | S |
+| 3 | Migrate `app/setup-pin.tsx` per section 2.2 | S |
+| 4 | Migrate `app/(admin)/settings/index.tsx` per section 2.3 | S |
+| 5 | Migrate `app/(admin)/billing/receipt.tsx` per section 2.4 | S |
+| 6 | Decide on `TenantQuickSearchModal` per section 2.5; add justifying comment if kept | XS |
 | 7 | Run final audit grep — only primitives remain | XS |
 | 8 | `tsc --noEmit` clean | XS |
 | 9 | Smoke test: every migrated screen on Android (the platform where manual insets break) — top + bottom areas render correctly | M |

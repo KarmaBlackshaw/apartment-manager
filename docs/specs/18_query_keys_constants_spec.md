@@ -16,14 +16,14 @@ Trivial verification spec. No migration expected.
 1. Confirm every hooks/*.ts data hook exports a *_KEY constant:
      grep -rln "_KEY" hooks/
 
-2. Spot-check each hook follows the pattern (§2.1):
+2. Spot-check each hook follows the pattern (section 2.1):
      grep -rEn "queryKey:\s*\[" hooks/ | grep -v "_KEY"
    Any literal-array queryKey hits → fix to use the constant.
 
 3. Verify CLAUDE.md "TanStack Query keys" rule text exists. Add
-   precedent example per §2.3 if missing.
+   precedent example per section 2.3 if missing.
 
-Verify §4 acceptance. ~10 min. Do NOT commit.
+Verify section 4 acceptance. ~10 min. Do NOT commit.
 
 After verification passes, mark this spec done:
   git mv docs/specs/18_query_keys_constants_spec.md docs/specs/18_DONE_query_keys_constants_spec.md
@@ -73,9 +73,9 @@ In CLAUDE.md, append:
 
 | # | Task | Complexity |
 |---|---|---|
-| 1 | Spot-check each hook follows the pattern (§2.1) | S |
+| 1 | Spot-check each hook follows the pattern (section 2.1) | S |
 | 2 | If any inline-array query keys found, refactor to use the constant | XS–S |
-| 3 | Verify CLAUDE.md text exists per §2.2; add precedent example per §2.3 | XS |
+| 3 | Verify CLAUDE.md text exists per section 2.2; add precedent example per section 2.3 | XS |
 
 **Estimate:** ~10 minutes.
 

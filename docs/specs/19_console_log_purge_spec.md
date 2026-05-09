@@ -25,7 +25,7 @@ Trivial. No migration expected.
 
 3. (Optional) add the audit command to a PR checklist file.
 
-Verify §6 acceptance. ~5 min. Do NOT commit.
+Verify section 6 acceptance. ~5 min. Do NOT commit.
 
 After verification passes, mark this spec done:
   git mv docs/specs/19_console_log_purge_spec.md docs/specs/19_DONE_console_log_purge_spec.md
@@ -76,7 +76,7 @@ When ESLint config is added, enable `no-console` with `{ allow: ['error', 'warn'
 | # | Task | Complexity |
 |---|---|---|
 | 1 | Run the audit grep — confirm empty | XS |
-| 2 | Verify `console.error` callers per §2 | XS |
+| 2 | Verify `console.error` callers per section 2 | XS |
 | 3 | (Optional) add the audit to a PR checklist file | XS |
 
 **Estimate:** ~5 minutes.

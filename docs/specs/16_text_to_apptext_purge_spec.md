@@ -11,14 +11,14 @@ This spec migrates every `<Text>` in screens to `<AppText>`. Primitives (the `ui
 ```
 Implement docs/specs/16_text_to_apptext_purge_spec.md exactly.
 
-Scope: 20 screen files (§2). Primitives in components/ui/* keep <Text>
+Scope: 20 screen files (section 2). Primitives in components/ui/* keep <Text>
 — they're the typography source. Do NOT touch them.
 
 For each screen file:
   1. Drop `import { Text }` from 'react-native' (keep View, etc.)
   2. Add `import { AppText } from '~/components/ui/AppText'`
   3. Replace each <Text style={{...}}>...</Text> with <AppText
-     variant="..." color="...">...</AppText> per §3.2 / §3.3 mapping
+     variant="..." color="...">...</AppText> per section 3.2 / section 3.3 mapping
   4. Drop inline style={{ fontSize, color, fontWeight }}; let
      variant/color do the work
   5. Any raw hex that surfaces → fix it inline (pairs with spec 15)
@@ -26,7 +26,7 @@ For each screen file:
 If a needed AppText variant doesn't exist, add it to AppText before
 migrating screens — don't fork the typography system.
 
-Run `npx tsc --noEmit`. Verify §5 acceptance:
+Run `npx tsc --noEmit`. Verify section 5 acceptance:
   grep -rln "import.*\bText\b.*from 'react-native'" app/
   → must return empty.
 
@@ -117,7 +117,7 @@ Do NOT migrate `<Text>` inside `components/ui/AppText.tsx` (it's the source) or 
 
 | # | Task | Complexity |
 |---|---|---|
-| 1 | Audit each of the 20 files; classify `<Text>` usages by variant/color (§3.2, §3.3) | M |
+| 1 | Audit each of the 20 files; classify `<Text>` usages by variant/color (section 3.2, section 3.3) | M |
 | 2 | Replace `<Text>` → `<AppText>`; remove `import { Text }` from `react-native` line | M |
 | 3 | Drop `style={{ fontSize, color, fontWeight }}` props in favor of `variant` / `color` | M |
 | 4 | Pair with spec 15 — any raw hex that surfaces during migration goes to tokens | S |
@@ -129,7 +129,7 @@ Do NOT migrate `<Text>` inside `components/ui/AppText.tsx` (it's the source) or 
 ## 5. Acceptance
 
 - [ ] `grep -rln "import.*\\bText\\b.*from 'react-native'" app/` returns empty.
-- [ ] `grep -rln "import.*\\bText\\b.*from 'react-native'" components/` returns only the legitimate primitives listed in §2.
+- [ ] `grep -rln "import.*\\bText\\b.*from 'react-native'" components/` returns only the legitimate primitives listed in section 2.
 - [ ] No `<Text>` JSX in screen files (manual verification or a stricter grep).
 - [ ] Typography visually consistent across migrated screens.
 - [ ] `tsc --noEmit` clean.

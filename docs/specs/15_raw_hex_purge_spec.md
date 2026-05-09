@@ -15,32 +15,32 @@ Read first:
 1. docs/specs/15_raw_hex_purge_spec.md (source of truth)
 2. CLAUDE.md "Color tokens — no raw hex outside tailwind.config.js"
 
-Run in 3 phases per §4:
+Run in 3 phases per section 4:
 
-Phase A — Token-mapped replacements (§4.1):
-  Add subtle/tint tokens to constants/theme.ts first (§3:
+Phase A — Token-mapped replacements (section 4.1):
+  Add subtle/tint tokens to constants/theme.ts first (section 3:
   successSubtle, dangerSubtle, warningSubtle, infoSubtle,
   accentSubtle, tealSubtle). Then run the regex mapping table
-  (§4.1) project-wide.
+  (section 4.1) project-wide.
 
-Phase B — NativeWind arbitrary values (§4.2):
+Phase B — NativeWind arbitrary values (section 4.2):
   Replace `text-[#xxx]` and `bg-[#xxx]` with named classes;
   extend tailwind.config.js if needed.
 
-Phase C — Triage leftovers (§4.3):
+Phase C — Triage leftovers (section 4.3):
   Anything not mapping cleanly: add to tailwind.config.js or
   one-off.
 
 EXEMPT directories (raw hex allowed):
   - tailwind.config.js (it IS the tokens)
-  - components/illustrations/** (per spec 10 §6)
+  - components/illustrations/** (per spec 10 section 6)
 
 Run audit between phases:
   grep -rEn "#[0-9a-fA-F]{6}|rgba\(" app/ components/ layouts/ \
     | grep -v "tailwind.config\|illustrations"
 
 Final result must be 0 hits. Run `npx tsc --noEmit` clean. Verify
-§6 acceptance. Smoke test every screen — visuals identical. ~90-120
+section 6 acceptance. Smoke test every screen — visuals identical. ~90-120
 min. Do NOT commit.
 
 After verification passes, mark this spec done:
@@ -131,10 +131,10 @@ Anything not mapping cleanly: triage one-by-one. If a hex doesn't match an exist
 
 | # | Task | Complexity |
 |---|---|---|
-| 1 | Add subtle/tint tokens to `constants/theme.ts` (§3) | S |
-| 2 | Build the regex mapping table (§4.1) and run replacements | M |
-| 3 | Replace NativeWind arbitrary values (§4.2) | M |
-| 4 | Triage leftovers; add tokens or fix one-off (§4.3) | M |
+| 1 | Add subtle/tint tokens to `constants/theme.ts` (section 3) | S |
+| 2 | Build the regex mapping table (section 4.1) and run replacements | M |
+| 3 | Replace NativeWind arbitrary values (section 4.2) | M |
+| 4 | Triage leftovers; add tokens or fix one-off (section 4.3) | M |
 | 5 | Run audit grep — must return only `tailwind.config.js` and `components/illustrations/` hits | XS |
 | 6 | `npx tsc --noEmit` clean | XS |
 | 7 | Smoke test: every screen — visuals identical, no missing colors | M |
@@ -143,7 +143,7 @@ Anything not mapping cleanly: triage one-by-one. If a hex doesn't match an exist
 
 ## 6. Acceptance
 
-- [ ] Audit grep (§1) returns zero hits in `app/`, `components/` (except `illustrations/`), `layouts/`.
+- [ ] Audit grep (section 1) returns zero hits in `app/`, `components/` (except `illustrations/`), `layouts/`.
 - [ ] `constants/theme.ts` has the new subtle tokens.
 - [ ] No visual regressions — colors preserved.
 - [ ] `tsc --noEmit` clean.
@@ -152,7 +152,7 @@ Anything not mapping cleanly: triage one-by-one. If a hex doesn't match an exist
 
 - Adding a fully alpha-aware design token system — current hardcoded 12% is sufficient.
 - Migrating Tailwind config color names — keep current `bg-primary` etc. naming.
-- Touching `components/illustrations/**` — exempt per spec 10 §6.
+- Touching `components/illustrations/**` — exempt per spec 10 section 6.
 - Reviewing `tailwind.config.js`'s own hex values — those ARE the tokens.
 
 ## 8. Prevention

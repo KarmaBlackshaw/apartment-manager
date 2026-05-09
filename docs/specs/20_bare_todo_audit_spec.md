@@ -20,7 +20,7 @@ One bare TODO in the codebase:
 Apply Option B (recommended): change to `// FIXME(v2): implement
 waive late fee mutation`. Don't build the feature in this spec.
 
-Verify §5 acceptance:
+Verify section 5 acceptance:
   grep -rEn "^\s*//\s*TODO[^\(]" app/ components/ lib/ hooks/ types/
   → must return empty.
 
