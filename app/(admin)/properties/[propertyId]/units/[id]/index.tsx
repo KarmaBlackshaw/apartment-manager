@@ -81,7 +81,6 @@ export default function UnitDetailScreen() {
           >
             <Ionicons name="create-outline" size={24} color="#fff" />
           </Pressable>
-          <StatusChip variant={occupancyChip.variant} label={occupancyChip.label} />
         </View>
       }
     >

@@ -58,24 +58,24 @@ export default function PropertyDetailScreen() {
         columnWrapperClassName="gap-2.5"
         ItemSeparatorComponent={() => <View className="h-2.5" />}
         ListHeaderComponent={
-          <>
-            <View className="pt-3">
-              <PropertySummaryCard
-                occupancyPct={occupancyPct}
-                collectedThisMonth={stats?.collectedThisMonth ?? 0}
-                expectedMonthlyIncome={stats?.expectedMonthlyIncome ?? 0}
-                overdueCount={overdueCount}
-                expiringContracts={stats?.expiringContracts ?? 0}
-                openIssueCount={stats?.openIssueCount ?? 0}
+          <View className="pt-3">
+            <PropertySummaryCard
+              occupancyPct={occupancyPct}
+              collectedThisMonth={stats?.collectedThisMonth ?? 0}
+              expectedMonthlyIncome={stats?.expectedMonthlyIncome ?? 0}
+              overdueCount={overdueCount}
+              expiringContracts={stats?.expiringContracts ?? 0}
+              openIssueCount={stats?.openIssueCount ?? 0}
+            />
+            <View className="mt-4 mb-2">
+              <SectionHeader
+                title="All units"
+                count={units.length}
+                actionLabel="Add unit"
+                onViewAll={() => router.push(`/(admin)/properties/${propertyId}/units/new` as never)}
               />
             </View>
-            <SectionHeader
-              title="All units"
-              count={units.length}
-              actionLabel="Add unit"
-              onViewAll={() => router.push(`/(admin)/properties/${propertyId}/units/new` as never)}
-            />
-          </>
+          </View>
         }
         renderItem={({ item }) => (
           <View className="flex-1">
