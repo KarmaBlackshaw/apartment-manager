@@ -14,6 +14,40 @@
 
 **Prevention:** add a CLAUDE.md rule and a memory entry. Plus a dev-time runtime guard (optional) to scream when the antipattern reappears.
 
+## Agent prompt
+
+```
+Implement docs/specs/04_double_header_audit_and_fix_spec.md exactly.
+
+One-line code fix + 6 layout patches + CLAUDE.md rule + memory entry.
+
+Read first:
+1. docs/specs/04_double_header_audit_and_fix_spec.md (source of truth)
+2. CLAUDE.md "Navigation Structure"
+
+Execute §5 in order — 8 steps:
+  1. Patch layouts/ScreenLayout.tsx — emit
+     <Stack.Screen options={{ headerShown: false }} /> internally
+  2. Update 6 parent _layout.tsx files per §3.1
+  3. Delete components/ui/AppHeader.tsx (verify zero imports first)
+  4. Remove redundant inline <Stack.Screen options={{ title }} />
+     from tenants/new.tsx, notifications.tsx, onboarding.tsx
+  5. Add the "Header ownership rule" to CLAUDE.md per §4.1
+  6. Add memory entry per §4.3 (feedback_one_header_per_screen.md)
+  7. Smoke test all 6 affected routes on iOS + Android — exactly
+     one header per screen
+  8. `npx tsc --noEmit` clean
+
+Constraints:
+- Do NOT commit.
+- No raw hex; NativeWind classes or `colors.*` only.
+
+Verify §6 acceptance. ~30 min.
+
+After verification passes, mark this spec done:
+  git mv docs/specs/04_double_header_audit_and_fix_spec.md docs/specs/04_double_header_audit_and_fix_spec_DONE.md
+```
+
 ---
 
 ## 1. Root cause

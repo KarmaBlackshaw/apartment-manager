@@ -12,6 +12,52 @@
 
 ---
 
+## TL;DR
+
+Rebuild Unit Detail (`dark_20`) to fix layout gaps + 6 engineering-rule violations. Add proper Unit info card (InfoRow list), tappable Tenant card, BalanceCard with breakdown helper, top-2 MaintenanceRow list, top-3 DocumentRow list, and a header pencil edit. Header chip becomes occupancy-only (separates "rented?" from "paid?"). All existing components reused; data layer adds `recentMaintenance` + `recentDocuments` to UnitDetail and a new `lib/balance.ts` breakdown helper.
+
+## Agent prompt
+
+```
+Implement docs/specs/03_unit_detail_spec.md exactly.
+
+Read first:
+1. docs/specs/03_unit_detail_spec.md (source of truth)
+2. CLAUDE.md "Color tokens", "Tech Stack", "Component Extraction",
+   "Header ownership rule"
+3. Verify spec 04 (ScreenLayout self-suppresses native header) and
+   spec 07 (ScreenView uses SafeAreaView) are applied.
+
+Execute §9 in order — 7 steps:
+  1. Add lib/balance.ts with getBalanceBreakdown helper
+  2. Extend UnitDetail type with recentMaintenance + recentDocuments
+  3. Extend fetchUnitDetail to populate them (top 2 maintenance,
+     top 3 docs)
+  4. Verify unit edit route exists OR units/new.tsx?editId={id}
+     supports edit mode
+  5. Rewrite app/(admin)/properties/[propertyId]/units/[id]/index.tsx
+     per §3 + §4 + §5 (skeleton at end of spec for reference)
+  6. Run `npx tsc --noEmit` clean
+  7. Manual smoke test against §7 rule checklist + §8 functional
+     checklist
+
+Constraints:
+- Do NOT commit.
+- No raw hex; no <Text> from react-native; no <TouchableOpacity>;
+  no inline style={{...}} (except Reanimated useAnimatedStyle).
+- File ≤200 LOC; extract to components/properties/ if approaching.
+- Section spacing rhythm: mt-3 only between sections.
+- contentContainerClassName="px-4 pt-3 pb-[88px]".
+
+Verify §7 (rule compliance) AND §8 (functional acceptance)
+before reporting. ~45 min. Do NOT commit.
+
+After verification passes, mark this spec done:
+  git mv docs/specs/03_unit_detail_spec.md docs/specs/03_unit_detail_spec_DONE.md
+```
+
+---
+
 ## 0. Why this spec exists — audit of current screen
 
 Reference: the screenshot the user shared (Pixel 6 emulator) shows the screen as it stands

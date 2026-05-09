@@ -15,6 +15,49 @@ The fix is **one file rewrite** (`ScreenView.tsx`). Every screen using `ScreenVi
 
 Plus: migrate `properties/new.tsx` (the screen in the screenshot) to `ScreenLayout` for consistency, since it's the only `ScreenView edges={['bottom']}` consumer that doesn't pair with a guaranteed native header.
 
+## Agent prompt
+
+```
+Implement docs/specs/07_safe_area_systemic_fix_spec.md exactly.
+
+Root cause: ScreenView used manual paddingTop:insets.top, which
+returns 0 on Android edge-to-edge mode.
+
+Read first:
+1. docs/specs/07_safe_area_systemic_fix_spec.md (source of truth)
+2. docs/specs/04_double_header_audit_and_fix_spec.md (incorporated
+   in step 2 of this spec)
+3. CLAUDE.md "Safe Area" section (will be replaced)
+
+Execute §5 in order — 9 steps:
+  1. Rewrite components/ui/ScreenView.tsx to use <SafeAreaView
+     edges={...}> from react-native-safe-area-context. Drop
+     useSafeAreaInsets import.
+  2. Patch layouts/ScreenLayout.tsx with <Stack.Screen options={{
+     headerShown: false }} /> if not already done (spec 04 fix).
+  3. Rewrite app/(admin)/properties/new.tsx to wrap in
+     <ScreenLayout title="Add Property"
+     backHref="/(admin)/properties">. Drop the inline "Property
+     Details" subheading.
+  4. Edit properties/_layout.tsx — drop headerShown: true from
+     the new route.
+  5. Replace CLAUDE.md "Safe Area" section with §4.1 content.
+  6. Update memory file feedback_safe_area_status_bar.md per §4.2.
+  7. Run grep audit per §4.3 — only primitives may call
+     useSafeAreaInsets.
+  8. `npx tsc --noEmit` clean.
+  9. Smoke test on Android (Pixel) + iOS — title below status bar.
+
+Constraints:
+- Do NOT commit.
+- No raw hex; no <Text> from react-native; use <AppText>.
+
+Verify §6 acceptance (10 items). ~30 min.
+
+After verification passes, mark this spec done:
+  git mv docs/specs/07_safe_area_systemic_fix_spec.md docs/specs/07_safe_area_systemic_fix_spec_DONE.md
+```
+
 ---
 
 ## 1. Root cause

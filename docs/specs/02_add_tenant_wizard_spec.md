@@ -6,14 +6,36 @@
 
 ---
 
-## Overview
+## TL;DR
 
-5-step form wizard for onboarding a new tenant. Replaces previous hardcoded form with reusable `WizardShell` + form binder components.
+5-step wizard for onboarding a new tenant, built on `WizardShell` from spec 01. Replaces the legacy 420-LOC hardcoded form with a ~190-LOC consumer + reusable form binders. Per-step validation via zod, persists ID photos to `documents` table, structured emergency contact JSON, daily-tenant auto-bill on submit.
 
-**Screen size:** 260 lines (down from ~400 LOC)
-**Field count:** 42 fields across 5 steps
-**Form validation:** zod schema with per-step field groups
-**API integration:** `useCreateTenant` hook, emergency contact JSON serialization
+**Status:** Implemented. This file documents the design for review and future maintenance.
+
+## Agent prompt
+
+```
+This spec is already implemented (see "Status: Implemented" line).
+Use it as reference documentation only.
+
+If you are extending or fixing the existing wizard:
+1. Read docs/specs/02_add_tenant_wizard_spec.md (this spec)
+2. Read docs/specs/01_form_and_wizard_components_spec.md (the
+   underlying component layer)
+3. Read docs/specs/06_inline_cta_pattern_spec.md (the inline-CTA
+   rule that overrides the original WizardShell footer)
+4. Confirm the file at app/(admin)/tenants/new.tsx matches §15
+   slim consumer reference. If it diverges, update either the
+   spec or the code so they agree.
+
+Constraints:
+- Do NOT commit.
+- No raw hex; NativeWind / colors.* tokens only.
+- Existing engineering rules from CLAUDE.md still apply.
+
+After verification passes, mark this spec done:
+  git mv docs/specs/02_add_tenant_wizard_spec.md docs/specs/02_add_tenant_wizard_spec_DONE.md
+```
 
 ---
 

@@ -10,7 +10,7 @@ import { ScreenLayout } from '~/layouts/ScreenLayout'
 import { Input } from '~/components/ui/Input'
 import { Button } from '~/components/ui/Button'
 import { AppText } from '~/components/ui/AppText'
-import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { Avatar } from '~/components/ui/Avatar'
 import { Chip } from '~/components/ui/Chip'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { editUnitSchema, EditUnitFormData } from './edit.schema'
@@ -104,7 +104,7 @@ export default function EditUnitScreen() {
           keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive"
         >
           <View className="rounded-xl bg-surface p-4 flex-row items-center mb-4">
-            <AvatarInitials name={unit.unit_number} size="md" />
+            <Avatar name={unit.unit_number} size="md" />
             <View className="ml-3 flex-1">
               <AppText variant="body" className="font-semibold">Unit {unit.unit_number}</AppText>
               {property && (

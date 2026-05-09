@@ -8,7 +8,7 @@ import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { SectionHeader } from '~/components/ui/SectionHeader'
 import { InfoRow } from '~/components/ui/InfoRow'
 import { Chip } from '~/components/ui/Chip'
-import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { Avatar } from '~/components/ui/Avatar'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
 import type { ChipVariant } from '~/components/ui/Chip'
 import { useBill } from '~/hooks/useBills'
@@ -109,7 +109,7 @@ export default function BillDetailScreen() {
       <ScrollView contentContainerClassName="pb-[88px]">
         {/* 1. Tenant header card */}
         <View className="bg-surface rounded-md mx-4 mt-4 p-4 flex-row items-center gap-3">
-          <AvatarInitials name={tenant?.full_name ?? '?'} size="md" />
+          <Avatar name={tenant?.full_name ?? '?'} size="md" />
           <View className="flex-1">
             <Text className="text-text-primary text-[15px] font-semibold">
               {tenant?.full_name ?? '—'}

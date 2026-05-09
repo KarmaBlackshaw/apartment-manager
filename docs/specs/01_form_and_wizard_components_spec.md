@@ -12,6 +12,54 @@
 
 ---
 
+## TL;DR
+
+13 reusable form/wizard primitives (~470 LOC) in `components/form/`, `components/ui/`, `hooks/`, and `lib/` that eliminate `react-hook-form` boilerplate across 13+ screens. Build before any wizard rebuild.
+
+Phases: **0** domain helpers → **1** UI primitives (Toggle, SectionLabel, InfoNote) → **2** form binders (FormField, FormSelect, FormDateInput, FormSegmentedControl, FormToggleRow, FormCameraCapture) → **3** `useDiscardGuard` → **4** `WizardShell`. Then any consumer screen migrates with zero new boilerplate.
+
+> **NOTE:** spec 06 supersedes the `BottomCTABar`-based `WizardShell` design here. After spec 06, `WizardShell` renders the Next/Skip CTA inline at the end of step content (no docked footer). Apply that revision per spec 06 §4.2 when implementing this spec.
+
+## Agent prompt
+
+```
+Implement docs/specs/01_form_and_wizard_components_spec.md exactly.
+
+Read first:
+1. docs/specs/01_form_and_wizard_components_spec.md (this spec)
+2. docs/specs/06_inline_cta_pattern_spec.md §4 (WizardShell rework —
+   render Next/Skip inline at end of step scroll, NOT in BottomCTABar)
+3. CLAUDE.md "Tech Stack", "Component Extraction", "Engineering
+   Discipline"
+
+Execute phases in order (§4 build order):
+  Phase 0: lib/emergency-contact.ts
+  Phase 1: components/ui/Toggle.tsx, SectionLabel.tsx, InfoNote.tsx
+  Phase 2: components/form/{FormField,FormSelect,FormDateInput,
+           FormSegmentedControl,FormToggleRow,FormCameraCapture}.tsx
+  Phase 3: hooks/useDiscardGuard.ts
+  Phase 4: components/form/WizardShell.tsx — apply spec 06 §4.2
+           (inline CTA at end of step scroll, no BottomCTABar)
+
+After each phase: `npx tsc --noEmit` clean.
+
+Constraints:
+- Do NOT commit.
+- No raw hex; NativeWind classes or `colors.*` only.
+- No <Text> from react-native in screens (primitives may use it).
+- No <TouchableOpacity>; use <Pressable>.
+- Each component ≤200 LOC.
+
+Verify §8 acceptance checklist (ten items including a throwaway
+2-step demo at app/_demo/wizard-demo.tsx — delete after smoke test).
+~3-4 hours for the full layer. Do NOT commit.
+
+After verification passes, mark this spec done:
+  git mv docs/specs/01_form_and_wizard_components_spec.md docs/specs/01_form_and_wizard_components_spec_DONE.md
+```
+
+---
+
 ## 0. Why this layer exists
 
 ### Current pain

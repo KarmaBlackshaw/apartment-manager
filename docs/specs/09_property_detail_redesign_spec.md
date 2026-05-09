@@ -19,6 +19,44 @@ The current screen has the right **structure** (summary card + section header + 
 
 This spec rebuilds Property Detail to match the design audit, fixes the rule violations, and removes the redundant FAB.
 
+## Agent prompt
+
+```
+Implement docs/specs/09_property_detail_redesign_spec.md exactly.
+
+Read first:
+1. docs/specs/09_property_detail_redesign_spec.md (source of truth)
+2. CLAUDE.md "Color tokens", "Tech Stack", "Component Extraction",
+   "What's Cut in v1" (no FloorTabSelector / amenities)
+3. Verify spec 04 (ScreenLayout self-suppress) and spec 07
+   (ScreenView SafeAreaView) are applied.
+
+Execute §7 in order — 10 steps. Highlights:
+  1. Extend PropertyStats type with openIssueCount
+  2. Extend fetchPropertyStats to query open maintenance issues
+  3. Extend PropertySummaryCard with openIssueCount + render the
+     new chip per §3.1 (issues red + overdue red + expiring warning)
+  4. Verify SectionHeader accepts actionLabel + onAction; add if not
+  5. Rewrite app/(admin)/properties/[propertyId]/index.tsx per §4
+  6. Drop the <FAB> import + render entirely
+  7. Run rule-compliance grep checks per §5
+  8. `npx tsc --noEmit` clean
+
+Constraints:
+- Do NOT commit.
+- No raw hex; NativeWind / colors.* only.
+- No <Text> from react-native; use <AppText>.
+- No <TouchableOpacity>; use <Pressable>.
+- No inline style={{...}} except Reanimated useAnimatedStyle.
+- pb-[88px] for floating-tab clearance (no `paddingBottom: 120`).
+
+Verify §6 (functional) AND §5 (rule compliance) acceptance. Smoke
+test on iOS + Android. ~45 min.
+
+After verification passes, mark this spec done:
+  git mv docs/specs/09_property_detail_redesign_spec.md docs/specs/09_property_detail_redesign_spec_DONE.md
+```
+
 ---
 
 ## 1. Reference breakdown (`dark_19`)

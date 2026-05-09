@@ -8,7 +8,7 @@ import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
 import { AppText } from '~/components/ui/AppText'
 import { Chip } from '~/components/ui/Chip'
-import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { Avatar } from '~/components/ui/Avatar'
 import { BalanceCard } from '~/components/billing/BalanceCard'
 import { SectionHeader } from '~/components/ui/SectionHeader'
 import { AmountText } from '~/components/ui/AmountText'
@@ -104,7 +104,7 @@ export default function UnitDetailScreen() {
             className="mt-3 flex-row items-center rounded-xl bg-surface p-4"
             accessibilityLabel={`View tenant ${unit.tenant.full_name}`}
           >
-            <AvatarInitials name={unit.tenant.full_name} size="md" />
+            <Avatar name={unit.tenant.full_name} size="md" />
             <View className="ml-3 flex-1">
               <AppText variant="body" className="font-semibold">
                 {unit.tenant.full_name}

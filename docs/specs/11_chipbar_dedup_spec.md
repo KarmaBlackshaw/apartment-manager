@@ -23,6 +23,38 @@ After this spec, exactly **two** chip primitives exist:
 
 No `variant` prop on `ChipBar` — there's just one visual. The previous "filter vs tab" stylistic difference goes away in favor of consistency.
 
+## Agent prompt
+
+```
+Implement docs/specs/11_chipbar_dedup_spec.md exactly. Two phases:
+
+Phase A — Static badge rename (StatusChip → Chip):
+  Steps 1-3 from §6. Bulk find-replace across app/ and components/.
+  Update ChipVariant type imports.
+
+Phase B — Interactive bar consolidation:
+  Steps 4-7 from §6. Create components/ui/ChipBar.tsx, migrate 8
+  FilterChipBar callers + 5 MonthTabSelector callers. Note the
+  months→options prop rename in §4.2. Delete the two legacy files.
+
+Then steps 8-12: barrel exports, CLAUDE.md "Component Map" update,
+grep audit (must be empty):
+  grep -rn "StatusChip\|FilterChipBar\|MonthTabSelector" app/ components/
+
+Constraints:
+- Do NOT commit.
+- No raw hex; NativeWind / colors.* only.
+- No <Text> from react-native (primitives may use it — Chip and
+  ChipBar internals are primitives).
+- No <TouchableOpacity>; use <Pressable> with Reanimated.
+
+Verify §7 acceptance (10 items). Smoke test on iOS + Android per
+step 12. ~45 min.
+
+After verification passes, mark this spec done:
+  git mv docs/specs/11_chipbar_dedup_spec.md docs/specs/11_chipbar_dedup_spec_DONE.md
+```
+
 ---
 
 ## 1. Why two primitives, not one

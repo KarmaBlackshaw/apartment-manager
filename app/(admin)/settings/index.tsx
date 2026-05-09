@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { Avatar } from '~/components/ui/Avatar'
 import { ScreenView } from '~/components/ui/ScreenView'
 import { SectionHeader } from '~/components/ui/SectionHeader'
 import { SettingsRow } from '~/components/settings/SettingsRow'
@@ -61,7 +61,7 @@ export default function SettingsScreen() {
           marginBottom: spacing[3],
         }}
       >
-        <AvatarInitials name={ownerName || 'Owner'} size="lg" />
+        <Avatar name={ownerName || 'Owner'} size="lg" />
         <View style={{ flex: 1 }}>
           <Text
             style={{

@@ -3,7 +3,7 @@ import { View, Text, FlatList, Pressable, Share } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
 import { ListRow } from '~/components/ui/ListRow'
-import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { Avatar } from '~/components/ui/Avatar'
 import { Chip } from '~/components/ui/Chip'
 import { AmountText } from '~/components/ui/AmountText'
 import { EmptyState } from '~/components/ui/EmptyState'
@@ -56,7 +56,7 @@ export default function DepositSummaryScreen() {
           }
           renderItem={({ item }) => (
             <ListRow
-              leading={<AvatarInitials name={item.tenant_name} />}
+              leading={<Avatar name={item.tenant_name} />}
               title={item.tenant_name}
               subtitle={`Unit ${item.unit_number ?? '—'} · ₱${item.deposit.toLocaleString('en-PH', { minimumFractionDigits: 0 })} deposit`}
               trailingChip={

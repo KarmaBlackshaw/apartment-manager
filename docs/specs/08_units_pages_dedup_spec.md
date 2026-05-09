@@ -18,6 +18,34 @@ Three views currently exist for "units." Only one is canonical:
 
 Property Detail's embedded grid is the only place users need to browse units. Add Unit and Unit Detail (the destinations users actually need) live at `/(admin)/properties/[propertyId]/units/new` and `/(admin)/properties/[propertyId]/units/[id]` respectively — those stay.
 
+## Agent prompt
+
+```
+Implement docs/specs/08_units_pages_dedup_spec.md exactly.
+
+Delete 4 files (§2): the standalone properties/[propertyId]/units/
+index.tsx + the entire settings/units/ directory (3 files).
+
+Patch 2 _layout.tsx files (§3): drop the index entry from
+properties/[propertyId]/units/_layout.tsx; drop the units entry
+from settings/_layout.tsx.
+
+Run §4 grep checks — both must return empty:
+  grep -rn "settings/units" app/ components/ hooks/ lib/
+  grep -rn "/units['\"]\|/units$" app/ components/
+
+Constraints:
+- Do NOT commit.
+- npx tsc --noEmit clean.
+
+Verify §7 acceptance (8 items). Smoke test §5: Property Detail
+intact, Add Unit works, Unit Detail works, Settings tab loads.
+~10 min.
+
+After verification passes, mark this spec done:
+  git mv docs/specs/08_units_pages_dedup_spec.md docs/specs/08_units_pages_dedup_spec_DONE.md
+```
+
 ---
 
 ## 1. Why both lists are dead weight

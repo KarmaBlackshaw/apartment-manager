@@ -4,7 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import dayjs from 'dayjs'
 import { useTenant } from '~/hooks/useTenants'
 import { useBills } from '~/hooks/useBills'
-import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { Avatar } from '~/components/ui/Avatar'
 import { AmountText } from '~/components/ui/AmountText'
 import { ChipBar } from '~/components/ui/ChipBar'
 import { ListRow } from '~/components/ui/ListRow'
@@ -51,7 +51,7 @@ export default function PaymentHistoryScreen() {
     <ScreenLayout title="Payment History" headerRight={exportBtn} backHref={`/(admin)/tenants/${id}`}>
       <View className="bg-surface rounded-md mx-4 my-3 p-4">
         <View className="flex-row items-center gap-3">
-          <AvatarInitials name={tenant?.full_name ?? ''} size="md" />
+          <Avatar name={tenant?.full_name ?? ''} size="md" />
           <View className="flex-1">
             <AppText variant="subheading">{tenant?.full_name}</AppText>
             <AppText color="secondary" variant="caption">

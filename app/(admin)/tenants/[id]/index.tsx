@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useTenant } from '~/hooks/useTenants'
 import { fetchBills } from '~/lib/api/bills'
 import { Chip } from '~/components/ui/Chip'
-import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { Avatar } from '~/components/ui/Avatar'
 import { AmountText } from '~/components/ui/AmountText'
 import { BalanceCard } from '~/components/billing/BalanceCard'
 import { SectionHeader } from '~/components/ui/SectionHeader'
@@ -61,7 +61,7 @@ export default function TenantDetailScreen() {
         {/* Profile card */}
         <View className="bg-surface rounded-md mx-4 mt-3 p-4">
           <View className="flex-row items-center gap-3">
-            <AvatarInitials name={tenant.full_name} size="lg" />
+            <Avatar name={tenant.full_name} size="lg" />
             <View className="flex-1">
               <AppText variant="subheading">{tenant.full_name}</AppText>
               <AppText color="secondary" variant="caption">

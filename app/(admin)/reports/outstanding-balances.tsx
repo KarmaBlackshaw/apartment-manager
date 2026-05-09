@@ -3,7 +3,7 @@ import { View, Text, FlatList, Pressable, Share } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
 import { ListRow } from '~/components/ui/ListRow'
-import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { Avatar } from '~/components/ui/Avatar'
 import { AmountText } from '~/components/ui/AmountText'
 import { EmptyState } from '~/components/ui/EmptyState'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
@@ -63,7 +63,7 @@ export default function OutstandingBalancesScreen() {
           }
           renderItem={({ item }) => (
             <ListRow
-              leading={<AvatarInitials name={item.tenant_full_name} />}
+              leading={<Avatar name={item.tenant_full_name} />}
               title={item.tenant_full_name}
               subtitle={`Unit ${item.unit_number ?? '—'} · ${item.overdueMonthCount >= 2 ? `${item.overdueMonthCount}+ months` : '1 month'} overdue`}
               trailingAmount={<AmountText amount={item.balance} variant="owed" size="small" />}

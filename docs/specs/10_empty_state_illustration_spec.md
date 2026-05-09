@@ -14,6 +14,46 @@
 4. Add a CLAUDE.md rule banning bare empty-state strings in favor of `<EmptyState>` (with one explicit exception: tiny inline labels in dropdown / search-result panels where a full illustration would be visually disruptive — those use `<EmptyState size="sm">` or stay as a single muted line, engineer's call documented in §4).
 5. `react-native-svg` is already installed (15.12.1) — no new dependency.
 
+## Agent prompt
+
+```
+Implement docs/specs/10_empty_state_illustration_spec.md exactly.
+
+Read first:
+1. docs/specs/10_empty_state_illustration_spec.md (source of truth)
+2. CLAUDE.md "Color tokens" section (gets a hex exception per §6)
+
+Execute §7 in order — 11 steps. Highlights:
+  1. Create components/illustrations/EmptyStateIllustration.tsx
+     with the SVG paths verbatim from §1.1. Hex literals OK in
+     this directory.
+  2. Refactor components/ui/EmptyState.tsx per §2 — add `size`
+     prop, render illustration. Drop-in compatible with all
+     existing callers.
+  3. Migrate 6 inline empties per §3 (rows 1-6) to <EmptyState>.
+  4. Bump 12 full-page list empties to size="lg".
+  5. Leave 4 inline-text exceptions alone (§3 rows 7-10).
+  6. Update CLAUDE.md per §4 — add "Empty-state rule".
+  7. Update CLAUDE.md "Color tokens" per §6 — add illustrations
+     hex exception.
+  8. Add memory file feedback_empty_states.md per §5.
+  9. Run grep audit per step 9.
+
+Constraints:
+- Do NOT commit.
+- No raw hex anywhere except tailwind.config.js AND
+  components/illustrations/**.
+- npx tsc --noEmit clean.
+
+Smoke-test step 11 on iOS + Android; confirm illustration crisp
+at all 3 sizes.
+
+Verify §8 acceptance (10 items). ~45 min.
+
+After verification passes, mark this spec done:
+  git mv docs/specs/10_empty_state_illustration_spec.md docs/specs/10_empty_state_illustration_spec_DONE.md
+```
+
 ---
 
 ## 1. The illustration

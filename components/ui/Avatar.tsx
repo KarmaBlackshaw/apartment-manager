@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 
-interface AvatarInitialsProps {
+interface AvatarProps {
   name: string
   size?: 'sm' | 'md' | 'lg'
 }
@@ -44,7 +44,7 @@ function hashName(name: string): number {
   return sum % 8
 }
 
-export function AvatarInitials({ name, size = 'md' }: AvatarInitialsProps) {
+export function Avatar({ name, size = 'md' }: AvatarProps) {
   const initials = getInitials(name)
   const bgColor = AVATAR_COLORS[hashName(name)]
   const dimension = DIMENSION[size]

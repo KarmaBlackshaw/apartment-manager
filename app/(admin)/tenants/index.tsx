@@ -9,7 +9,7 @@ import { useTenants } from '~/hooks/useTenants'
 import { useBills } from '~/hooks/useBills'
 import { ChipBar } from '~/components/ui/ChipBar'
 import { ListRow } from '~/components/ui/ListRow'
-import { AvatarInitials } from '~/components/ui/AvatarInitials'
+import { Avatar } from '~/components/ui/Avatar'
 import { Chip } from '~/components/ui/Chip'
 import { AmountText } from '~/components/ui/AmountText'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
@@ -131,7 +131,7 @@ export default function TenantsScreen() {
           const owed = bal?.amount ?? 0
           return (
             <ListRow
-              leading={<AvatarInitials name={tenant.full_name} size="md" />}
+              leading={<Avatar name={tenant.full_name} size="md" />}
               title={tenant.full_name}
               subtitle={
                 tenant.unit

@@ -17,6 +17,40 @@ The dashboard has two parallel blocks for the same data:
 
 CLAUDE.md "Navigation Structure" already mandates "Reports have NO tab — accessed by tapping cards on the Home screen." ReportCards satisfy that role; KPIs are redundant.
 
+## Agent prompt
+
+```
+Implement docs/specs/12_dashboard_reports_dedup_spec.md exactly.
+
+Read first:
+1. docs/specs/12_dashboard_reports_dedup_spec.md (source of truth)
+2. CLAUDE.md "Navigation Structure" + "Color tokens"
+
+Execute §5 in order — 9 steps:
+  1. Edit app/(admin)/index.tsx: delete the 2×2 KPI strip block (§4.1)
+  2. Move the Reports grid to the top of the ScrollView; drop the
+     SectionHeader (§4.2)
+  3. Delete app/(admin)/reports/index.tsx (Reports menu) (§4.3)
+  4. Verify no remaining /(admin)/reports bare-path refs
+  5. Drop unused imports + computed values per §4.4
+  6. Audit <KPICard> project-wide; delete file if zero callers
+  7. Replace raw rgba/hex with colors.* tokens (§4.6); add subtle
+     tokens to constants/theme.ts if needed
+  8. `npx tsc --noEmit` clean
+  9. Smoke test: dashboard with Reports at top; tap each ReportCard
+     opens detail; bare /reports route no longer matches
+
+Constraints:
+- Do NOT commit.
+- No raw hex; NativeWind / colors.* only.
+- No <Text> from react-native; use <AppText>.
+
+Verify §6 acceptance. ~25 min.
+
+After verification passes, mark this spec done:
+  git mv docs/specs/12_dashboard_reports_dedup_spec.md docs/specs/12_dashboard_reports_dedup_spec_DONE.md
+```
+
 ---
 
 ## 1. The duplication

@@ -20,6 +20,45 @@
 - `CLAUDE.md` "Sticky CTA rule" is replaced with an "Inline CTA rule".
 - Memory entry `feedback_sticky_cta.md` is replaced with `feedback_inline_cta.md`.
 
+## Agent prompt
+
+```
+Implement docs/specs/06_inline_cta_pattern_spec.md exactly.
+
+Read first:
+1. docs/specs/06_inline_cta_pattern_spec.md (source of truth)
+2. docs/specs/01_form_and_wizard_components_spec.md §2.10
+   (WizardShell — needs rework per spec 06 §4.2)
+3. CLAUDE.md (project conventions)
+
+Scope: 14 form screens. 8 migrate from BottomCTABar to inline (§2 🔴).
+6 already inline (§2 🟢) — verify no regression.
+
+Execute §5 in order — 16 steps. Highlights:
+  - Step 2: rework components/form/WizardShell.tsx — render Next/
+    Skip inline at end of step scroll (no BottomCTABar). Tab bar
+    stays visible.
+  - Steps 3-10: migrate the 8 sticky screens to patterns in §3.1,
+    §3.2, §3.3, §3.4.
+  - Step 11: delete components/ui/BottomCTABar.tsx (verify zero
+    imports first).
+  - Step 12: delete hooks/useHideTabBar.ts ONLY if no other callers.
+  - Step 13: edit CLAUDE.md per spec 06 §6.
+  - Step 14: write feedback_inline_cta.md memory; update MEMORY.md.
+
+Constraints:
+- Do NOT commit.
+- No raw hex; NativeWind classes or `colors.*` only.
+- No <Text> from react-native; use <AppText>.
+- No <TouchableOpacity>; use <Pressable> with Reanimated.
+
+Verify §8 acceptance (12 items). Smoke test on iOS + Android per
+step 16. ~60 min.
+
+After verification passes, mark this spec done:
+  git mv docs/specs/06_inline_cta_pattern_spec.md docs/specs/06_inline_cta_pattern_spec_DONE.md
+```
+
 ---
 
 ## 1. Why this reversal — design rationale
