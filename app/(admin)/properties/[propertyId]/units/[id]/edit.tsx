@@ -13,7 +13,7 @@ import { AppText } from '~/components/ui/AppText'
 import { Avatar } from '~/components/ui/Avatar'
 import { Chip } from '~/components/ui/Chip'
 import { LoadingSpinner } from '~/components/ui/LoadingSpinner'
-import { editUnitSchema, EditUnitFormData } from './edit.schema'
+import { editUnitSchema, EditUnitFormData } from '~/lib/schemas/unit-edit.schema'
 import { colors } from '~/constants/theme'
 
 export default function EditUnitScreen() {

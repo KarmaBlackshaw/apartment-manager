@@ -141,7 +141,12 @@ All colors must come from NativeWind classes (`bg-primary`, `text-text-secondary
 
 ### Form schemas live next to the form
 
-Every multi-field form has a sibling schema file — either `<screen>.schema.ts` (preferred) or `_schema.ts` for screens grouped under a directory. Keeps screens scannable, makes schemas reusable for create/edit variants, and isolates zod imports from JSX-heavy files.
+Every multi-field form has a schema file at `lib/schemas/<domain>-<screen>.schema.ts` (e.g. `lib/schemas/unit-edit.schema.ts`). **Do NOT place schema files inside `app/`** — expo-router v6 treats every `.ts`/`.tsx` file under `app/` as a route (underscore prefix does NOT exclude files; only `_layout.tsx` is special). Putting a schema there causes a "missing default export" route error.
+
+Canonical pattern:
+- `lib/schemas/<domain>-<screen>.schema.ts` — import via `~/lib/schemas/<name>`
+
+**Forbidden:** any `*.schema.ts` inside `app/` — regardless of prefix. See `docs/specs/23_DONE_schema_file_route_collision_spec.md`.
 
 ### TanStack Query keys are exported constants
 
