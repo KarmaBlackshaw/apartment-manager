@@ -1,4 +1,5 @@
 import { Text, TextProps } from 'react-native'
+import { cn } from '~/lib/utils'
 
 type Variant = 'display' | 'heading' | 'subheading' | 'body' | 'caption' | 'label'
 type Color = 'primary' | 'secondary' | 'muted' | 'danger' | 'success' | 'warning'
@@ -28,5 +29,5 @@ const clrCls: Record<Color, string> = {
 
 export function AppText({ variant = 'body', color = 'primary', className = '', ...props }: AppTextProps) {
   // @ts-ignore — className handled by NativeWind babel transform at runtime
-  return <Text className={`${varCls[variant]} ${clrCls[color]} ${className}`} {...props} />
+  return <Text className={cn(varCls[variant], clrCls[color], className)} {...props} />
 }

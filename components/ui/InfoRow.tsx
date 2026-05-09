@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
+import { AppText } from '~/components/ui/AppText'
 import { colors } from '~/constants/theme'
 
 interface InfoRowProps {
@@ -24,15 +25,15 @@ export function InfoRow({
         showDivider ? 'border-b border-border' : '',
       ].join(' ')}
     >
-      <Text
+      <AppText
         className={[
           'text-sm text-text-secondary',
           bold ? 'font-bold' : 'font-normal',
         ].join(' ')}
       >
         {label}
-      </Text>
-      <Text
+      </AppText>
+      <AppText
         className={[
           'text-sm',
           bold ? 'font-bold' : 'font-medium',
@@ -40,7 +41,7 @@ export function InfoRow({
         style={{ color: valueColor ?? colors.textPrimary }}
       >
         {value}
-      </Text>
+      </AppText>
     </View>
   )
 }

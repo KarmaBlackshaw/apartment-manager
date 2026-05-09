@@ -1,10 +1,7 @@
 import React from 'react'
-import { View, Text, Pressable } from 'react-native'
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated'
+import { View } from 'react-native'
+import { Card } from '~/components/ui/Card'
+import { AppText } from '~/components/ui/AppText'
 
 interface PropertyChip {
   label: string
@@ -19,8 +16,6 @@ interface PropertyOverviewCardProps {
   occupancyPct: number
   onPress: () => void
 }
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 const chipBgClass: Record<'neutral' | 'success' | 'danger', string> = {
   neutral: 'bg-elevated',
@@ -37,7 +32,7 @@ const chipTextClass: Record<'neutral' | 'success' | 'danger', string> = {
 function PropertyChipBadge({ label, variant = 'neutral' }: PropertyChip) {
   return (
     <View className={`px-2 py-[3px] rounded-full ${chipBgClass[variant]}`}>
-      <Text className={`text-[11px] font-medium ${chipTextClass[variant]}`}>{label}</Text>
+      <AppText className={`text-[11px] font-medium ${chipTextClass[variant]}`}>{label}</AppText>
     </View>
   )
 }
@@ -50,29 +45,12 @@ export function PropertyOverviewCard({
   occupancyPct,
   onPress,
 }: PropertyOverviewCardProps) {
-  const scale = useSharedValue(1)
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }))
-
   const clampedPct = Math.min(100, Math.max(0, occupancyPct))
 
   return (
-    <AnimatedPressable
-      style={animatedStyle}
-      className="bg-surface rounded-md p-4 mb-3"
-      onPressIn={() => {
-        scale.value = withTiming(0.97, { duration: 100 })
-      }}
-      onPressOut={() => {
-        scale.value = withTiming(1, { duration: 150 })
-      }}
-      onPress={onPress}
-      accessibilityRole="button"
-    >
-      <Text className="text-base font-bold text-text-primary">{name}</Text>
-      <Text className="text-[13px] text-text-secondary mt-[2px]">{address}</Text>
+    <Card onPress={onPress} size="lg" className="mb-3" accessibilityLabel={name}>
+      <AppText className="text-base font-bold text-text-primary">{name}</AppText>
+      <AppText className="text-[13px] text-text-secondary mt-[2px]">{address}</AppText>
 
       <View className="flex-row gap-[6px] mt-2 flex-wrap">
         {chips.map((chip, index) => (
@@ -88,11 +66,11 @@ export function PropertyOverviewCard({
       </View>
 
       <View className="mt-2 flex-row justify-between">
-        <Text className="text-xs text-text-muted">Monthly income</Text>
-        <Text className="text-xs text-text-secondary" style={{ fontVariant: ['tabular-nums'] }}>
+        <AppText className="text-xs text-text-muted">Monthly income</AppText>
+        <AppText className="text-xs text-text-secondary" style={{ fontVariant: ['tabular-nums'] }}>
           {`₱${monthlyIncome.toLocaleString('en-PH')}`}
-        </Text>
+        </AppText>
       </View>
-    </AnimatedPressable>
+    </Card>
   )
 }

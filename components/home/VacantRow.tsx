@@ -1,5 +1,8 @@
 import React from 'react'
-import { Pressable, Text, View } from 'react-native'
+import { View } from 'react-native'
+import { AppText } from '~/components/ui/AppText'
+import { Card } from '~/components/ui/Card'
+import { colors } from '~/constants/theme'
 import { formatPHP } from '~/lib/format'
 
 export interface VacantRowProps {
@@ -23,29 +26,30 @@ export function VacantRow({
     : null
 
   return (
-    <Pressable
-      className="bg-surface rounded-[12px] flex-row items-center justify-between"
-      style={{ padding: 12, paddingHorizontal: 14 }}
+    <Card
+      size="sm"
       onPress={onPress}
+      accessibilityLabel={unitName}
+      className="flex-row items-center justify-between"
     >
       {/* Left column */}
       <View className="flex-1 gap-[2px]">
-        <Text className="text-[13px] font-semibold text-text-primary">
+        <AppText className="text-[13px] font-semibold text-text-primary">
           Unit {unitName} · {propertyName}
-        </Text>
-        <Text className="text-[11px] font-normal text-text-muted">
+        </AppText>
+        <AppText className="text-[11px] font-normal text-text-muted">
           Vacant {daysVacant} days
-        </Text>
+        </AppText>
       </View>
 
       {/* Right column */}
       {lostAmount !== null ? (
-        <Text className="text-[10px] font-bold" style={{ color: '#FF5C6A' }}>
+        <AppText className="text-[10px] font-bold" style={{ color: colors.danger }}>
           ~{formatPHP(lostAmount)} lost
-        </Text>
+        </AppText>
       ) : (
         <View />
       )}
-    </Pressable>
+    </Card>
   )
 }

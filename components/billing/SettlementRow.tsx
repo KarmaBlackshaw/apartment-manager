@@ -1,6 +1,8 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { colors } from '~/constants/theme'
+import { Card } from '~/components/ui/Card'
+import { AppText } from '~/components/ui/AppText'
 
 type SettlementVariant = 'deduction' | 'credit' | 'neutral' | 'total'
 
@@ -36,26 +38,25 @@ export function SettlementRow({ label, amount, variant }: SettlementRowProps) {
   const amountCfg = AMOUNT_CONFIG[variant]
 
   return (
-    <View
-      className="flex-row justify-between py-3 px-4"
-      style={{ backgroundColor: isTotal ? colors.surface : colors.elevated }}
-    >
-      <Text
-        className={isTotal ? 'text-[15px] font-bold text-text-primary' : 'text-sm text-text-secondary'}
-      >
-        {label}
-      </Text>
+    <Card size="sm" className={isTotal ? '' : 'bg-elevated'}>
+      <View className="flex-row justify-between">
+        <AppText
+          className={isTotal ? 'text-[15px] font-bold text-text-primary' : 'text-sm text-text-secondary'}
+        >
+          {label}
+        </AppText>
 
-      <Text
-        style={{
-          color: amountCfg.color,
-          fontWeight: amountCfg.fontWeight,
-          fontSize: amountCfg.fontSize,
-          fontVariant: ['tabular-nums'],
-        }}
-      >
-        {amountCfg.prefix}{formatAmount(amount)}
-      </Text>
-    </View>
+        <AppText
+          style={{
+            color: amountCfg.color,
+            fontWeight: amountCfg.fontWeight,
+            fontSize: amountCfg.fontSize,
+            fontVariant: ['tabular-nums'],
+          }}
+        >
+          {amountCfg.prefix}{formatAmount(amount)}
+        </AppText>
+      </View>
+    </Card>
   )
 }

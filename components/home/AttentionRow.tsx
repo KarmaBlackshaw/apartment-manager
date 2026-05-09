@@ -1,6 +1,9 @@
 import React from 'react'
-import { Pressable, Text, View } from 'react-native'
+import { View } from 'react-native'
+import { AppText } from '~/components/ui/AppText'
+import { Card } from '~/components/ui/Card'
 import { Chip } from '~/components/ui/Chip'
+import { colors } from '~/constants/theme'
 import { formatPHP } from '~/lib/format'
 
 export interface AttentionRowProps {
@@ -18,23 +21,24 @@ export function AttentionRow({
   amount,
   onPress,
 }: AttentionRowProps) {
-  const statusColor = status === 'overdue' ? '#FF5C6A' : '#FFB020'
+  const statusColor = status === 'overdue' ? colors.danger : colors.warning
 
   return (
-    <Pressable
-      className="bg-surface rounded-[12px] flex-row items-center justify-between"
-      style={{ padding: 12, paddingHorizontal: 14 }}
+    <Card
+      size="sm"
       onPress={onPress}
+      accessibilityLabel={tenantName}
+      className="flex-row items-center justify-between"
     >
       {/* Left column */}
       <View className="flex-1 gap-[2px]">
-        <Text className="text-[13px] font-semibold text-text-primary">
+        <AppText className="text-[13px] font-semibold text-text-primary">
           {tenantName}
-        </Text>
+        </AppText>
         {unitNumber && (
-          <Text className="text-[11px] font-normal text-text-muted">
+          <AppText className="text-[11px] font-normal text-text-muted">
             {unitNumber}
-          </Text>
+          </AppText>
         )}
       </View>
 
@@ -44,10 +48,10 @@ export function AttentionRow({
           variant={status === 'overdue' ? 'danger' : 'warning'}
           label={status === 'overdue' ? 'OVERDUE' : 'PENDING'}
         />
-        <Text className="text-[13px] font-bold" style={{ color: statusColor }}>
+        <AppText className="text-[13px] font-bold" style={{ color: statusColor }}>
           {formatPHP(amount)}
-        </Text>
+        </AppText>
       </View>
-    </Pressable>
+    </Card>
   )
 }

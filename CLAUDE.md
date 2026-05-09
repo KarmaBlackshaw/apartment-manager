@@ -374,53 +374,99 @@ Reports have NO tab — accessed by tapping KPI cards on the Home screen.
 
 ## Component Map
 
+### Card system — atom + molecules (spec 26)
+
+**One atom, many molecules.** `Card` owns chrome only (bg-surface, rounded-xl, padding, press animation, accentBorder). Molecules own layout.
+
+```
+Card usage:
+  <Card size="sm|md|lg" onPress={...} accentBorder={{side,color,width}} className accessibilityLabel>
+    {molecule layout}
+  </Card>
+
+sizes:  sm = px-4 py-3  |  md = px-4 py-3.5 (default)  |  lg = p-4
+press:  onPress present → AnimatedPressable scale 0.97; absent → plain View
+accent: accentBorder adds borderLeftColor/Width or borderTopColor/Width (inline style, dynamic)
+```
+
+Row-pattern molecules (wrap `<Card>`, own internal layout):
+- `components/ui/ListRow.tsx`          — generic leading/title/subtitle/trailing row
+- `components/ui/InfoRow.tsx`          — chrome-less key/value row; sits INSIDE another Card, no Card wrapper
+- `components/cards/SettingsCard.tsx`  — label + value/right + optional chevron
+- `components/documents/DocumentRow.tsx` — icon + title + category + date + chevron
+- `components/home/AttentionRow.tsx`   — tenant name + status chip + amount
+- `components/home/VacantRow.tsx`      — unit + days vacant + lost revenue
+- `components/home/ReportCard.tsx`     — icon + label + value + sub (compact KPI shortcut)
+- `components/maintenance/MaintenanceRow.tsx` — dot + title + meta + status chip
+- `components/notifications/NotificationRow.tsx` — icon + title + subtitle + timestamp
+- `components/reports/UnitIncomeRow.tsx` — left accent border + unit + tenant + amount
+- `components/form/FormToggleRow.tsx`  — label + Toggle (RHF-bound), bg-elevated
+- `components/tenants/TenantCard.tsx`  — avatar + name + email + badges
+
+Specialized molecules (wrap `<Card>`, keep rich internal layout):
+- `components/billing/BalanceCard.tsx`           — variant bg (danger/success/neutral) + amount + CTA
+- `components/billing/BillCard.tsx`              — bill row with tenant + amount + status
+- `components/billing/SwipeablePaymentRow.tsx`   — Swipeable outside, Card inside
+- `components/billing/SettlementRow.tsx`         — move-out breakdown row, bg-elevated for non-total
+- `components/properties/PropertyCard.tsx`       — property name + address + unit count
+- `components/properties/PropertySummaryCard.tsx` — occupancy % + collection bar + chips
+- `components/properties/PropertyOverviewCard.tsx` — name + address + chips + progress bar + income
+- `components/properties/UnitCard.tsx`           — unit number + rate + status badge
+- `components/properties/UnitGridCard.tsx`       — left accent border + name + tenant + chip
+- `components/properties/BedSlotCard.tsx`        — status-tinted bg + bed label + tenant
+- `components/reports/ReportMenuCard.tsx`        — icon tile in 2-col grid
+
 ```
 components/
   ui/
-    Text.tsx              Typography scale (h1/h2/title/body/label/caption/mono)
-    Chip.tsx              Static badge — variant: success|warning|danger|info|neutral|advance, size: xs|sm|md. Use for status labels, counts, etc. Non-interactive.
-    ChipBar.tsx           Interactive horizontal scroll of single-select pills. Use for filter rows and month/scope tab strips. Single visual (bg-surface ↔ bg-primary).
+    Card.tsx              ATOM — chrome only: bg-surface rounded-xl, padding sizes, press animation, accentBorder
+    AppText.tsx           Typography scale (body/subheading/caption/mono/label)
+    Chip.tsx              Static badge — variant: success|warning|danger|info|neutral|advance, size: xs|sm|md. Non-interactive.
+    ChipBar.tsx           Interactive horizontal scroll of single-select pills.
     Avatar.tsx            Initials, always neutral Surface 3 bg — never colored
     IconButton.tsx        28×28px header icon buttons
     BackButton.tsx        28×28px chevron-only, Surface 2 bg
     FAB.tsx               Floating action button, accent bg, bottom 82 right 16
-    ProgressBar.tsx       4px bar, green fill, Surface 3 track
-    Divider.tsx           1px horizontal, Border color
     Toggle.tsx            iOS-style switch
+    InfoRow.tsx           Chrome-less key/value row — NO Card wrapper, sits inside parent Card
+    ListRow.tsx           Generic row molecule wrapping Card
   form/
     FormField.tsx         Label + input, react-hook-form Controller
     FormSelect.tsx        Label + picker, react-hook-form Controller
-    SegmentedPicker.tsx   Grid of tap-to-select options
-    TagPicker.tsx         Wrap-row toggleable tags
-    PrimaryButton.tsx     Full-width CTA — flows in normal document flow only
-    SecondaryButton.tsx   Text-only tertiary button
-    StepIndicator.tsx     Multi-step wizard progress
+    FormToggleRow.tsx     Label + Toggle, RHF-bound, wraps Card (bg-elevated)
+    SegmentedControl.tsx  Segmented tab control
   layout/
-    Screen.tsx            Root wrapper, bg color, safe area
-    Header.tsx            3-col grid: left / center title / right
-    ScrollBody.tsx        Scrollable body, always pb-[88px], gap-3
+    ScreenView.tsx        Root wrapper, safe area
+    ScreenHeader.tsx      3-col grid: left / center title / right
     SectionLabel.tsx      Section header + optional action link
-    FilterRow.tsx         Horizontal scroll filter pills
-    MonthStrip.tsx        Month selector pills
-    TabBar.tsx            Floating pill nav
+    FloatingTabBar.tsx    Floating pill nav (4 tabs)
   cards/
-    KpiCard.tsx           Metric card, 2px colored top border, Surface 1 bg
-    TenantCard.tsx        Tenant list row
-    UnitCell.tsx          2-col grid cell, 3px colored left border
-    PropertyCard.tsx      Property list card
-    BillingRow.tsx        Billing overview row
-    PaymentRow.tsx        Payment history row
-    IssueRow.tsx          Maintenance issue row
-    DocumentRow.tsx       Document list row
-    InfoRow.tsx           Key-value table row
-    BalanceHero.tsx       Large balance display + Record Payment CTA
-    SummaryGrid.tsx       2-col stat strip
-    ReportCard.tsx        Compact report shortcut, icon + value + sub inline
-    NotificationCard.tsx  Notification row
-    QuickActionBar.tsx    4-button action grid
-    SearchBar.tsx         Search input
-    SettingsRow.tsx       Settings list row
-    ReceiptView.tsx       Full receipt layout
+    SettingsCard.tsx      Settings row molecule — label + value + chevron, wraps Card
+  billing/
+    BalanceCard.tsx       Hero balance molecule — variant bg, wraps Card
+    BillCard.tsx          Bill row molecule, wraps Card
+    SwipeablePaymentRow.tsx  Swipeable gesture + Card inside
+    SettlementRow.tsx     Settlement breakdown row, wraps Card
+  home/
+    AttentionRow.tsx      Dashboard attention row, wraps Card
+    VacantRow.tsx         Dashboard vacant row, wraps Card
+    ReportCard.tsx        Compact report KPI tile, wraps Card
+  maintenance/
+    MaintenanceRow.tsx    Maintenance issue row, wraps Card
+  notifications/
+    NotificationRow.tsx   Notification row, wraps Card
+  properties/
+    PropertyCard.tsx      Property list card, wraps Card
+    PropertySummaryCard.tsx  Multi-section summary, wraps Card
+    PropertyOverviewCard.tsx  Overview with progress bar, wraps Card
+    UnitCard.tsx          Unit list row, wraps Card
+    UnitGridCard.tsx      Grid cell with left accent border, wraps Card
+    BedSlotCard.tsx       Bed slot with status bg, wraps Card
+  reports/
+    UnitIncomeRow.tsx     Per-unit income row with left accent border, wraps Card
+    ReportMenuCard.tsx    Report menu icon tile, wraps Card
+  tenants/
+    TenantCard.tsx        Tenant list row molecule, wraps Card
 lib/
   utils.ts                cn() utility
   currency.ts             formatPeso()

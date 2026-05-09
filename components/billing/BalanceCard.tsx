@@ -1,5 +1,4 @@
 import React from 'react'
-import { Text, View } from 'react-native'
 import { Pressable } from 'react-native'
 import Animated, {
   useSharedValue,
@@ -7,6 +6,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import { colors } from '~/constants/theme'
+import { Card } from '~/components/ui/Card'
+import { AppText } from '~/components/ui/AppText'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
@@ -20,10 +21,10 @@ interface BalanceCardProps {
   label?: string
 }
 
-const containerStyle: Record<BalanceVariant, { backgroundColor: string; borderColor: string }> = {
-  danger:  { backgroundColor: colors.dangerBg,  borderColor: colors.danger },
-  success: { backgroundColor: colors.successBg, borderColor: colors.success },
-  neutral: { backgroundColor: colors.elevated,  borderColor: colors.border },
+const containerClass: Record<BalanceVariant, string> = {
+  danger:  'bg-danger-bg border border-danger',
+  success: 'bg-success-bg border border-success',
+  neutral: 'bg-elevated border border-border',
 }
 
 const amountColor: Record<BalanceVariant, string> = {
@@ -60,26 +61,21 @@ export function BalanceCard({
     scale.value = withTiming(1, { duration: 150 })
   }
 
-  const { backgroundColor, borderColor } = containerStyle[variant]
-
   return (
-    <View
-      className="rounded-md p-4 mx-4 border"
-      style={{ backgroundColor, borderColor }}
-    >
-      <Text className="text-[11px] font-semibold tracking-wider uppercase text-text-muted">
+    <Card size="lg" className={`mx-4 ${containerClass[variant]}`}>
+      <AppText className="text-[11px] font-semibold tracking-wider uppercase text-text-muted">
         {label}
-      </Text>
+      </AppText>
 
-      <Text
+      <AppText
         className="text-[28px] font-bold mt-1"
         style={{ color: amountColor[variant], fontVariant: ['tabular-nums'] }}
       >
         {formatAmount(amount)}
-      </Text>
+      </AppText>
 
       {breakdown != null && (
-        <Text className="text-[13px] text-text-muted mt-1">{breakdown}</Text>
+        <AppText className="text-[13px] text-text-muted mt-1">{breakdown}</AppText>
       )}
 
       {onRecordPayment != null && (
@@ -90,9 +86,9 @@ export function BalanceCard({
           className="mt-3 bg-primary rounded-full h-11 items-center justify-center"
           style={animatedStyle}
         >
-          <Text className="text-[15px] font-semibold text-white">Record Payment</Text>
+          <AppText className="text-[15px] font-semibold text-white">Record Payment</AppText>
         </AnimatedPressable>
       )}
-    </View>
+    </Card>
   )
 }

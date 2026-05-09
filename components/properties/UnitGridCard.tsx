@@ -1,11 +1,8 @@
 import React from 'react'
-import { View, Text, Pressable } from 'react-native'
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated'
+import { View } from 'react-native'
 import { colors } from '~/constants/theme'
+import { Card } from '~/components/ui/Card'
+import { AppText } from '~/components/ui/AppText'
 import { Chip } from '~/components/ui/Chip'
 import type { ChipVariant } from '~/components/ui/Chip'
 
@@ -17,8 +14,6 @@ interface UnitGridCardProps {
   status: UnitStatus
   onPress: () => void
 }
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 const borderColorMap: Record<UnitStatus, string> = {
   paid:    colors.success,
@@ -42,35 +37,18 @@ const chipLabelMap: Record<UnitStatus, string> = {
 }
 
 export function UnitGridCard({ unitName, tenantName, status, onPress }: UnitGridCardProps) {
-  const scale = useSharedValue(1)
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }))
-
   return (
-    <AnimatedPressable
-      style={[
-        animatedStyle,
-        { borderLeftColor: borderColorMap[status], borderLeftWidth: 3 },
-      ]}
-      className="bg-surface rounded-xl p-3"
-      onPressIn={() => {
-        scale.value = withTiming(0.97, { duration: 100 })
-      }}
-      onPressOut={() => {
-        scale.value = withTiming(1, { duration: 150 })
-      }}
+    <Card
       onPress={onPress}
-      accessibilityRole="button"
+      size="sm"
+      accentBorder={{ side: 'left', color: borderColorMap[status], width: 3 }}
+      accessibilityLabel={unitName}
     >
-      <Text className="text-sm font-semibold text-text-primary">{unitName}</Text>
-      <Text className="text-xs text-text-secondary mt-[2px]">
-        {tenantName ?? 'Vacant'}
-      </Text>
+      <AppText variant="caption" color="primary" className="font-semibold">{unitName}</AppText>
+      <AppText variant="caption" color="secondary" className="text-xs mt-[2px]">{tenantName ?? 'Vacant'}</AppText>
       <View className="mt-[6px]">
         <Chip variant={chipVariantMap[status]} label={chipLabelMap[status]} size="xs" />
       </View>
-    </AnimatedPressable>
+    </Card>
   )
 }

@@ -1,5 +1,7 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
+import { Card } from '~/components/ui/Card'
+import { AppText } from '~/components/ui/AppText'
 import { Chip } from '~/components/ui/Chip'
 
 interface PropertySummaryCardProps {
@@ -27,28 +29,25 @@ export function PropertySummaryCard({
   const hasChips = openIssueCount > 0 || overdueCount > 0 || expiringContracts > 0
 
   return (
-    <View
-      className="flex-row items-center bg-surface rounded-2xl"
-      style={{ paddingVertical: 14, paddingHorizontal: 16, gap: 14 }}
-    >
+    <Card size="lg" className="flex-row items-center gap-3.5">
       <View className="items-center" style={{ minWidth: 52 }}>
-        <Text className="text-[26px] font-bold text-success">{occupancyPct}%</Text>
-        <Text className="text-[9px] text-text-muted">occupied</Text>
+        <AppText className="text-[26px] font-bold text-success">{occupancyPct}%</AppText>
+        <AppText className="text-[9px] text-text-muted">occupied</AppText>
       </View>
 
       <View className="bg-border" style={{ width: 1, alignSelf: 'stretch' }} />
 
       <View className="flex-1">
-        <Text className="text-[10px] text-text-muted" style={{ marginBottom: 4 }}>
+        <AppText className="text-[10px] text-text-muted mb-1">
           ₱{collectedThisMonth.toLocaleString('en-PH')} / ₱{expectedMonthlyIncome.toLocaleString('en-PH')} collected
-        </Text>
+        </AppText>
 
-        <View className="h-1.5 bg-elevated rounded-sm" style={{ marginBottom: 5 }}>
+        <View className="h-1.5 bg-elevated rounded-sm mb-[5px]">
           <View className="h-full bg-success rounded-sm" style={{ width: `${collectionPct}%` }} />
         </View>
 
         {hasChips && (
-          <View className="flex-row" style={{ gap: 5 }}>
+          <View className="flex-row gap-[5px]">
             {openIssueCount > 0 && (
               <Chip variant="danger" size="xs" label={`${openIssueCount} issues`} />
             )}
@@ -61,6 +60,6 @@ export function PropertySummaryCard({
           </View>
         )}
       </View>
-    </View>
+    </Card>
   )
 }

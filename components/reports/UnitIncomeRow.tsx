@@ -1,6 +1,8 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import { AmountText } from '~/components/ui/AmountText'
+import { AppText } from '~/components/ui/AppText'
+import { Card } from '~/components/ui/Card'
 import { colors } from '~/constants/theme'
 import type { PerUnitIncomeEntry, PerUnitIncomeStatus } from '~/types'
 
@@ -22,25 +24,28 @@ export function UnitIncomeRow({ entry }: UnitIncomeRowProps) {
     : 'Vacant'
 
   return (
-    <View className="mx-4 mb-2 flex-row rounded-xl overflow-hidden" style={{ backgroundColor: colors.surface }}>
-      <View style={{ width: 3, backgroundColor: borderColor }} />
-      <View className="flex-1 flex-row items-center justify-between p-3">
+    <Card
+      accentBorder={{ side: 'left', color: borderColor, width: 3 }}
+      className="mx-4 mb-2"
+      size="sm"
+    >
+      <View className="flex-row items-center justify-between">
         <View className="flex-1 mr-3">
-          <Text className="text-[15px] font-semibold text-text-primary" numberOfLines={1}>
+          <AppText className="text-[15px] font-semibold text-text-primary" numberOfLines={1}>
             {entry.unit_label}
             {entry.unit_type ? ` — ${entry.unit_type}` : ''}
-          </Text>
-          <Text className="text-[13px] text-text-secondary mt-[2px]" numberOfLines={1}>
+          </AppText>
+          <AppText className="text-[13px] text-text-secondary mt-[2px]" numberOfLines={1}>
             {subtitle}
-          </Text>
+          </AppText>
         </View>
         <View className="items-end">
           <AmountText amount={entry.collected} size="small" />
-          <Text className="text-xs mt-[2px]" style={{ color: colors.textMuted }}>
+          <AppText className="text-xs mt-[2px]" style={{ color: colors.textMuted }}>
             {entry.pct}%
-          </Text>
+          </AppText>
         </View>
       </View>
-    </View>
+    </Card>
   )
 }
