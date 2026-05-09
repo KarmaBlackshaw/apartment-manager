@@ -13,7 +13,6 @@ import {
   usePerUnitIncome,
   useAnnualSummary,
 } from '~/hooks/useReports'
-import { KPICard } from '~/components/home/KPICard'
 import { SectionHeader } from '~/components/ui/SectionHeader'
 import { QuickActionBar } from '~/components/home/QuickActionBar'
 import { AttentionRow } from '~/components/home/AttentionRow'
@@ -23,6 +22,7 @@ import { ReportCard } from '~/components/home/ReportCard'
 import { CollectionProgressBar } from '~/components/billing/CollectionProgressBar'
 import { ScreenLayout } from '~/layouts/ScreenLayout'
 import { formatPHP } from '~/lib/format'
+import { colors } from '~/constants/theme'
 
 export default function HomeScreen() {
   const router = useRouter()
@@ -47,18 +47,6 @@ export default function HomeScreen() {
     monthlyStats && monthlyStats.totalBilled > 0
       ? Math.round((monthlyStats.totalCollected / monthlyStats.totalBilled) * 100)
       : 0
-
-  const occupied = unitCounts?.occupied ?? 0
-  const available = unitCounts?.available ?? 0
-  const maintenance = unitCounts?.maintenance ?? 0
-  const total = occupied + available + maintenance
-  const occupancyPct = total > 0 ? Math.round((occupied / total) * 100) : 0
-
-  const outstanding = outstandingBalances.data
-  const lostPerMonth = (vacantUnits ?? []).reduce(
-    (s, u) => s + (u.monthly_rate ?? 0),
-    0
-  )
 
   const attentionList = useMemo(
     () =>
@@ -113,8 +101,8 @@ export default function HomeScreen() {
         value: formatPHP(mc?.totalCollected ?? 0),
         sub: `${mcPct}% collected`,
         iconName: 'wallet-outline' as const,
-        iconBg: 'rgba(34,201,138,0.12)',
-        iconColor: '#22C98A',
+        iconBg: colors.successSubtle,
+        iconColor: colors.success,
         route: '/(admin)/reports/monthly-collection',
       },
       {
@@ -122,8 +110,8 @@ export default function HomeScreen() {
         value: `${occPct}%`,
         sub: `${occ} / ${tot} units`,
         iconName: 'home-outline' as const,
-        iconBg: 'rgba(75,123,255,0.12)',
-        iconColor: '#4B7BFF',
+        iconBg: colors.infoSubtle,
+        iconColor: colors.info,
         route: '/(admin)/reports/occupancy',
       },
       {
@@ -131,8 +119,8 @@ export default function HomeScreen() {
         value: formatPHP(ob?.totalOutstanding ?? 0),
         sub: `${ob?.tenantCount ?? 0} tenants`,
         iconName: 'alert-circle-outline' as const,
-        iconBg: 'rgba(255,92,106,0.12)',
-        iconColor: '#FF5C6A',
+        iconBg: colors.dangerSubtle,
+        iconColor: colors.danger,
         route: '/(admin)/reports/outstanding-balances',
       },
       {
@@ -140,8 +128,8 @@ export default function HomeScreen() {
         value: formatPHP(maint?.thisMonthCost ?? 0),
         sub: 'this month',
         iconName: 'construct-outline' as const,
-        iconBg: 'rgba(255,176,32,0.12)',
-        iconColor: '#FFB020',
+        iconBg: colors.warningSubtle,
+        iconColor: colors.warning,
         route: '/(admin)/reports/maintenance-costs',
       },
       {
@@ -149,8 +137,8 @@ export default function HomeScreen() {
         value: formatPHP(bestUnitIncome),
         sub: 'best unit',
         iconName: 'stats-chart-outline' as const,
-        iconBg: 'rgba(155,111,255,0.12)',
-        iconColor: '#9B6FFF',
+        iconBg: colors.purpleSubtle,
+        iconColor: colors.purple,
         route: '/(admin)/reports/per-unit-income',
       },
       {
@@ -158,8 +146,8 @@ export default function HomeScreen() {
         value: formatPHP(ann?.ytdIncome ?? 0),
         sub: 'YTD income',
         iconName: 'calendar-outline' as const,
-        iconBg: 'rgba(24,201,201,0.12)',
-        iconColor: '#18C9C9',
+        iconBg: colors.tealSubtle,
+        iconColor: colors.teal,
         route: '/(admin)/reports/annual-summary',
       },
     ]
@@ -181,13 +169,13 @@ export default function HomeScreen() {
             className="p-1.5"
             onPress={() => router.push('/(admin)/notifications' as any)}
           >
-            <Ionicons name="notifications-outline" size={22} color="#94A3B8" />
+            <Ionicons name="notifications-outline" size={22} color={colors.textSecondary} />
           </Pressable>
           <Pressable
             className="p-1.5"
             onPress={() => router.push('/(admin)/settings' as any)}
           >
-            <Ionicons name="settings-outline" size={22} color="#94A3B8" />
+            <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
           </Pressable>
         </View>
       }
@@ -204,43 +192,20 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         {...tabBarScroll}
       >
-        <View className="gap-2">
-          <View className="flex-row gap-2">
-            <View className="flex-1">
-              <KPICard
-                label="Monthly income"
-                value={formatPHP(monthlyStats?.totalCollected ?? 0)}
-                subtitle={`of ${formatPHP(monthlyStats?.totalBilled ?? 0)} · ${collectionPct}%`}
-                accentColor="#22C98A"
+        <View className="flex-row flex-wrap gap-2">
+          {reportCards.map((card) => (
+            <View key={card.route} className="w-[48.5%]">
+              <ReportCard
+                label={card.label}
+                value={card.value}
+                sub={card.sub}
+                iconName={card.iconName}
+                iconBg={card.iconBg}
+                iconColor={card.iconColor}
+                onPress={() => router.push(card.route as any)}
               />
             </View>
-            <View className="flex-1">
-              <KPICard
-                label="Occupancy"
-                value={`${occupancyPct}%`}
-                subtitle={`${occupied} / ${total} units`}
-                accentColor="#4B7BFF"
-              />
-            </View>
-          </View>
-          <View className="flex-row gap-2">
-            <View className="flex-1">
-              <KPICard
-                label="Outstanding"
-                value={formatPHP(outstanding?.totalOutstanding ?? 0)}
-                subtitle={`${outstanding?.tenantCount ?? 0} tenants`}
-                accentColor="#FF5C6A"
-              />
-            </View>
-            <View className="flex-1">
-              <KPICard
-                label="Vacancies"
-                value={`${available} units`}
-                subtitle={`~${formatPHP(lostPerMonth)}/mo lost`}
-                accentColor="#FFB020"
-              />
-            </View>
-          </View>
+          ))}
         </View>
 
         <QuickActionBar />
@@ -326,27 +291,6 @@ export default function HomeScreen() {
             </View>
           </>
         )}
-
-        <SectionHeader
-          title="Reports"
-          onViewAll={() => router.push('/(admin)/reports' as any)}
-          actionLabel="See all"
-        />
-        <View className="flex-row flex-wrap gap-2">
-          {reportCards.map((card) => (
-            <View key={card.route} className="w-[48.5%]">
-              <ReportCard
-                label={card.label}
-                value={card.value}
-                sub={card.sub}
-                iconName={card.iconName}
-                iconBg={card.iconBg}
-                iconColor={card.iconColor}
-                onPress={() => router.push(card.route as any)}
-              />
-            </View>
-          ))}
-        </View>
       </ScrollView>
     </ScreenLayout>
   )

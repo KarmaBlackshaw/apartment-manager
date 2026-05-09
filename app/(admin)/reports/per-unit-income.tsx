@@ -48,7 +48,7 @@ export default function PerUnitIncomeScreen() {
   const report = data ?? { entries: [], totalCollected: 0, bestUnitLabel: null }
 
   return (
-    <ScreenLayout title="Per-Unit Income" headerRight={exportBtn} backHref="/(admin)/reports">
+    <ScreenLayout title="Per-Unit Income" headerRight={exportBtn} backHref="/(admin)/">
       <ChipBar
         options={MONTHS.map(getMonthLabel)}
         selected={getMonthLabel(month)}

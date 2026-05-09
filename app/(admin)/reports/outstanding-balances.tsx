@@ -33,7 +33,7 @@ export default function OutstandingBalancesScreen() {
   const report = data ?? { entries: [], totalOutstanding: 0, tenantCount: 0 }
 
   return (
-    <ScreenLayout title="Outstanding" headerRight={exportBtn} backHref="/(admin)/reports">
+    <ScreenLayout title="Outstanding" headerRight={exportBtn} backHref="/(admin)/">
       {isLoading ? (
         <LoadingSpinner />
       ) : (

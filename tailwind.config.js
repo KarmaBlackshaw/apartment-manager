@@ -34,11 +34,13 @@ module.exports = {
         },
 
         // Status
-        success: { DEFAULT: '#10B981', bg: '#052E16', text: '#6EE7B7' },
-        warning: { DEFAULT: '#F59E0B', bg: '#1C1005', text: '#FCD34D' },
-        danger:  { DEFAULT: '#EF4444', bg: '#200C0C', text: '#FCA5A5' },
-        info:    { DEFAULT: '#3B82F6', bg: '#0C1A3D', text: '#93C5FD' },
+        success: { DEFAULT: '#10B981', bg: '#052E16', text: '#6EE7B7', subtle: 'rgba(16,185,129,0.12)' },
+        warning: { DEFAULT: '#F59E0B', bg: '#1C1005', text: '#FCD34D', subtle: 'rgba(245,158,11,0.12)' },
+        danger:  { DEFAULT: '#EF4444', bg: '#200C0C', text: '#FCA5A5', subtle: 'rgba(239,68,68,0.12)' },
+        info:    { DEFAULT: '#3B82F6', bg: '#0C1A3D', text: '#93C5FD', subtle: 'rgba(59,130,246,0.12)' },
         neutral: { DEFAULT: '#64748B', bg: '#1E2533', text: '#94A3B8' },
+        purple:  { DEFAULT: '#8B5CF6', subtle: 'rgba(139,92,246,0.12)' },
+        teal:    { DEFAULT: '#14B8A6', subtle: 'rgba(20,184,166,0.12)' },
 
         // Balance states
         balance: {

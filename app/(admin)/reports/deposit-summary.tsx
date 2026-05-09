@@ -33,7 +33,7 @@ export default function DepositSummaryScreen() {
   const report = data ?? { entries: [], totalHeld: 0, tenantCount: 0 }
 
   return (
-    <ScreenLayout title="Deposit Summary" headerRight={exportBtn} backHref="/(admin)/reports">
+    <ScreenLayout title="Deposit Summary" headerRight={exportBtn} backHref="/(admin)/">
       {isLoading ? (
         <LoadingSpinner />
       ) : (

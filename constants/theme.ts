@@ -15,25 +15,35 @@ export const colors = {
   textInverse:   '#0F172A',
   textLink:      '#3B82F6',
 
-  success:     '#10B981',
-  successBg:   '#052E16',
-  successText: '#6EE7B7',
+  success:       '#10B981',
+  successBg:     '#052E16',
+  successText:   '#6EE7B7',
+  successSubtle: 'rgba(16,185,129,0.12)',
 
-  warning:     '#F59E0B',
-  warningBg:   '#1C1005',
-  warningText: '#FCD34D',
+  warning:       '#F59E0B',
+  warningBg:     '#1C1005',
+  warningText:   '#FCD34D',
+  warningSubtle: 'rgba(245,158,11,0.12)',
 
-  danger:     '#EF4444',
-  dangerBg:   '#200C0C',
-  dangerText: '#FCA5A5',
+  danger:       '#EF4444',
+  dangerBg:     '#200C0C',
+  dangerText:   '#FCA5A5',
+  dangerSubtle: 'rgba(239,68,68,0.12)',
 
-  info:     '#3B82F6',
-  infoBg:   '#0C1A3D',
-  infoText: '#93C5FD',
+  info:       '#3B82F6',
+  infoBg:     '#0C1A3D',
+  infoText:   '#93C5FD',
+  infoSubtle: 'rgba(59,130,246,0.12)',
 
   neutral:     '#64748B',
   neutralBg:   '#1E2533',
   neutralText: '#94A3B8',
+
+  purple:       '#8B5CF6',
+  purpleSubtle: 'rgba(139,92,246,0.12)',
+
+  teal:       '#14B8A6',
+  tealSubtle: 'rgba(20,184,166,0.12)',
 
   balanceZero:   '#10B981',
   balanceOwed:   '#EF4444',

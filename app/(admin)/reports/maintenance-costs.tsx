@@ -84,7 +84,7 @@ export default function MaintenanceCostsScreen() {
   }
 
   return (
-    <ScreenLayout title="Maintenance Costs" headerRight={exportBtn} backHref="/(admin)/reports">
+    <ScreenLayout title="Maintenance Costs" headerRight={exportBtn} backHref="/(admin)/">
       <ChipBar
         options={MONTHS.map(getMonthLabel)}
         selected={getMonthLabel(month)}

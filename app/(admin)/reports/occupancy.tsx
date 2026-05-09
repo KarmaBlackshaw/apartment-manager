@@ -43,7 +43,7 @@ export default function OccupancyScreen() {
   }
 
   return (
-    <ScreenLayout title="Occupancy Rate" headerRight={exportBtn} backHref="/(admin)/reports">
+    <ScreenLayout title="Occupancy Rate" headerRight={exportBtn} backHref="/(admin)/">
 
       {isLoading ? (
         <LoadingSpinner />
