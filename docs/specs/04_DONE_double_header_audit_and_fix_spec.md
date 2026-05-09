@@ -45,7 +45,7 @@ Constraints:
 Verify §6 acceptance. ~30 min.
 
 After verification passes, mark this spec done:
-  git mv docs/specs/04_double_header_audit_and_fix_spec.md docs/specs/04_double_header_audit_and_fix_spec_DONE.md
+  git mv docs/specs/04_double_header_audit_and_fix_spec.md docs/specs/04_DONE_double_header_audit_and_fix_spec.md
 ```
 
 ---

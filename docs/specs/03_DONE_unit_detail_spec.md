@@ -53,7 +53,7 @@ Verify §7 (rule compliance) AND §8 (functional acceptance)
 before reporting. ~45 min. Do NOT commit.
 
 After verification passes, mark this spec done:
-  git mv docs/specs/03_unit_detail_spec.md docs/specs/03_unit_detail_spec_DONE.md
+  git mv docs/specs/03_unit_detail_spec.md docs/specs/03_DONE_unit_detail_spec.md
 ```
 
 ---

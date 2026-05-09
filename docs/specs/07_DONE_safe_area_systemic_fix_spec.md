@@ -55,7 +55,7 @@ Constraints:
 Verify §6 acceptance (10 items). ~30 min.
 
 After verification passes, mark this spec done:
-  git mv docs/specs/07_safe_area_systemic_fix_spec.md docs/specs/07_safe_area_systemic_fix_spec_DONE.md
+  git mv docs/specs/07_safe_area_systemic_fix_spec.md docs/specs/07_DONE_safe_area_systemic_fix_spec.md
 ```
 
 ---

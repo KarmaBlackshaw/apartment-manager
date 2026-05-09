@@ -55,7 +55,7 @@ Verify §8 acceptance checklist (ten items including a throwaway
 ~3-4 hours for the full layer. Do NOT commit.
 
 After verification passes, mark this spec done:
-  git mv docs/specs/01_form_and_wizard_components_spec.md docs/specs/01_form_and_wizard_components_spec_DONE.md
+  git mv docs/specs/01_form_and_wizard_components_spec.md docs/specs/01_DONE_form_and_wizard_components_spec.md
 ```
 
 ---

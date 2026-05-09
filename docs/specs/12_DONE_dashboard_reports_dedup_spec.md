@@ -48,7 +48,7 @@ Constraints:
 Verify §6 acceptance. ~25 min.
 
 After verification passes, mark this spec done:
-  git mv docs/specs/12_dashboard_reports_dedup_spec.md docs/specs/12_dashboard_reports_dedup_spec_DONE.md
+  git mv docs/specs/12_dashboard_reports_dedup_spec.md docs/specs/12_DONE_dashboard_reports_dedup_spec.md
 ```
 
 ---

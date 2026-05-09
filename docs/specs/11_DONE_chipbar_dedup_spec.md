@@ -52,7 +52,7 @@ Verify §7 acceptance (10 items). Smoke test on iOS + Android per
 step 12. ~45 min.
 
 After verification passes, mark this spec done:
-  git mv docs/specs/11_chipbar_dedup_spec.md docs/specs/11_chipbar_dedup_spec_DONE.md
+  git mv docs/specs/11_chipbar_dedup_spec.md docs/specs/11_DONE_chipbar_dedup_spec.md
 ```
 
 ---

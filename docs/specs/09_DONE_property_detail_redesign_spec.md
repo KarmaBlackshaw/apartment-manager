@@ -54,7 +54,7 @@ Verify §6 (functional) AND §5 (rule compliance) acceptance. Smoke
 test on iOS + Android. ~45 min.
 
 After verification passes, mark this spec done:
-  git mv docs/specs/09_property_detail_redesign_spec.md docs/specs/09_property_detail_redesign_spec_DONE.md
+  git mv docs/specs/09_property_detail_redesign_spec.md docs/specs/09_DONE_property_detail_redesign_spec.md
 ```
 
 ---

@@ -16,7 +16,7 @@ Run `npx tsc --noEmit`. Verify §5 acceptance. ~5 min.
 Do NOT commit.
 
 After verification passes, mark this spec done:
-  git mv docs/specs/13_avatar_rename_spec.md docs/specs/13_avatar_rename_spec_DONE.md
+  git mv docs/specs/13_avatar_rename_spec.md docs/specs/13_DONE_avatar_rename_spec.md
 ```
 
 ---

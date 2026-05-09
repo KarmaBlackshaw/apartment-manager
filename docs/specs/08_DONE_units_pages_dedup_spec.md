@@ -43,7 +43,7 @@ intact, Add Unit works, Unit Detail works, Settings tab loads.
 ~10 min.
 
 After verification passes, mark this spec done:
-  git mv docs/specs/08_units_pages_dedup_spec.md docs/specs/08_units_pages_dedup_spec_DONE.md
+  git mv docs/specs/08_units_pages_dedup_spec.md docs/specs/08_DONE_units_pages_dedup_spec.md
 ```
 
 ---

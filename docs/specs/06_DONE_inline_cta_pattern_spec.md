@@ -56,7 +56,7 @@ Verify §8 acceptance (12 items). Smoke test on iOS + Android per
 step 16. ~60 min.
 
 After verification passes, mark this spec done:
-  git mv docs/specs/06_inline_cta_pattern_spec.md docs/specs/06_inline_cta_pattern_spec_DONE.md
+  git mv docs/specs/06_inline_cta_pattern_spec.md docs/specs/06_DONE_inline_cta_pattern_spec.md
 ```
 
 ---

@@ -51,7 +51,7 @@ at all 3 sizes.
 Verify §8 acceptance (10 items). ~45 min.
 
 After verification passes, mark this spec done:
-  git mv docs/specs/10_empty_state_illustration_spec.md docs/specs/10_empty_state_illustration_spec_DONE.md
+  git mv docs/specs/10_empty_state_illustration_spec.md docs/specs/10_DONE_empty_state_illustration_spec.md
 ```
 
 ---

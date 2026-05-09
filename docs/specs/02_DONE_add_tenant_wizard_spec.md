@@ -34,7 +34,7 @@ Constraints:
 - Existing engineering rules from CLAUDE.md still apply.
 
 After verification passes, mark this spec done:
-  git mv docs/specs/02_add_tenant_wizard_spec.md docs/specs/02_add_tenant_wizard_spec_DONE.md
+  git mv docs/specs/02_add_tenant_wizard_spec.md docs/specs/02_DONE_add_tenant_wizard_spec.md
 ```
 
 ---
