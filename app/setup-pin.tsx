@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, Pressable } from 'react-native'
 import { useRouter } from 'expo-router'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAuth } from '~/context/AuthContext'
+import { ScreenView } from '~/components/ui/ScreenView'
 
 export default function SetupPinScreen() {
   const router = useRouter()
   const { setupPin } = useAuth()
-  const insets = useSafeAreaInsets()
   const [step, setStep] = useState<'enter' | 'confirm'>('enter')
   const [first, setFirst] = useState('')
   const [pin, setPin] = useState('')
@@ -44,7 +43,7 @@ export default function SetupPinScreen() {
   const dots = Array.from({ length: 6 }, (_, i) => i < pin.length)
 
   return (
-    <View className="flex-1 bg-app items-center justify-center px-8" style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}>
+    <ScreenView className="items-center justify-center px-8">
       <Text className="text-[#f1f1f1] text-2xl font-bold mb-2">
         {step === 'enter' ? 'Set PIN' : 'Confirm PIN'}
       </Text>
@@ -64,25 +63,28 @@ export default function SetupPinScreen() {
         {[['1','2','3'],['4','5','6'],['7','8','9']].map((row, ri) => (
           <View key={ri} className="flex-row gap-3">
             {row.map((k) => (
-              <TouchableOpacity key={k} onPress={() => handleKey(k)}
+              <Pressable key={k} onPress={() => handleKey(k)}
                 className="flex-1 h-16 bg-surface rounded-2xl items-center justify-center border border-[#2a2a2a]">
                 <Text className="text-[#f1f1f1] text-2xl font-semibold">{k}</Text>
-              </TouchableOpacity>
+              </Pressable>
             ))}
           </View>
         ))}
         <View className="flex-row gap-3">
           <View className="flex-1 h-16" />
-          <TouchableOpacity onPress={() => handleKey('0')}
+          <Pressable onPress={() => handleKey('0')}
             className="flex-1 h-16 bg-surface rounded-2xl items-center justify-center border border-[#2a2a2a]">
             <Text className="text-[#f1f1f1] text-2xl font-semibold">0</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleDelete}
-            className="flex-1 h-16 bg-surface rounded-2xl items-center justify-center border border-[#2a2a2a]">
+          </Pressable>
+          <Pressable
+            onPress={handleDelete}
+            accessibilityLabel="Delete last digit"
+            className="flex-1 h-16 bg-surface rounded-2xl items-center justify-center border border-[#2a2a2a]"
+          >
             <Text className="text-[#f1f1f1] text-xl">⌫</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
-    </View>
+    </ScreenView>
   )
 }

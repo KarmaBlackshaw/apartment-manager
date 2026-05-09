@@ -1,9 +1,12 @@
 import React from 'react'
-import { TouchableOpacity, View } from 'react-native'
+import { Pressable, View } from 'react-native'
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { Card } from '~/components/ui/Card'
 import { AppText } from '~/components/ui/AppText'
 import { Badge, unitStatusBadge } from '~/components/ui/Badge'
 import type { Unit } from '~/types'
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 interface UnitCardProps {
   unit: Unit
@@ -12,9 +15,17 @@ interface UnitCardProps {
 
 export function UnitCard({ unit, onPress }: UnitCardProps) {
   const statusBadge = unitStatusBadge(unit.status)
+  const scale = useSharedValue(1)
+  const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }))
 
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.7} className="mb-3">
+    <AnimatedPressable
+      style={animatedStyle}
+      onPressIn={() => { scale.value = withTiming(0.97, { duration: 100 }) }}
+      onPressOut={() => { scale.value = withTiming(1, { duration: 150 }) }}
+      onPress={onPress}
+      className="mb-3"
+    >
       <Card>
         <View className="flex-row items-start justify-between">
           <View className="flex-1">
@@ -28,6 +39,6 @@ export function UnitCard({ unit, onPress }: UnitCardProps) {
           <Badge label={statusBadge.label} variant={statusBadge.variant} />
         </View>
       </Card>
-    </TouchableOpacity>
+    </AnimatedPressable>
   )
 }

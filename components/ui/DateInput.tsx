@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TouchableOpacity, View, Platform, Modal } from 'react-native'
+import { Pressable, View, Platform, Modal } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import dayjs from 'dayjs'
@@ -37,17 +37,16 @@ export function DateInput({ label, value, onChange, error, minimumDate, maximumD
   return (
     <View className="mb-4">
       {label && <AppText variant="label" color="secondary" className="mb-2">{label}</AppText>}
-      <TouchableOpacity
+      <Pressable
         onPress={() => setShow(true)}
         // @ts-ignore
         className={`flex-row items-center border rounded-xl px-4 py-4 bg-surface ${error ? 'border-danger' : 'border-[#2a2a2a]'}`}
-        activeOpacity={0.7}
       >
         <AppText className="flex-1" color={value ? 'primary' : 'muted'}>
           {displayValue || 'Select date…'}
         </AppText>
         <Ionicons name="calendar-outline" size={18} color="#555555" />
-      </TouchableOpacity>
+      </Pressable>
       {error && <AppText variant="caption" color="danger" className="mt-1">{error}</AppText>}
 
       {Platform.OS === 'ios' && show && (
@@ -56,9 +55,9 @@ export function DateInput({ label, value, onChange, error, minimumDate, maximumD
             <View style={{ backgroundColor: '#1a1a1a', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 16 }}>
               <View className="flex-row justify-between items-center mb-2">
                 <AppText variant="subheading">Select Date</AppText>
-                <TouchableOpacity onPress={() => setShow(false)} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                <Pressable onPress={() => setShow(false)} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
                   <AppText color="primary">Done</AppText>
-                </TouchableOpacity>
+                </Pressable>
               </View>
               <DateTimePicker
                 value={date}

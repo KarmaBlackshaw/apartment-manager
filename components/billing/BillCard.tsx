@@ -1,10 +1,13 @@
 import React from 'react'
-import { TouchableOpacity, View } from 'react-native'
+import { Pressable, View } from 'react-native'
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { Card } from '~/components/ui/Card'
 import { AppText } from '~/components/ui/AppText'
 import { Badge, billStatusBadge, billingBadge } from '~/components/ui/Badge'
 import { formatCurrency, formatDateRange } from '~/lib/billing'
 import type { BillWithTenant } from '~/types'
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 interface BillCardProps {
   bill: BillWithTenant
@@ -14,9 +17,17 @@ interface BillCardProps {
 export function BillCard({ bill, onPress }: BillCardProps) {
   const statusBadge = billStatusBadge(bill.status)
   const billing = billingBadge(bill.billing_type)
+  const scale = useSharedValue(1)
+  const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }))
 
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.7} className="mb-3">
+    <AnimatedPressable
+      style={animatedStyle}
+      onPressIn={() => { scale.value = withTiming(0.97, { duration: 100 }) }}
+      onPressOut={() => { scale.value = withTiming(1, { duration: 150 }) }}
+      onPress={onPress}
+      className="mb-3"
+    >
       <Card>
         <View className="flex-row items-start justify-between">
           <View className="flex-1">
@@ -33,6 +44,6 @@ export function BillCard({ bill, onPress }: BillCardProps) {
           <AppText variant="caption" color="secondary">Due: {bill.due_date}</AppText>
         </View>
       </Card>
-    </TouchableOpacity>
+    </AnimatedPressable>
   )
 }

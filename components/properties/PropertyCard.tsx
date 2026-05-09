@@ -1,9 +1,12 @@
 import React from 'react'
-import { TouchableOpacity, View } from 'react-native'
+import { Pressable, View } from 'react-native'
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { Card } from '~/components/ui/Card'
 import { AppText } from '~/components/ui/AppText'
 import { Badge } from '~/components/ui/Badge'
 import type { Property } from '~/types'
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 interface PropertyCardProps {
   property: Property
@@ -12,8 +15,17 @@ interface PropertyCardProps {
 }
 
 export function PropertyCard({ property, unitCount, onPress }: PropertyCardProps) {
+  const scale = useSharedValue(1)
+  const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }))
+
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.7} className="mb-3">
+    <AnimatedPressable
+      style={animatedStyle}
+      onPressIn={() => { scale.value = withTiming(0.97, { duration: 100 }) }}
+      onPressOut={() => { scale.value = withTiming(1, { duration: 150 }) }}
+      onPress={onPress}
+      className="mb-3"
+    >
       <Card>
         <AppText variant="subheading">{property.name}</AppText>
         <AppText color="secondary" className="mt-1">{property.address}</AppText>
@@ -23,6 +35,6 @@ export function PropertyCard({ property, unitCount, onPress }: PropertyCardProps
           </View>
         )}
       </Card>
-    </TouchableOpacity>
+    </AnimatedPressable>
   )
 }

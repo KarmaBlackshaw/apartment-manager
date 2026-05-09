@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity, ActivityIndicator, Text, View } from 'react-native'
+import { Pressable, ActivityIndicator, Text, View } from 'react-native'
 import * as Haptics from 'expo-haptics'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
@@ -70,7 +70,7 @@ export function Button({
   }
 
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={handlePress}
       disabled={disabled || loading}
       // @ts-ignore — className handled by NativeWind babel transform at runtime
@@ -87,6 +87,6 @@ export function Button({
           </View>
         )
       }
-    </TouchableOpacity>
+    </Pressable>
   )
 }

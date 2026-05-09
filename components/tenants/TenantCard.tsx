@@ -1,9 +1,12 @@
 import React from 'react'
-import { TouchableOpacity, View } from 'react-native'
+import { Pressable, View } from 'react-native'
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { Card } from '~/components/ui/Card'
 import { AppText } from '~/components/ui/AppText'
 import { Badge, billingBadge, tenantStatusBadge } from '~/components/ui/Badge'
 import type { TenantWithUnit } from '~/types'
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 interface TenantCardProps {
   tenant: TenantWithUnit
@@ -13,9 +16,17 @@ interface TenantCardProps {
 export function TenantCard({ tenant, onPress }: TenantCardProps) {
   const billing = billingBadge(tenant.billing_type)
   const status = tenantStatusBadge(tenant.status)
+  const scale = useSharedValue(1)
+  const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }))
 
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.7} className="mb-3">
+    <AnimatedPressable
+      style={animatedStyle}
+      onPressIn={() => { scale.value = withTiming(0.97, { duration: 100 }) }}
+      onPressOut={() => { scale.value = withTiming(1, { duration: 150 }) }}
+      onPress={onPress}
+      className="mb-3"
+    >
       <Card>
         <View className="flex-row items-start justify-between">
           <View className="flex-1">
@@ -31,6 +42,6 @@ export function TenantCard({ tenant, onPress }: TenantCardProps) {
           )}
         </View>
       </Card>
-    </TouchableOpacity>
+    </AnimatedPressable>
   )
 }

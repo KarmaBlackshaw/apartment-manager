@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, Pressable, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useAuth } from '~/context/AuthContext'
 import { ScreenView } from '~/components/ui/ScreenView'
@@ -83,32 +83,38 @@ export default function LockScreen() {
         {[['1','2','3'],['4','5','6'],['7','8','9']].map((row, ri) => (
           <View key={ri} className="flex-row gap-3">
             {row.map((k) => (
-              <TouchableOpacity key={k} onPress={() => handleKey(k)}
+              <Pressable key={k} onPress={() => handleKey(k)}
                 className="flex-1 h-16 bg-surface rounded-2xl items-center justify-center border border-[#2a2a2a]">
                 <Text className="text-[#f1f1f1] text-2xl font-semibold">{k}</Text>
-              </TouchableOpacity>
+              </Pressable>
             ))}
           </View>
         ))}
         <View className="flex-row gap-3">
-          <TouchableOpacity onPress={() => { setShowPin(false); attemptBiometric() }}
-            className="flex-1 h-16 bg-surface rounded-2xl items-center justify-center border border-[#2a2a2a]">
+          <Pressable
+            onPress={() => { setShowPin(false); attemptBiometric() }}
+            accessibilityLabel="Use biometric authentication"
+            className="flex-1 h-16 bg-surface rounded-2xl items-center justify-center border border-[#2a2a2a]"
+          >
             <Text className="text-primary text-sm font-medium">Biometric</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleKey('0')}
+          </Pressable>
+          <Pressable onPress={() => handleKey('0')}
             className="flex-1 h-16 bg-surface rounded-2xl items-center justify-center border border-[#2a2a2a]">
             <Text className="text-[#f1f1f1] text-2xl font-semibold">0</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleDelete}
-            className="flex-1 h-16 bg-surface rounded-2xl items-center justify-center border border-[#2a2a2a]">
+          </Pressable>
+          <Pressable
+            onPress={handleDelete}
+            accessibilityLabel="Delete last digit"
+            className="flex-1 h-16 bg-surface rounded-2xl items-center justify-center border border-[#2a2a2a]"
+          >
             <Text className="text-[#f1f1f1] text-xl">⌫</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
 
-      <TouchableOpacity onPress={handleForgot} className="mt-10">
+      <Pressable onPress={handleForgot} className="mt-10">
         <Text className="text-[#888888] text-sm">Forgot PIN?</Text>
-      </TouchableOpacity>
+      </Pressable>
     </ScreenView>
   )
 }

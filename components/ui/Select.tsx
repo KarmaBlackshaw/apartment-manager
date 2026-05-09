@@ -1,5 +1,5 @@
 import React, { useRef, useState, useMemo } from 'react'
-import { View, TouchableOpacity } from 'react-native'
+import { View, Pressable } from 'react-native'
 import { BottomSheetModal, BottomSheetFlatList, BottomSheetTextInput, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { AppText } from '~/components/ui/AppText'
@@ -57,9 +57,8 @@ export function Select({
   return (
     <View className="mb-4">
       {label && <AppText variant="label" color="secondary" className="mb-2">{label}</AppText>}
-      <TouchableOpacity
+      <Pressable
         onPress={handleOpen}
-        activeOpacity={0.7}
         // @ts-ignore
         className={`border rounded-xl px-4 py-4 flex-row justify-between items-center bg-surface ${error ? 'border-danger' : 'border-[#2a2a2a]'}`}
       >
@@ -67,7 +66,7 @@ export function Select({
           {selected ? selected.label : placeholder}
         </AppText>
         <Ionicons name="chevron-down" size={18} color="#888888" />
-      </TouchableOpacity>
+      </Pressable>
       {error && <AppText variant="caption" color="danger" className="mt-1">{error}</AppText>}
 
       <BottomSheetModal
@@ -83,9 +82,13 @@ export function Select({
       >
         <View className="flex-row items-center justify-between px-4 py-4 border-b border-[#2a2a2a]">
           <AppText variant="subheading">{label ?? 'Select'}</AppText>
-          <TouchableOpacity onPress={handleClose} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
+          <Pressable
+            onPress={handleClose}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+            accessibilityLabel="Close"
+          >
             <Ionicons name="close" size={24} color="#888888" />
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         {searchable && (
@@ -101,9 +104,13 @@ export function Select({
                 style={{ flex: 1, fontSize: 16, color: '#f1f1f1' }}
               />
               {query.length > 0 && (
-                <TouchableOpacity onPress={() => setQuery('')} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                <Pressable
+                  onPress={() => setQuery('')}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  accessibilityLabel="Clear search"
+                >
                   <Ionicons name="close-circle" size={18} color="#555555" />
-                </TouchableOpacity>
+                </Pressable>
               )}
             </View>
           </View>
@@ -116,9 +123,8 @@ export function Select({
           renderItem={({ item }) => {
             const isSelected = item.value === value
             return (
-              <TouchableOpacity
+              <Pressable
                 onPress={() => handleSelect(item.value)}
-                activeOpacity={0.7}
                 // @ts-ignore
                 className={`flex-row items-center justify-between px-4 py-4 rounded-xl mb-2 ${isSelected ? 'bg-primary' : 'bg-elevated'}`}
               >
@@ -126,7 +132,7 @@ export function Select({
                   {item.label}
                 </AppText>
                 {isSelected && <Ionicons name="checkmark" size={20} color="#ffffff" />}
-              </TouchableOpacity>
+              </Pressable>
             )
           }}
           ListEmptyComponent={
