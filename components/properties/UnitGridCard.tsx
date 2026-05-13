@@ -39,9 +39,9 @@ const chipLabelMap: Record<UnitStatus, string> = {
 export function UnitGridCard({ unitName, tenantName, status, onPress }: UnitGridCardProps) {
   return (
     <Card
+      radius="sm"
       onPress={onPress}
       size="sm"
-      accentBorder={{ side: 'left', color: borderColorMap[status], width: 3 }}
       accessibilityLabel={unitName}
     >
       <AppText variant="caption" color="primary" className="font-semibold">{unitName}</AppText>
