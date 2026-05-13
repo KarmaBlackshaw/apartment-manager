@@ -33,8 +33,8 @@ Run `npx tsc --noEmit`. Verify section 5 acceptance:
 Smoke test: typography unchanged across migrated screens. ~90 min.
 Do NOT commit.
 
-After verification passes, mark this spec done:
-  git mv docs/specs/16_text_to_apptext_purge_spec.md docs/specs/16_DONE_text_to_apptext_purge_spec.md
+After verification passes, delete this spec:
+  rm docs/specs/16_text_to_apptext_purge_spec.md
 ```
 
 ---

@@ -45,8 +45,8 @@ Run `npx tsc --noEmit`. Verify section 5 acceptance. Smoke test on Android
 specifically (the platform where manual insets break). ~30 min.
 Do NOT commit.
 
-After verification passes, mark this spec done:
-  git mv docs/specs/21_safe_area_insets_audit_spec.md docs/specs/21_DONE_safe_area_insets_audit_spec.md
+After verification passes, delete this spec:
+  rm docs/specs/21_safe_area_insets_audit_spec.md
 ```
 
 ---

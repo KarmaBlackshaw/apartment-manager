@@ -26,8 +26,8 @@ Verify section 5 acceptance:
 
 ~2 min. Do NOT commit.
 
-After verification passes, mark this spec done:
-  git mv docs/specs/20_bare_todo_audit_spec.md docs/specs/20_DONE_bare_todo_audit_spec.md
+After verification passes, delete this spec:
+  rm docs/specs/20_bare_todo_audit_spec.md
 ```
 
 ---

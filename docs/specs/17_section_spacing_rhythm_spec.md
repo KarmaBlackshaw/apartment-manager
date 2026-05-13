@@ -33,8 +33,8 @@ Allowed exceptions: mt-4 / mt-8 for deliberate heavier breaks
 Run `npx tsc --noEmit`. Verify section 5 acceptance. Smoke test — visuals
 tighter and more consistent. ~60 min. Do NOT commit.
 
-After verification passes, mark this spec done:
-  git mv docs/specs/17_section_spacing_rhythm_spec.md docs/specs/17_DONE_section_spacing_rhythm_spec.md
+After verification passes, delete this spec:
+  rm docs/specs/17_section_spacing_rhythm_spec.md
 ```
 
 ---

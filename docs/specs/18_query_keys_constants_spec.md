@@ -25,8 +25,8 @@ Trivial verification spec. No migration expected.
 
 Verify section 4 acceptance. ~10 min. Do NOT commit.
 
-After verification passes, mark this spec done:
-  git mv docs/specs/18_query_keys_constants_spec.md docs/specs/18_DONE_query_keys_constants_spec.md
+After verification passes, delete this spec:
+  rm docs/specs/18_query_keys_constants_spec.md
 ```
 
 ---

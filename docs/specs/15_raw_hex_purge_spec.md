@@ -43,8 +43,8 @@ Final result must be 0 hits. Run `npx tsc --noEmit` clean. Verify
 section 6 acceptance. Smoke test every screen — visuals identical. ~90-120
 min. Do NOT commit.
 
-After verification passes, mark this spec done:
-  git mv docs/specs/15_raw_hex_purge_spec.md docs/specs/15_DONE_raw_hex_purge_spec.md
+After verification passes, delete this spec:
+  rm docs/specs/15_raw_hex_purge_spec.md
 ```
 
 ---

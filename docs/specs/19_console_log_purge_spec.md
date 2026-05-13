@@ -27,8 +27,8 @@ Trivial. No migration expected.
 
 Verify section 6 acceptance. ~5 min. Do NOT commit.
 
-After verification passes, mark this spec done:
-  git mv docs/specs/19_console_log_purge_spec.md docs/specs/19_DONE_console_log_purge_spec.md
+After verification passes, delete this spec:
+  rm docs/specs/19_console_log_purge_spec.md
 ```
 
 ---
