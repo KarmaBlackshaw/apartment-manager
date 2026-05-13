@@ -67,7 +67,7 @@ export default function PropertyDetailScreen() {
               expiringContracts={stats?.expiringContracts ?? 0}
               openIssueCount={stats?.openIssueCount ?? 0}
             />
-            <View className="mt-4 mb-2">
+            <View className="mt-4 mb-3">
               <SectionHeader
                 title="All units"
                 count={units.length}
