@@ -26,7 +26,13 @@
     "plugins": [
       "expo-router",
       "expo-sqlite",
-      ["expo-image-picker", { "cameraPermission": "Allow $(PRODUCT_NAME) to take photos of documents." }]
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to take photos of documents."
+        }
+      ],
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "typedRoutes": true
